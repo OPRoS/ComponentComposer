@@ -1,0 +1,285 @@
+package id9ql3lf91zz67uf9202idt;
+
+/**
+@version 2.0
+@physicalPackage
+@__modelType diagram 
+*/
+class diagram {
+/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.comm.UMLNamePackageModel:oiref><oihard>
+@__modelType reference 
+*/
+class reference {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.comm.IStructured:oiref><oihard>
+@__modelType reference 
+*/
+class reference167 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.comm.UMLModelRuler:oiref><oihard>
+@__modelType reference 
+*/
+class reference168 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.comm.ConstraintsProperty:oiref><oihard>
+@__modelType reference 
+*/
+class reference169 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.comm.RolePropertySource:oiref><oihard>
+@__modelType reference 
+*/
+class reference170 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.comm.ElementPropertySource:oiref><oihard>
+@__modelType reference 
+*/
+class reference171 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.comm.IN3UMLModelDeleteListener:oiref><oihard>
+@__modelType reference 
+*/
+class reference172 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.comm.RoleModel:oiref><oihard>
+@__modelType reference 
+*/
+class reference173 {
+}/**
+@__ref <oiref:design#Class#idje11mf91zz67uf9202if4.diagram:oiref><oihard>
+@__modelType reference
+@__fqn <oiref:#Package#co.n3soft.n3com.model.comm.descriptor:oiref> 
+*/
+class reference174 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.comm.ConstraintsModel:oiref><oihard>
+@__modelType reference 
+*/
+class reference175 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.comm.IUMLModelUpdateListener:oiref><oihard>
+@__modelType reference 
+*/
+class reference176 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.comm.IAttachText:oiref><oihard>
+@__modelType reference 
+*/
+class reference177 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.comm.TypeRefModel:oiref><oihard>
+@__modelType reference 
+*/
+class reference178 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.comm.NodeContainerModel:oiref><oihard>
+@__modelType reference 
+*/
+class reference179 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.comm.ClassModel:oiref><oihard>
+@__modelType reference 
+*/
+class reference180 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.comm.AttributeElementModel:oiref><oihard>
+@__modelType reference 
+*/
+class reference181 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.comm.LineTextModel:oiref><oihard>
+@__modelType reference 
+*/
+class reference182 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.comm.UMLDataModel:oiref><oihard>
+@__modelType reference 
+*/
+class reference183 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.comm.ColorPropertySource:oiref><oihard>
+@__modelType reference 
+*/
+class reference184 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.comm.EntryPointModel:oiref><oihard>
+@__modelType reference 
+*/
+class reference185 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.comm.StrcuturedActivityPackageTreeModel:oiref><oihard>
+@__modelType reference 
+*/
+class reference186 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.comm.UpdateEvent:oiref><oihard>
+@__modelType reference 
+*/
+class reference187 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.comm.UMLModel:oiref><oihard>
+@__modelType reference 
+*/
+class reference188 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.comm.OperationElementModel:oiref><oihard>
+@__modelType reference 
+*/
+class reference189 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.comm.SeqLineModel:oiref><oihard>
+@__modelType reference 
+*/
+class reference190 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.comm.BarModel:oiref><oihard>
+@__modelType reference 
+*/
+class reference191 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.comm.IPortContainer:oiref><oihard>
+@__modelType reference 
+*/
+class reference192 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.comm.UMLLabel:oiref><oihard>
+@__modelType reference 
+*/
+class reference193 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.comm.UMLMainPackageModel:oiref><oihard>
+@__modelType reference 
+*/
+class reference194 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.comm.LineBendpointModel:oiref><oihard>
+@__modelType reference 
+*/
+class reference195 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.comm.ExitPointModel:oiref><oihard>
+@__modelType reference 
+*/
+class reference196 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.comm.PartitionModel:oiref><oihard>
+@__modelType reference 
+*/
+class reference197 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.comm.SeqChopboxAnchor:oiref><oihard>
+@__modelType reference 
+*/
+class reference198 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.comm.LineModel:oiref><oihard>
+@__modelType reference 
+*/
+class reference199 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.comm.PortContainerModel:oiref><oihard>
+@__modelType reference 
+*/
+class reference200 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.comm.TempModel:oiref><oihard>
+@__modelType reference 
+*/
+class reference201 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.comm.UMLContainerModel:oiref><oihard>
+@__modelType reference 
+*/
+class reference202 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.comm.IPort:oiref><oihard>
+@__modelType reference 
+*/
+class reference203 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.comm.IUpdateType:oiref><oihard>
+@__modelType reference 
+*/
+class reference204 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.comm.TempBorderLayoutContainerModel:oiref><oihard>
+@__modelType reference 
+*/
+class reference205 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.comm.ClassifierModel:oiref><oihard>
+@__modelType reference 
+*/
+class reference206 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.comm.ClassifierModelTextAttach:oiref><oihard>
+@__modelType reference 
+*/
+class reference207 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.comm.PortModel:oiref><oihard>
+@__modelType reference 
+*/
+class reference208 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.comm.FinalPackageModel:oiref><oihard>
+@__modelType reference 
+*/
+class reference209 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.comm.UMLNoteModel:oiref><oihard>
+@__modelType reference 
+*/
+class reference210 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.comm.CommonStrcuturedModel:oiref><oihard>
+@__modelType reference 
+*/
+class reference211 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.comm.BorderContainlModel:oiref><oihard>
+@__modelType reference 
+*/
+class reference212 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.comm.UMLElementModel:oiref><oihard>
+@__modelType reference 
+*/
+class reference213 {
+}/**
+@__ref <oiref:design#Class#id3c9kvf91zz67uf9202ifz.diagram:oiref><oihard>
+@__modelType reference
+@__fqn <oiref:#Package#co.n3soft.n3com.model.comm.icons:oiref> 
+*/
+class reference214 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.comm.UMLModelGuide:oiref><oihard>
+@__modelType reference 
+*/
+class reference215 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.comm.ElementLabelModel:oiref><oihard>
+@__modelType reference 
+*/
+class reference216 {
+}/**
+@__ref <oiref:design#Class#id108lgf91zz67uf9202ieo.diagram:oiref><oihard>
+@__modelType reference
+@__fqn <oiref:#Package#co.n3soft.n3com.model.comm.command:oiref> 
+*/
+class reference217 {
+}}/**
+@__tags
+@shapeType ClassDiagram 
+*/
+class __tags {
+}/**
+@__options 
+*/
+class __options {
+}/**
+@__positions 
+*/
+class __positions {
+}

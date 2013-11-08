@@ -1,0 +1,32 @@
+package id2iz85fayma2abfaymaoq1;
+
+/**
+@version 2.0
+@physicalPackage
+@__modelType diagram 
+*/
+class diagram {
+/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.anchor.N3ConnectionLocator:oiref><oihard>
+@__modelType reference 
+*/
+class reference {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.anchor.FixedAnchor:oiref><oihard>
+@__modelType reference 
+*/
+class reference153 {
+}}/**
+@__tags
+@shapeType ClassDiagram 
+*/
+class __tags {
+}/**
+@__options 
+*/
+class __options {
+}/**
+@__positions 
+*/
+class __positions {
+}

@@ -1,0 +1,32 @@
+package id8ykkxf91zz67uf9202ibn;
+
+/**
+@version 2.0
+@physicalPackage
+@__modelType diagram 
+*/
+class diagram {
+/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.manager.UMLNoteEditManager:oiref><oihard>
+@__modelType reference 
+*/
+class reference {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.manager.UMLElementEditManager:oiref><oihard>
+@__modelType reference 
+*/
+class reference67 {
+}}/**
+@__tags
+@shapeType ClassDiagram 
+*/
+class __tags {
+}/**
+@__options 
+*/
+class __options {
+}/**
+@__positions 
+*/
+class __positions {
+}

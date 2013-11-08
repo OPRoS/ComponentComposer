@@ -1,0 +1,27 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE> New Document </TITLE>
+<META NAME="Generator" CONTENT="EditPlus">
+<META NAME="Author" CONTENT="">
+<META NAME="Keywords" CONTENT="">
+<META NAME="Description" CONTENT="">
+</HEAD>
+
+<BODY>
+
+<H1 CLASS="Head">프로젝트 열기</H1>
+<P>도구는 사용자가 작업한 내용을 파일로 저장하는 기능을 제공하여 사용자로 하여금 지속적인 작업을 가능하도록 지원한다. 읽어온 정보는 저장 당시의 작업 상태대로 배치된다. 다음 그림은 프로젝트 정보를 열기 위한 대화창이다. 프로젝트 정보를 저장하는 파일의 확장자는 .nmdl이다.
+<P CLASS="Para" align="center"><img src="../images/GUI/4/image001.jpg" alt="start1" border="0"><br>
+그림 2.1-2 프로젝트 열기
+</p>
+<p>읽을 파일을 선택한 후 열기 버튼을 누른다.
+<P CLASS="Para" align="center"><img src="../images/GUI/4/image002.jpg" alt="start1" border="0"><br>
+그림 2.1-2 프로젝트 열기
+</p>
+<p>저장할 때 열려있었던 다이어그램의 목록이 나타나는데 select All과 Deselect All 버튼을 이용하거나 사용자가 선택하여 다이어그램을 열 수 있다.
+<P CLASS="Para" align="center"><img src="../images/GUI/4/image003.jpg" alt="start1" border="0"><br>
+그림 2.1-2 프로젝트 열기
+</p>
+</BODY>
+</HTML>

@@ -1,0 +1,192 @@
+<?xml version = '1.0' encoding = 'ISO-8859-1' ?>
+  <XMI xmi.version = '1.1' xmlns:UML = '//org.omg/UML/1.3'>
+   <XMI.header>
+    <XMI.documentation>
+     <XMI.exporter>
+      	TogetherSoft
+     </XMI.exporter>
+     <XMI.exporterVersion>
+      	6.0
+     </XMI.exporterVersion>
+    </XMI.documentation>
+    <XMI.metamodel xmi.name = 'UML' xmi.version = '1.3'/>
+   </XMI.header>
+   <XMI.content>
+    <UML:Model xmi.id = 'S.1' name = 'Project' visibility = 'public'>
+     <UML:Namespace.ownedElement>
+      <UML:StateMachine xmi.id = 'S.4'
+            name = 'State/Activity Model' visibility = 'public' isSpecification = 'true'>
+       <UML:StateMachine.context>
+        <Foundation.Core.ModelElement xmi.idref = 'S.1'/>
+       </UML:StateMachine.context>
+       <UML:StateMachine.top>
+        <UML:CompositeState xmi.id = 'XX.4'
+              name = '{top}' visibility = 'public' isSpecification = 'false'>
+         <UML:CompositeState.subvertex>
+          <UML:Pseudostate xmi.id = 'G.1'
+                name = 'StartState1' visibility = 'package' isSpecification = 'false' kind = 'initial'>
+           <UML:StateVertex.outgoing>
+            <Behavioral_Elements.State_Machines.Transition xmi.idref = 'G.0'/>
+           </UML:StateVertex.outgoing>
+          </UML:Pseudostate>
+          <UML:FinalState xmi.id = 'G.2'
+                name = 'EndState1' visibility = 'package' isSpecification = 'false'>
+          </UML:FinalState>
+          <UML:Pseudostate xmi.id = 'G.3'
+                name = 'SyncBar1' visibility = 'package' isSpecification = 'false' kind = 'join'>
+          </UML:Pseudostate>
+          <UML:Pseudostate xmi.id = 'G.4'
+                name = 'SyncBar2' visibility = 'package' isSpecification = 'false' kind = 'join'>
+          </UML:Pseudostate>
+          <UML:SimpleState xmi.id = 'G.7'
+                name = 'State1' visibility = 'package' isSpecification = 'false'>
+           <UML:StateVertex.outgoing>
+            <Behavioral_Elements.State_Machines.Transition xmi.idref = 'G.6'/>
+           </UML:StateVertex.outgoing>
+          </UML:SimpleState>
+         </UML:CompositeState.subvertex>
+        </UML:CompositeState>
+       </UML:StateMachine.top>
+       <UML:StateMachine.transitions>
+        <!--From StartState StartState1 to State State1-->
+        <UML:Transition xmi.id = 'G.0'
+              name = 'link' visibility = 'package' isSpecification = 'false'>
+         <UML:Transition.source>
+          <Behavioral_Elements.State_Machines.StateVertex xmi.idref = 'G.1'/>
+         </UML:Transition.source>
+         <UML:Transition.target>
+          <Behavioral_Elements.State_Machines.StateVertex xmi.idref = 'G.7'/>
+         </UML:Transition.target>
+         <UML:Transition.effect>
+          <UML:ActionSequence xmi.id = 'XX.1'
+                name = '' visibility = 'public' isSpecification = 'false'
+                isAsynchronous = 'false'>
+           <UML:Action.recurrence>
+            <UML:IterationExpression
+                  language = '' body = ''/>
+           </UML:Action.recurrence>
+           <UML:Action.target>
+            <UML:ObjectSetExpression
+                  language = '' body = ''/>
+           </UML:Action.target>
+           <UML:Action.script>
+            <UML:ActionExpression
+                  language = '' body = ''/>
+           </UML:Action.script>
+          </UML:ActionSequence>
+         </UML:Transition.effect>
+        </UML:Transition>
+        <!--From State State1 to EndState EndState1-->
+        <UML:Transition xmi.id = 'G.6'
+              name = 'link' visibility = 'package' isSpecification = 'false'>
+         <UML:Transition.source>
+          <Behavioral_Elements.State_Machines.StateVertex xmi.idref = 'G.7'/>
+         </UML:Transition.source>
+         <UML:Transition.target>
+          <Behavioral_Elements.State_Machines.StateVertex xmi.idref = 'G.2'/>
+         </UML:Transition.target>
+         <UML:Transition.effect>
+          <UML:ActionSequence xmi.id = 'XX.3'
+                name = '' visibility = 'public' isSpecification = 'false'
+                isAsynchronous = 'false'>
+           <UML:Action.recurrence>
+            <UML:IterationExpression
+                  language = '' body = ''/>
+           </UML:Action.recurrence>
+           <UML:Action.target>
+            <UML:ObjectSetExpression
+                  language = '' body = ''/>
+           </UML:Action.target>
+           <UML:Action.script>
+            <UML:ActionExpression
+                  language = '' body = ''/>
+           </UML:Action.script>
+          </UML:ActionSequence>
+         </UML:Transition.effect>
+        </UML:Transition>
+       </UML:StateMachine.transitions>
+       <UML:Namespace.ownedElement>
+        <UML:ClassifierRole xmi.id = 'G.5'
+              name = 'Object1' visibility = 'package' isSpecification = 'false'
+              isAbstract = 'false'>
+         <UML:ClassifierRole.multiplicity>
+          <UML:Multiplicity>
+           <UML:Multiplicity.range>
+            <UML:MultiplicityRange lower = '1' upper = '1'/>
+           </UML:Multiplicity.range>
+          </UML:Multiplicity>
+         </UML:ClassifierRole.multiplicity>
+         <UML:ClassifierRole.base>
+          <Foundation.Core.Classifier/>
+         </UML:ClassifierRole.base>
+        </UML:ClassifierRole>
+       </UML:Namespace.ownedElement>
+      </UML:StateMachine>
+     </UML:Namespace.ownedElement>
+    </UML:Model>
+    <UML:Diagram xmi.id = 'S.7'
+          name = 'Main' toolName = 'Rational Rose 98' diagramType = 'ClassDiagram' style = ''>
+     <UML:Diagram.owner>
+      <Foundation.Core.ModelElement xmi.idref = 'S.1'/>
+     </UML:Diagram.owner>
+     <UML:Diagram.element>
+     </UML:Diagram.element>
+    </UML:Diagram>
+    <UML:Diagram xmi.id = 'S.8'
+          name = 'untitled' toolName = 'Rational Rose 98' diagramType = 'StateDiagram' style = ''>
+     <UML:Diagram.owner>
+      <Foundation.Core.ModelElement xmi.idref = 'S.4'/>
+     </UML:Diagram.owner>
+     <UML:Diagram.element>
+      <UML:DiagramElement xmi.id = 'XX.0'
+            geometry = '1194,681,1395,810,' style = 'Transition'>
+       <UML:PresentationElement.subject>
+        <Foundation.Core.ModelElement xmi.idref = 'G.0'/>    <!--TransitionLink link-->
+       </UML:PresentationElement.subject>
+      </UML:DiagramElement>
+      <UML:DiagramElement xmi.id = 'XX.2'
+            geometry = '1956,921,960,222,' style = 'Transition'>
+       <UML:PresentationElement.subject>
+        <Foundation.Core.ModelElement xmi.idref = 'G.6'/>    <!--TransitionLink link-->
+       </UML:PresentationElement.subject>
+      </UML:DiagramElement>
+      <UML:DiagramElement xmi.id = 'XX.5'
+            geometry = '498,258,36,36,'>
+       <UML:PresentationElement.subject>
+        <Foundation.Core.ModelElement xmi.idref = 'G.1'/>    <!--StartState StartState1-->
+       </UML:PresentationElement.subject>
+      </UML:DiagramElement>
+      <UML:DiagramElement xmi.id = 'XX.6'
+            geometry = '957,198,45,45,'>
+       <UML:PresentationElement.subject>
+        <Foundation.Core.ModelElement xmi.idref = 'G.2'/>    <!--EndState EndState1-->
+       </UML:PresentationElement.subject>
+      </UML:DiagramElement>
+      <UML:DiagramElement xmi.id = 'XX.7'
+            geometry = '339,690,18,420,' style = 'SyncItem, Horizontal=1,'>
+       <UML:PresentationElement.subject>
+        <Foundation.Core.ModelElement xmi.idref = 'G.3'/>    <!--SyncBar SyncBar1-->
+       </UML:PresentationElement.subject>
+      </UML:DiagramElement>
+      <UML:DiagramElement xmi.id = 'XX.8'
+            geometry = '759,690,18,180,' style = 'SyncItem, Horizontal=0,'>
+       <UML:PresentationElement.subject>
+        <Foundation.Core.ModelElement xmi.idref = 'G.4'/>    <!--SyncBar SyncBar2-->
+       </UML:PresentationElement.subject>
+      </UML:DiagramElement>
+      <UML:DiagramElement xmi.id = 'XX.9'
+            geometry = '1395,960,330,300,'>
+       <UML:PresentationElement.subject>
+        <Foundation.Core.ModelElement xmi.idref = 'G.7'/>    <!--State State1-->
+       </UML:PresentationElement.subject>
+      </UML:DiagramElement>
+      <UML:DiagramElement xmi.id = 'XX.10'
+            geometry = '711,1080,165,180,' style = 'FillColor.Blue= 204,FillColor.Green= 255,FillColor.Red= 255,FillColor.Transparent=1,Font.Blue= 0,Font.Green= 0,Font.Red= 0,Font.FaceName=Arial,Font.Size= 10,Font.Bold=0,Font.Italic=0,Font.Strikethrough=0,Font.Underline=1,LineColor.Blue= 51,LineColor.Green= 0,LineColor.Red= 153,'>
+       <UML:PresentationElement.subject>
+        <Foundation.Core.ModelElement xmi.idref = 'G.5'/>    <!--Object Object1-->
+       </UML:PresentationElement.subject>
+      </UML:DiagramElement>
+     </UML:Diagram.element>
+    </UML:Diagram>
+   </XMI.content>
+  </XMI>

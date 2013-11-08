@@ -1,0 +1,25 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE> New Document </TITLE>
+<META NAME="Generator" CONTENT="EditPlus">
+<META NAME="Author" CONTENT="">
+<META NAME="Keywords" CONTENT="">
+<META NAME="Description" CONTENT="">
+</HEAD>
+
+<BODY>
+
+<H1 CLASS="Head">통합 GUI 옵션</H1>
+<p>통합 GUI의 보기메뉴를 통해서 사용자는 편집 공간을 효율적으로 사용할 수 있다. View 메뉴의 체크 옵션들은 통합 GUI의 작업 영역을 숨기거나 다시 보여줄 수가 있어서 사용자가 원하는 편집 공간만을 보여주는 기능을 제공한다. 체크 메뉴가 선택되어 있으면 해당 윈도우가 보여지며, 체크를 해제하면 해당 윈도우는 숨겨진다.
+<ul>
+<li><a href="./gui_9_1.html">Zoom In</a></li>
+<li><a href="./gui_9_2.html">Zoom Out</a></li>
+<li><a href="./gui_9_3.html">Rulers</a></li>
+<li><a href="./gui_9_4.html">Grid</a></li>
+<li><a href="./gui_9_5.html">Snap to Geometry</a></li>
+<li><a href="./gui_9_6.html">Match Width</a></li>
+<li><a href="./gui_9_7.html">Match Height</a></li>
+</ul>
+</BODY>
+</HTML>

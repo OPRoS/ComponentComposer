@@ -1,0 +1,144 @@
+package id2rrc4f91zz67uf9202i5k;
+
+/**
+@version 2.0
+@physicalPackage
+@__modelType diagram 
+*/
+class diagram {
+/**
+@__ref <oiref:design#Class#id5caw0f91zz67uf9202ilm.diagram:oiref><oihard>
+@__modelType reference
+@__fqn <oiref:#Package#co.n3soft.n3com.ruler:oiref> 
+*/
+class reference {
+}/**
+@__ref <oiref:design#Class#id4qphdf91zz67uf9202ikb.diagram:oiref><oihard>
+@__modelType reference
+@__fqn <oiref:#Package#co.n3soft.n3com.projectmanager:oiref> 
+*/
+class reference17 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.N3Messages:oiref><oihard>
+@__modelType reference 
+*/
+class reference18 {
+}/**
+@__ref <oiref:design#Class#idiytxwf91zz67uf9202ij0.diagram:oiref><oihard>
+@__modelType reference
+@__fqn <oiref:#Package#co.n3soft.n3com.project:oiref> 
+*/
+class reference19 {
+}/**
+@__ref <oiref:design#Class#idgft4zf91zz67uf9202iac.diagram:oiref><oihard>
+@__modelType reference
+@__fqn <oiref:#Package#co.n3soft.n3com.editor:oiref> 
+*/
+class reference20 {
+}/**
+@__ref <oiref:design#Class#idekk0uf91zz67uf9202i7a.diagram:oiref><oihard>
+@__modelType reference
+@__fqn <oiref:#Package#co.n3soft.n3com.dnd:oiref> 
+*/
+class reference21 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.UMLDefaultEditDomain:oiref><oihard>
+@__modelType reference 
+*/
+class reference22 {
+}/**
+@__ref <oiref:design#Class#idj2qbsf91zz67uf9202idd.diagram:oiref><oihard>
+@__modelType reference
+@__fqn <oiref:#Package#co.n3soft.n3com.model:oiref> 
+*/
+class reference23 {
+}/**
+@__ref <oiref:design#Class#id28f7uf91zz67uf9202i5z.diagram:oiref><oihard>
+@__modelType reference
+@__fqn <oiref:#Package#co.n3soft.n3com.comm:oiref> 
+*/
+class reference24 {
+}/**
+@__ref <oiref:design#Class#idhsjouf91zz67uf9202im2.diagram:oiref><oihard>
+@__modelType reference
+@__fqn <oiref:#Package#co.n3soft.n3com.util:oiref> 
+*/
+class reference25 {
+}/**
+@__ref <oiref:design#Class#idhjo8cf91zz67uf9202iar.diagram:oiref><oihard>
+@__modelType reference
+@__fqn <oiref:#Package#co.n3soft.n3com.figures:oiref> 
+*/
+class reference26 {
+}/**
+@__ref <oiref:design#Class#id8eb0ff91zz67uf9202ikr.diagram:oiref><oihard>
+@__modelType reference
+@__fqn <oiref:#Package#co.n3soft.n3com.rcp:oiref> 
+*/
+class reference27 {
+}/**
+@__ref <oiref:design#Class#id8ykkxf91zz67uf9202ibn.diagram:oiref><oihard>
+@__modelType reference
+@__fqn <oiref:#Package#co.n3soft.n3com.manager:oiref> 
+*/
+class reference28 {
+}/**
+@__ref <oiref:design#Class#id452uqf91zz67uf9202i7q.diagram:oiref><oihard>
+@__modelType reference
+@__fqn <oiref:#Package#co.n3soft.n3com.edit:oiref> 
+*/
+class reference29 {
+}/**
+@__ref <oiref:design#Class#id2gv4lf91zz67uf9202ici.diagram:oiref><oihard>
+@__modelType reference
+@__fqn <oiref:#Package#co.n3soft.n3com.message:oiref> 
+*/
+class reference30 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.N3Plugin:oiref><oihard>
+@__modelType reference 
+*/
+class reference31 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.UMLEditor:oiref><oihard>
+@__modelType reference 
+*/
+class reference32 {
+}/**
+@__ref <oiref:design#Class#id2iz85fayma2abfaymaoq1.diagram:oiref><oihard>
+@__modelType reference
+@__fqn <oiref:#Package#co.n3soft.n3com.anchor:oiref> 
+*/
+class reference1 {
+}}/**
+@__tags
+@shapeType ClassDiagram 
+*/
+class __tags {
+}/**
+@__options 
+*/
+class __options {
+}/**
+@__positions <oigroup:<oiref:design#Class#idgft4zf91zz67uf9202iac.diagram:oiref>=300,130,53,57,1:oigroup>
+<oigroup:<oiref:design#Class#id452uqf91zz67uf9202i7q.diagram:oiref>=10,890,200,1431,1:oigroup>
+<oigroup:MemberLink#<oiref:java#Member#kr.co.n3soft.n3com.N3Plugin#singleton:oiref>=170,328,170,378,260,378,260,288,210,288:oigroup>
+<oigroup:<oiref:design#Class#idekk0uf91zz67uf9202i7a.diagram:oiref>=799,10,200,116,1:oigroup>
+<oigroup:<oiref:java#Class#kr.co.n3soft.n3com.UMLEditor:oiref>=406,10,200,846,1:oigroup>
+<oigroup:<oiref:design#Class#id8ykkxf91zz67uf9202ibn.diagram:oiref>=827,390,161,84,1:oigroup>
+<oigroup:<oiref:design#Class#idj2qbsf91zz67uf9202idd.diagram:oiref>=230,930,81,222,1:oigroup>
+<oigroup:<oiref:design#Class#id28f7uf91zz67uf9202i5z.diagram:oiref>=799,170,55,78,1:oigroup>
+<oigroup:<oiref:java#Class#kr.co.n3soft.n3com.N3Messages:oiref>=300,10,86,82,1:oigroup>
+<oigroup:<oiref:design#Class#id2gv4lf91zz67uf9202ici.diagram:oiref>=626,210,127,100,1:oigroup>
+<oigroup:<oiref:design#Class#id5caw0f91zz67uf9202ilm.diagram:oiref>=773,290,154,68,1:oigroup>
+<oigroup:<oiref:design#Class#idiytxwf91zz67uf9202ij0.diagram:oiref>=626,390,62,94,1:oigroup>
+<oigroup:<oiref:java#Class#kr.co.n3soft.n3com.N3Plugin:oiref>=10,10,200,318,1:oigroup>
+<oigroup:<oiref:design#Class#idhsjouf91zz67uf9202im2.diagram:oiref>=708,390,99,84,1:oigroup>
+<oigroup:<oiref:java#Class#kr.co.n3soft.n3com.UMLDefaultEditDomain:oiref>=10,330,152,165,1:oigroup>
+<oigroup:<oiref:design#Class#id4qphdf91zz67uf9202ikb.diagram:oiref>=874,170,145,132,1:oigroup>
+<oigroup:<oiref:design#Class#id8eb0ff91zz67uf9202ikr.diagram:oiref>=626,10,153,151,1:oigroup>
+<oigroup:<oiref:design#Class#idhjo8cf91zz67uf9202iar.diagram:oiref>=708,510,200,1428,1:oigroup>
+<oigroup:<oiref:design#Class#id2iz85fayma2abfaymaoq1.diagram:oiref>=220,203,141,84,1:oigroup>
+*/
+class __positions {
+}

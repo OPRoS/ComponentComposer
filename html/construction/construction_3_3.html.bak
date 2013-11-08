@@ -1,0 +1,30 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE> New Document </TITLE>
+<META NAME="Generator" CONTENT="EditPlus">
+<META NAME="Author" CONTENT="">
+<META NAME="Keywords" CONTENT="">
+<META NAME="Description" CONTENT="">
+</HEAD>
+
+<BODY>
+
+<H1 CLASS="Head">보기 메뉴</H1>
+
+<P>(그림 2.3-3)은 공통 풀다운 메뉴의 보기 메뉴이다. 보기 메뉴는 [보기설정], [확대/축소], [정렬], [GUI View]의 메뉴로 구성되고, 각각의 기능에 대한 설명은 다음과 같다. 
+<p>
+<P CLASS="Para" align="center"><img src="../images/construction/3/image003.jpg" alt="start1" border="0"><br>
+그림 2.1-2 보기 메뉴
+</p>
+<ul>
+<li><a href="../gud/gui_9_1.html">Zoom In</a> : 다이어그램 영역을 확대한다..</li>
+<li><a href="../gud/gui_9_2.html">Zoom Out</a> : 다이어그램 영역을 축소한다.</li>
+<li><a href="../gud/gui_9_3.html">Rulers</a> : 다이어그램에 가로 세로 수치를 표시한다.</li>
+<li><a href="../gud/gui_9_4.html">Grid</a> : 다이어그램에 그리드가 보이도록 한다. </li>
+<li><a href="../gud/gui_9_5.html">Snap to Geometry</a> : 다이어그램에서 객체와 객체가 겹치는 선을 표시한다.</li>
+<li><a href="../gud/gui_9_6.html">Match Width</a> : 선택된 객체들의 넓이를 맞춘다.</li>
+<li><a href="../gud/gui_9_7.html">Match Height</a> : 선택된 객체들의 높이를 맞춘다.</li>
+</ul>
+</BODY>
+</HTML>

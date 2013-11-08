@@ -1,0 +1,52 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE> New Document </TITLE>
+<META NAME="Generator" CONTENT="EditPlus">
+<META NAME="Author" CONTENT="">
+<META NAME="Keywords" CONTENT="">
+<META NAME="Description" CONTENT="">
+</HEAD>
+
+<BODY>
+<div class="help_breadcrumbs"><a href="../main.html">사용자 메뉴얼</a> > 
+<a href="./modeler_main.html">영역 모델러의 사용</a> > 
+<a href="./modeler_2.html">UML Behavioral(행위적 모델링 다이어그램)</a> > 
+<a href="./modeler_2_3.html">State</a> > 
+</div>
+
+<h1 class="NavTitle">관계 연결 및 편집 </h1>
+
+<p>State 다이어그램은 State의 palett에서 객체를 이용하여 작성한다.
+<ol>
+<li>Transition 전이</li>
+<p>전이의 흐름을 나타낸다.
+<P CLASS="Para" align="center"><img src="../images/modeler/2/state/image021.jpg" alt="start1" border="0"><br>
+그림 2.1-2 연관 관계 종류
+</p>
+<li>Object Flow</li>
+<p>object의 흐름을 나타낸다.
+<P CLASS="Para" align="center"><img src="../images/modeler/2/state/image022.jpg" alt="start1" border="0"><br>
+그림 2.1-2 의존 관계
+</p>
+<li>관계 편집</li>
+<p>관계에 마우스를 갖다 대고 우클릭을 하면 다음과 같은 팝업창이 뜬다.
+<P CLASS="Para" align="center"><img src="../images/modeler/2/state/image023.jpg" alt="start1" border="0"><br>
+그림 2.1-2 관계 팝업창
+</p>
+<ul>
+<li>Direct Line - 관계를 직선으로 만든다.</li>
+<li>Delete - 관계를 삭제한다.</li>
+</ul>
+<p>관계의 프로퍼티창은 이름, 프로퍼티, 스테레오타입으로 나뉘는데 프로퍼티에서는 세부 내용을 설정할 수 있다.
+SourceRole과 TargetRole는 대상이 다르고 같은 내용이며 Description은 관계에 대한 내용을 변경할 수 있다.
+<P CLASS="Para" align="center"><img src="../images/modeler/2/state/image024.jpg" alt="start1" border="0"><br>
+그림 2.1-2 관계 프로퍼티
+</p>
+<ul>
+<li>guard - role 이름을 변경한다.</li>
+<li>weight - role에 설명내용을 변경한다.</li>
+</ul>
+</ol>
+</BODY>
+</HTML>

@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.perspectives">
+      <perspective
+            class="uuu.Perspective"
+            icon="bin/kr/co/n3soft/n3com/model/usecase/icons/icno_16x16/02_Composer.png"
+            id="uuu.perspective"
+            name="OPRoS Component Composer">
+      </perspective>
+   </extension>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="kr.co.n3soft.n3com.UMLEditor"
+            contributorClass="kr.co.n3soft.n3com.rcp.actions.N3ActionBarContributor"
+            default="false"
+            icon="icons/diagram.gif"
+            id="kr.co.n3soft.n3com.rcp.N3Editor"
+            name="N3Editor">
+      </editor>
+   </extension>
+      <extension
+         id="product"
+         point="org.eclipse.core.runtime.products">
+      <product
+            application="uuu.application"
+            name="N3COM Constructor V3.0">
+         <property
+               name="appName"
+               value="N3COM Constructor V3.0">
+         </property>
+         <property
+               name="preferenceCustomization"
+               value="plugin_customization.ini">
+         </property>
+         <property
+               name="aboutText"
+               value="N3COM Constructor&#x0A;&#x0A;Version: 3.0&#x0A;Build id: I20070625-1500&#x0A;&#x0A;(c) Copyright N3soft contributors and others 2000, 2007.  All rights reserved.&#x0A;Visit http://www.n3soft.co.kr">
+         </property>
+         <property
+               name="aboutImage"
+               value="icons/constructor2.gif">
+         </property>
+         <property
+               name="windowImages"
+               value="logo.gif">
+         </property>
+      </product>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            category="uuu"
+            class="uuu.views.SampleView"
+            icon="icons/host.gif"
+            id="uuu.views.SampleView"
+            name="Task View">
+      </view>
+      <view
+            category="uuu"
+            class="kr.co.n3soft.n3com.project.browser.ModelBrowser"
+            icon="icons/model.gif"
+            id="uuu.views.SampleView4"
+            name="Solution Browser">
+      </view>
+      <view
+            category="uuu"
+            class="uuu.views.DescriptionView"
+            icon="icons/circuit16.gif"
+            id="uuu.views.DescriptionView"
+            name="Description">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension
+            targetID="org.eclipse.ui.resourcePerspective">
+         <view
+               id="uuu.views.SampleView"
+               ratio="0.5"
+               relationship="right"
+               relative="org.eclipse.ui.views.TaskList">
+         </view>
+      </perspectiveExtension>
+      <perspectiveExtension
+            targetID="org.eclipse.ui.resourcePerspective">
+         <view
+               id="uuu.views.SampleView4"
+               ratio="0.5"
+               relationship="right"
+               relative="org.eclipse.ui.views.TaskList">
+         </view>
+      </perspectiveExtension>
+   </extension>
+   <extension
+         point="org.eclipse.ui.intro">
+      <intro
+            class="org.eclipse.ui.intro.config.CustomizableIntroPart"
+            id="uuu.intro">
+      </intro>
+      <introProductBinding
+            introId="uuu.intro"
+            productId="uuu.product">
+      </introProductBinding>
+   </extension>
+   <extension
+         point="org.eclipse.ui.intro.config">
+      <config
+            content="introContent.xml"
+            id="uuu.introConfigId"
+            introId="uuu.intro">
+         <presentation
+               home-page-id="root">
+            <implementation
+                  kind="html"
+                  os="win32,linux,macosx">
+            </implementation>
+         </presentation>
+      </config>
+   </extension>
+   <extension
+         point="org.eclipse.ui.actionSets">
+      <actionSet
+            id="uuu.actionSet"
+            label="Sample Action Set"
+            visible="true">
+         <action
+               class="uuu.actions.SimulationToolRunAction"
+               icon="icons/s.gif"
+               id="uuu.actions.SimulationToolRunAction"
+               label="&amp;Simulation Run"
+               menubarPath="sampleMenu/sampleGroup"
+               toolbarPath="sampleGroup"
+               tooltip="Simulation Run">
+         </action>
+         <menu
+               id="sampleMenu"
+               label="&amp;ToolRun">
+            <separator
+                  name="sampleGroup">
+            </separator>
+         </menu>
+      </actionSet>
+      
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.opros.mainpreference.prefs.view"
+            class="uuu.preferences.SamplePreferencePage"
+            id="kr.etri.opros.cc.ce.preferences.SamplePreferencePage"
+            name="OPRoS_CC Directory Preference">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.opros.mainpreference.preferences.PreferenceInitializer">
+      </initializer>
+      <initializer
+            class="uuu.preferences.PreferenceInitializer">
+      </initializer>
+      <initializer
+            class="kr.etri.opros.cc.ce.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
+   <extension
+         point="org.eclipse.ui.actionSets">
+      <actionSet
+            id="uuu.actionSet1"
+            label="Monitoring"
+            visible="true">
+         <action
+               class="uuu.actions.SimulationToolRunAction"
+               icon="icons/rectangle16.gif"
+               id="uuu.actions.SimulationToolRunAction1"
+               label="&amp;Simulation Run"
+               tooltip="Simulation Run">
+         </action>
+      </actionSet>
+   </extension>
+   
+
+</plugin>

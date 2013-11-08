@@ -1,0 +1,25 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE> New Document </TITLE>
+<META NAME="Generator" CONTENT="EditPlus">
+<META NAME="Author" CONTENT="">
+<META NAME="Keywords" CONTENT="">
+<META NAME="Description" CONTENT="">
+</HEAD>
+
+<BODY>
+
+<H1 CLASS="Head">프로젝트 생성</H1>
+<P>도구는 프로젝트 단위의 작업을 지원한다. 도구에서는 항상 프로젝트를 생성한 후에 작업을 하게 된다. (그림 3.3-1)의 풀다운 메뉴의 [파일]->[새 프로젝트] 혹은 (그림 3.3-2)의 툴바의 새 프로젝트 버튼을 클릭하거나 Ctrl+N을 누르면 (그림 3.3-3)과 같은 작업 창이 나타난다. 
+<P CLASS="Para" align="center"><img src="../images/GUI/3/image001.jpg" alt="start1" border="0"><br>
+그림 2.1-2 새 프로젝트 생성(풀다운 메뉴)
+</p>
+<P CLASS="Para" align="center"><img src="../images/GUI/3/image002.jpg" alt="start1" border="0"><br>
+그림 2.1-2 새 프로젝트 생성(툴바)
+</p>
+<P CLASS="Para" align="center"><img src="../images/GUI/3/image003.jpg" alt="start1" border="0"><br>
+그림 2.1-2 프로젝트 생성 화면
+</p>
+</BODY>
+</HTML>

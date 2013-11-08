@@ -1,0 +1,42 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE> New Document </TITLE>
+<META NAME="Generator" CONTENT="EditPlus">
+<META NAME="Author" CONTENT="">
+<META NAME="Keywords" CONTENT="">
+<META NAME="Description" CONTENT="">
+</HEAD>
+
+<BODY>
+<div class="help_breadcrumbs"><a href="../main.html">사용자 메뉴얼</a> > 
+<a href="../GUI/gui_main.html"> 통합 GUI 사용</a> > 
+<a href="../GUI/gui_6.html"> 모델 브라우징 윈도우 사용</a> > 
+</div>
+
+<H1 CLASS="Head">다이어그램 추가</H1>
+<p>패키지를 오른쪽 마우스를 클릭하면 팝업메뉴가 활성화된다. 생성한 패키지를 기반으로 작업을 추가하려면 생성한 패키지에 마우스를 갖다대고 우클릭한다.
+<P CLASS="Para" align="center"><img src="../images/GUI/6/image004.jpg" alt="start1" border="0"><br>
+그림 2.1-2 패키지 메뉴
+</p>
+<ul>
+<li>패키지 추가 : 선택된 패키지 트리의 하단부분에 새로운 패키지를 추가한다.</li>
+<li>다이어그램 추가 : 선택한 패키지의 하단에 다이어그램을 생성한다.</li>
+<li>모델 생성 : 선택한 패키지의 하단에 모델을 생성한다.</li>
+<li>패키지 삭제 : 선택되어있는 패키지를 삭제하면서 하단의 모든 내용도 함께 삭제한다.</li>
+<li>다이어그램 찾기 : 선택된 패키지 하단에 다이어그램을 찾는다.</li>
+<li>엑셀 저장 : 선택된 패키지의 하단 객체들의 정보를 엑셀파일로 저장한다.</li>
+<li>코드 생성 : 선택된 패키지의 하단 객체들의 소스파일을 생성한다. </li>
+</ul>
+<p>새로운 다이어그램을 생성하기 위해서 다이어그램 생성 버튼을 클릭한다.
+<P CLASS="Para" align="center"><img src="../images/GUI/6/image005.jpg" alt="start1" border="0"><br>
+그림 2.1-2 다이어그램 생성 메뉴
+</p>
+<ul>
+<li>다이어그램 이름 : 생성할 다이어그램의 이름을 적는다.</li>
+<li>다이어그램 종류 : 생성할 다이어그램을 선택할수 있도록 여러가지 다이어그램이 나와있다.</li>
+<li>다이어그램 설명 : 선택한 다이어그램에 대한 설명이 나와있다.</li>
+</ul>
+<p>다이어그램은 총 13가지로 구성되어있는데 이 13가지중 한가지를 선택한 후 확인 버튼을 누르면 선택한 다이어그램이 생성된다.
+</BODY>
+</HTML>

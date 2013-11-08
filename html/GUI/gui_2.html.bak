@@ -1,0 +1,24 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE> New Document </TITLE>
+<META NAME="Generator" CONTENT="EditPlus">
+<META NAME="Author" CONTENT="">
+<META NAME="Keywords" CONTENT="">
+<META NAME="Description" CONTENT="">
+</HEAD>
+
+<BODY>
+
+<H1 CLASS="Head">도구 시작 화면</H1>
+<P>도구가 처음 실행되면, 스플래쉬 윈도우가 잠시 보인 후 통합 GUI화면이 나타난다.
+<P CLASS="Para" align="center"><img src="../images/GUI/2/image001.gif" alt="start1" border="0"><br>
+그림 2.1-2 도구의 스플래쉬 윈도우
+</p>
+<p>통합 GUI의 메인 윈도우는 각 용도별로 나뉘어져 있다. 통합 GUI에서 편집기를 제어하는 방식은 MDI 방식이며, 트리 형태로 프로젝트 관리를 수행한다. 
+<p><a href="../construction/construction_2.html">화면 구성</a>
+<br>
+<p>브라우징 윈도우와 다이어그램 보드의 경계선을 마우스로 드래그 하여 크기조절이 가능하며, 위에서 설명한 것 중에서 풀다운 메뉴를 제외한 메뉴들은 옵션 설정을 통해서 메뉴의 표시 여부를 정할 수 있다.
+
+</BODY>
+</HTML>

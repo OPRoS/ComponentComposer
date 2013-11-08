@@ -1,0 +1,93 @@
+package idfi6hbf91zz67uf9202ii5;
+
+/**
+@version 2.0
+@physicalPackage
+@__modelType diagram 
+*/
+class diagram {
+/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.usecase.IncludeLineModel:oiref><oihard>
+@__modelType reference 
+*/
+class reference {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.usecase.NoteLineModel:oiref><oihard>
+@__modelType reference 
+*/
+class reference154 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.usecase.FinalActorModel:oiref><oihard>
+@__modelType reference 
+*/
+class reference155 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.usecase.FinalBoundryModel:oiref><oihard>
+@__modelType reference 
+*/
+class reference156 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.usecase.ActorModel:oiref><oihard>
+@__modelType reference 
+*/
+class reference157 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.usecase.BoundaryModel:oiref><oihard>
+@__modelType reference 
+*/
+class reference158 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.usecase.RealizeLineModel:oiref><oihard>
+@__modelType reference 
+*/
+class reference159 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.usecase.GeneralizeLineModel:oiref><oihard>
+@__modelType reference 
+*/
+class reference160 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.usecase.UseCaseModel:oiref><oihard>
+@__modelType reference 
+*/
+class reference161 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.usecase.CollaborationModel:oiref><oihard>
+@__modelType reference 
+*/
+class reference162 {
+}/**
+@__ref <oiref:design#Class#idido50f91zz67uf9202iil.diagram:oiref><oihard>
+@__modelType reference
+@__fqn <oiref:#Package#co.n3soft.n3com.model.usecase.icons:oiref> 
+*/
+class reference163 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.usecase.ExtendLineModel:oiref><oihard>
+@__modelType reference 
+*/
+class reference164 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.usecase.AssociateLineModel:oiref><oihard>
+@__modelType reference 
+*/
+class reference165 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.usecase.FinalCollaborationModel:oiref><oihard>
+@__modelType reference 
+*/
+class reference166 {
+}}/**
+@__tags
+@shapeType ClassDiagram 
+*/
+class __tags {
+}/**
+@__options 
+*/
+class __options {
+}/**
+@__positions 
+*/
+class __positions {
+}

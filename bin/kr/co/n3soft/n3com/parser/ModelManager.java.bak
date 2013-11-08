@@ -1,0 +1,3843 @@
+package kr.co.n3soft.n3com.parser;
+
+import java.io.File;
+import java.io.PrintWriter;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+
+import javac.test.TJavaBuilder;
+import kr.co.n3soft.n3com.dnd.TreeSimpleFactory;
+import kr.co.n3soft.n3com.model.activity.ActivityParameterModel;
+import kr.co.n3soft.n3com.model.activity.CentralBufferNodeModel;
+import kr.co.n3soft.n3com.model.activity.ControlFlowLineModel;
+import kr.co.n3soft.n3com.model.activity.DataStoreModel;
+import kr.co.n3soft.n3com.model.activity.DecisionModel;
+import kr.co.n3soft.n3com.model.activity.ExceptionModel;
+import kr.co.n3soft.n3com.model.activity.ExpansionNodeModel;
+import kr.co.n3soft.n3com.model.activity.FinalActiionModel;
+import kr.co.n3soft.n3com.model.activity.FinalActivityModel;
+import kr.co.n3soft.n3com.model.activity.FinalModel;
+import kr.co.n3soft.n3com.model.activity.FinalObjectNodeModel;
+import kr.co.n3soft.n3com.model.activity.FlowFinalModel;
+import kr.co.n3soft.n3com.model.activity.HForkJoinModel;
+import kr.co.n3soft.n3com.model.activity.HPartitionModel;
+import kr.co.n3soft.n3com.model.activity.InitialModel;
+import kr.co.n3soft.n3com.model.activity.ReceiveModel;
+import kr.co.n3soft.n3com.model.activity.SendModel;
+import kr.co.n3soft.n3com.model.activity.SubPartitonModel;
+import kr.co.n3soft.n3com.model.activity.SynchModel;
+import kr.co.n3soft.n3com.model.activity.TextAttachModel;
+import kr.co.n3soft.n3com.model.activity.VForkJoinModel;
+import kr.co.n3soft.n3com.model.activity.VPartitionModel;
+import kr.co.n3soft.n3com.model.comm.ClassModel;
+import kr.co.n3soft.n3com.model.comm.ClassifierModel;
+import kr.co.n3soft.n3com.model.comm.FinalPackageModel;
+import kr.co.n3soft.n3com.model.comm.LineBendpointModel;
+import kr.co.n3soft.n3com.model.comm.LineModel;
+import kr.co.n3soft.n3com.model.comm.LineTextModel;
+import kr.co.n3soft.n3com.model.comm.NodeContainerModel;
+import kr.co.n3soft.n3com.model.comm.PartitionModel;
+import kr.co.n3soft.n3com.model.comm.PortContainerModel;
+import kr.co.n3soft.n3com.model.comm.PortModel;
+import kr.co.n3soft.n3com.model.comm.StrcuturedActivityPackageTreeModel;
+import kr.co.n3soft.n3com.model.comm.StrcuturedPackageTreeModel;
+import kr.co.n3soft.n3com.model.comm.TypeRefModel;
+import kr.co.n3soft.n3com.model.comm.UMLContainerModel;
+import kr.co.n3soft.n3com.model.comm.UMLDataModel;
+import kr.co.n3soft.n3com.model.comm.UMLModel;
+import kr.co.n3soft.n3com.model.communication.MessageAssoicateLineModel;
+import kr.co.n3soft.n3com.model.communication.MessageCommunicationModel;
+import kr.co.n3soft.n3com.model.component.ArtfifactModel;
+import kr.co.n3soft.n3com.model.component.ComponentModel;
+import kr.co.n3soft.n3com.model.composite.ConnectorLineModel;
+import kr.co.n3soft.n3com.model.composite.DelegateLineModel;
+import kr.co.n3soft.n3com.model.composite.OccurrenceLineModel;
+import kr.co.n3soft.n3com.model.composite.PartModel;
+import kr.co.n3soft.n3com.model.composite.ProvidedInterfaceLineModel;
+import kr.co.n3soft.n3com.model.composite.RepresentsLineModel;
+import kr.co.n3soft.n3com.model.composite.RequiredInterfaceLineModel;
+import kr.co.n3soft.n3com.model.composite.RoleBindingLineModel;
+import kr.co.n3soft.n3com.model.deployment.CommunicationPathLineModel;
+import kr.co.n3soft.n3com.model.deployment.DeployLineModel;
+import kr.co.n3soft.n3com.model.deployment.DeploymentSpecificationModel;
+import kr.co.n3soft.n3com.model.deployment.DeviceModel;
+import kr.co.n3soft.n3com.model.deployment.ExecutionEnvironmentModel;
+import kr.co.n3soft.n3com.model.deployment.ManifestLineModel;
+import kr.co.n3soft.n3com.model.deployment.NodeModel;
+import kr.co.n3soft.n3com.model.diagram.N3EditorDiagramModel;
+import kr.co.n3soft.n3com.model.sequence.LifeLineActorModel;
+import kr.co.n3soft.n3com.model.sequence.LifeLineModel;
+import kr.co.n3soft.n3com.model.sequence.MessageModel;
+import kr.co.n3soft.n3com.model.sequence.SelfMessageModel;
+import kr.co.n3soft.n3com.model.sequence.SeqGroup;
+import kr.co.n3soft.n3com.model.state.EntryPointModelNoPort;
+import kr.co.n3soft.n3com.model.state.HistoryModel;
+import kr.co.n3soft.n3com.model.state.StateModel;
+import kr.co.n3soft.n3com.model.state.StrcuturedStateModel;
+import kr.co.n3soft.n3com.model.state.StrcuturedStatePackageTreeModel;
+import kr.co.n3soft.n3com.model.state.TerminateModel;
+import kr.co.n3soft.n3com.model.state.TransitionLineModel;
+import kr.co.n3soft.n3com.model.timing.StateLifelineModel;
+import kr.co.n3soft.n3com.model.timing.TimingMessageLineModel;
+import kr.co.n3soft.n3com.model.umlclass.AttributeEditableTableItem;
+import kr.co.n3soft.n3com.model.umlclass.DependencyLineModel;
+import kr.co.n3soft.n3com.model.umlclass.EnumerationModel;
+import kr.co.n3soft.n3com.model.umlclass.FinalClassModel;
+import kr.co.n3soft.n3com.model.umlclass.ImportLineModel;
+import kr.co.n3soft.n3com.model.umlclass.InterfaceModel;
+import kr.co.n3soft.n3com.model.umlclass.MergeLineModel;
+import kr.co.n3soft.n3com.model.umlclass.OperationEditableTableItem;
+import kr.co.n3soft.n3com.model.umlclass.ParameterEditableTableItem;
+import kr.co.n3soft.n3com.model.usecase.AssociateLineModel;
+import kr.co.n3soft.n3com.model.usecase.CollaborationModel;
+import kr.co.n3soft.n3com.model.usecase.ExtendLineModel;
+import kr.co.n3soft.n3com.model.usecase.FinalActorModel;
+import kr.co.n3soft.n3com.model.usecase.FinalBoundryModel;
+import kr.co.n3soft.n3com.model.usecase.GeneralizeLineModel;
+import kr.co.n3soft.n3com.model.usecase.IncludeLineModel;
+import kr.co.n3soft.n3com.model.usecase.NoteLineModel;
+import kr.co.n3soft.n3com.model.usecase.RealizeLineModel;
+import kr.co.n3soft.n3com.model.usecase.UseCaseModel;
+import kr.co.n3soft.n3com.project.browser.PackageTreeModel;
+import kr.co.n3soft.n3com.project.browser.RootTreeModel;
+import kr.co.n3soft.n3com.project.browser.UMLTreeModel;
+import kr.co.n3soft.n3com.project.browser.UMLTreeParentModel;
+import kr.co.n3soft.n3com.project.dialog.DetailPropertyTableItem;
+import kr.co.n3soft.n3com.projectmanager.ProjectManager;
+
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.gef.examples.shapes.LogicEditorInput;
+import org.eclipse.ui.IEditorInput;
+
+
+public class ModelManager implements IN3ModelTokenType{
+	private static ModelManager instance;
+	private HashMap tempData = new HashMap();
+	private HashMap modelStore =new HashMap();
+	private HashMap lineStore =new HashMap();
+	private HashMap viewStore =new HashMap();
+	private HashMap inModelViewStore =new HashMap();
+	private HashMap inModelViewListStore =new HashMap();
+
+	private java.util.ArrayList viewLines =new java.util.ArrayList();
+	private java.util.ArrayList remapLines = new java.util.ArrayList();
+	private java.util.ArrayList subPartitons = new java.util.ArrayList();
+	private java.util.ArrayList seqGroups = new java.util.ArrayList();
+	private java.util.ArrayList msgs = new java.util.ArrayList();
+	private java.util.ArrayList selfMsgs = new java.util.ArrayList();
+		private java.util.ArrayList isState = new java.util.ArrayList();//2008043001 PKY S Timing 객체 저장 로직 추가
+	private java.util.ArrayList isTransition = new java.util.ArrayList();//2008043001 PKY S Timing 객체 저장 로직 추가
+	private java.util.ArrayList refStore = new java.util.ArrayList();
+
+	private java.util.ArrayList openDiagarams =new java.util.ArrayList();
+
+	private UMLModel tempUMLModel = null;
+	private UMLTreeModel utm = null;
+	private UMLTreeParentModel utp = null;
+	private int current_model_type = -1;
+	private UMLDataModel current_UMLDataModel = new UMLDataModel();
+	private UMLDataModel current_ClassModel_UMLDataModel = new UMLDataModel();
+	LoadProgressRun loadProgressRun = null;
+	IProgressMonitor monitor;
+	/*
+	 * 3:bendpoint
+	 * 4:port
+	 * 5:ID_DETAIL 
+	 * 6:ID_TAG
+	 * 7:ID_EXTENSIONPOINT
+	 * 9:subPartition
+	 * 10:seqGroup
+	 * 11:msgs
+	 * 12:TimingState //2008043001 PKY S Timing 객체 저장 로직 추가
+	 * 13:Transition //2008043001 PKY S Timing 객체 저장 로직 추가
+	 */
+	private int objectTypes_begin =-1;
+
+	RootTreeModel root = ProjectManager.getInstance().getModelBrowser().getRoot();
+	java.util.ArrayList current_objects = null;
+	java.util.Vector current_objects_v = null;
+	private boolean inModel  = false;
+	private int inModelType = -1;
+	private boolean isView = false;
+	TreeSimpleFactory factory = new TreeSimpleFactory();
+	private boolean isLine  = false;
+	private boolean isBoundary = false;
+	public NodeContainerModel boundaryModel = new NodeContainerModel();
+	String boundaryParentID = "";
+	Parser parser;
+
+	public void init(){
+		this.tempData.clear();
+		this.modelStore.clear();
+		this.lineStore.clear();
+		this.viewStore.clear();
+		this.inModelViewStore.clear();
+		this.inModelViewListStore.clear();
+		this.refStore.clear();
+
+		this.viewLines.clear();
+		this.remapLines.clear();
+		this.subPartitons.clear();
+		this.seqGroups.clear();
+		this.msgs.clear();
+		this.selfMsgs.clear();
+		tempUMLModel = null;
+		utm = null;
+		utp = null;
+		current_model_type = -1;
+		current_UMLDataModel = new UMLDataModel();
+		current_ClassModel_UMLDataModel = new UMLDataModel();
+		objectTypes_begin =-1;
+
+		RootTreeModel root = ProjectManager.getInstance().getModelBrowser().getRoot();
+		current_objects = null;
+		current_objects_v = null;
+		inModel  = false;
+		inModelType = -1;
+		isView = false;
+		factory = new TreeSimpleFactory();
+		isLine  = false;
+		isBoundary = false;
+		boundaryModel = new NodeContainerModel();
+		boundaryParentID = "";
+		parser=null;
+//		openDiagarams.clear();
+
+
+
+
+		this.root = ProjectManager.getInstance().getModelBrowser().getRoot();
+
+	}
+
+	public static ModelManager getInstance() {
+		if (instance == null) {
+			instance = new ModelManager();
+
+			return instance;
+		}
+		else {
+			return instance;
+		}
+	}
+	//e_models_begin
+	public void buildRoot(){
+		HashMap tempModel = new HashMap(); 
+	}
+
+	public java.util.ArrayList getParams(String token){
+		java.util.ArrayList params = new java.util.ArrayList();
+		String[] data = token.split(",");
+
+		for(int i=0;i<data.length;i++){
+			String param = data[i];
+			if(param.indexOf(":")>0){
+				String[] p = param.split(":");
+				ParameterEditableTableItem pt = new ParameterEditableTableItem();
+				pt.name = p[0];
+				pt.stype = p[1];
+				params.add(pt);
+			}
+		}
+		return params;
+
+	}
+
+	public MessageCommunicationModel getMessageCommunicationModel(String token){
+		MessageCommunicationModel mcm = new MessageCommunicationModel();
+		String[] data = token.split("\"");
+		if(data.length==7){
+			mcm.setMessageType(data[0]);
+			mcm.setMessageIntType(Integer.parseInt(data[4]));
+			if(mcm.getMessageIntType()==1){
+				mcm.setNumber("0");
+			}
+			else{
+				mcm.setAngle(data[6]);
+				if("0".equals(data[5])){
+					mcm.addRightArrowModel();
+				}
+				else{
+					mcm.addLeftArrowModel();
+				}
+				int num = data[1].indexOf(":");
+				if(num>0){
+					boolean isNum = true;
+					String numB = data[1].substring(0,num);
+
+					mcm.setNumber(numB);
+
+					mcm.setName(data[1].substring(num+1));
+				}
+				return mcm;
+
+			}
+			if(!data[3].equals("false")){
+				UMLTreeModel utm = (UMLTreeModel)this.modelStore.get(data[3]);
+				UMLModel um = (UMLModel)utm.getRefModel();
+				if(um!=null && um instanceof ClassifierModel){
+					ClassifierModel cm = (ClassifierModel)um;
+					mcm.setTrm((TypeRefModel)cm.getClassModel());
+					OperationEditableTableItem opm = cm.getClassModel().searchOperationEditableTableItem(data[1]);
+					if(opm!=null){
+						mcm.setOti(opm);
+					}
+				}
+			}
+			else{
+				mcm.setName(data[1]);
+			}
+
+
+		}
+		return mcm;
+	}
+
+	public SeqGroup getSeqGroup(String token){
+		SeqGroup seq = new SeqGroup();
+		String[] data = token.split(",");
+		if(data.length==4){
+			Rectangle rec = new Rectangle();
+			rec.x = Integer.valueOf(data[0]);
+			rec.y = Integer.valueOf(data[1]);
+			rec.width = Integer.valueOf(data[2]);
+			rec.height = Integer.valueOf(data[3]);
+			seq.setR(rec);
+		}
+		return seq;
+	}
+
+	public Point getLocation(String token){
+		int a=0;
+		int b=0;
+		String[] data = token.split(",");
+		if(data.length==2){
+			a = Integer.valueOf(data[0]);
+			b = Integer.valueOf(data[1]);
+		}
+		return new Point(a,b);
+	}
+
+	public PortModel getPortModel(String token){
+
+		PortModel pm = new PortModel();
+		String[] data = token.split(",");
+		if(data.length==7){
+			pm.x = Integer.valueOf(data[0]);
+			pm.y = Integer.valueOf(data[1]);
+			pm.w = Integer.valueOf(data[2]);
+			pm.h = Integer.valueOf(data[3]);
+			pm.dw = Integer.valueOf(data[4]);
+			pm.dh = Integer.valueOf(data[5]);
+			pm.pid = data[6];
+			this.viewStore.put(data[6], pm);
+		}
+		return pm;
+
+	}
+
+	public ActivityParameterModel getActivityParameterModel(String token){
+
+		ActivityParameterModel pm = new ActivityParameterModel();
+		String[] data = token.split(",");
+		if(data.length==7){
+			pm.x = Integer.valueOf(data[0]);
+			pm.y = Integer.valueOf(data[1]);
+			pm.w = Integer.valueOf(data[2]);
+			pm.h = Integer.valueOf(data[3]);
+			pm.dw = Integer.valueOf(data[4]);
+			pm.dh = Integer.valueOf(data[5]);
+			pm.pid = data[6];
+			this.viewStore.put(data[6], pm);
+		}
+		return pm;
+
+	}
+
+
+
+	public ExpansionNodeModel getExpansionNodeModel(String token){
+
+		ExpansionNodeModel pm = new ExpansionNodeModel();
+		String[] data = token.split(",");
+		if(data.length==7){
+			pm.x = Integer.valueOf(data[0]);
+			pm.y = Integer.valueOf(data[1]);
+			pm.w = Integer.valueOf(data[2]);
+			pm.h = Integer.valueOf(data[3]);
+			pm.dw = Integer.valueOf(data[4]);
+			pm.dh = Integer.valueOf(data[5]);
+			pm.pid = data[6];
+			this.viewStore.put(data[6], pm);
+		}
+		return pm;
+
+	}
+
+
+	public SubPartitonModel getSubPartitionModel(String token){
+
+
+		SubPartitonModel pm = new SubPartitonModel();
+		String[] data = token.split(",");
+		Point location = new Point();
+		Dimension size = new Dimension();
+		if(data.length==6 ){
+			location.x = Integer.valueOf(data[0]);
+			location.y = Integer.valueOf(data[1]);
+			size.width = Integer.valueOf(data[2]);
+			size.height = Integer.valueOf(data[3]);
+			String name = data[4];
+			boolean isMode = Boolean.valueOf(data[5]).booleanValue();
+			pm.setLocation(location);
+			pm.setSize(size);
+			pm.setIsMode(isMode);
+			pm.setName(name);
+
+		}
+		return pm;
+
+	}
+
+	public LineBendpointModel getLineBendpointModel(String token){
+		float weight = 0;
+		int w1 = 0;
+		int h1 = 0;
+		int w2 = 0;
+		int h2 = 0;
+		String[] data = token.split(",");
+		LineBendpointModel lbm = new LineBendpointModel();
+		if(data.length==5){
+			weight = Float.valueOf(data[0]);
+			w1 = Integer.valueOf(data[1]);
+			h1 = Integer.valueOf(data[2]);
+			w2 = Integer.valueOf(data[3]);
+			h2 = Integer.valueOf(data[4]);
+			lbm.setWeight(weight);
+			lbm.setRelativeDimensions(new Dimension(w1,h1),new Dimension(w2,h2));
+			return lbm;
+		}
+		return lbm;
+	}
+
+	public Dimension getSize(String token) {
+		int a=0;
+		int b=0;
+		String[] data = token.split(",");
+		if(data.length==2){
+			a = Integer.valueOf(data[0]);
+			b = Integer.valueOf(data[1]);
+		}
+		return new Dimension(a,b);
+	}
+
+	public void createLineModel(int type,UMLDataModel um,HashMap viewStore){
+		LineModel lm = null;
+		N3EditorDiagramModel ndm = null;
+		String diagramId = um.getProperty("ID_DIAGRAM");
+		String sourceId = um.getProperty("ID_SOURCE");
+		String targetId = um.getProperty("ID_TARGET");
+		String targetTerminal = um.getProperty("ID_TARGET_TERMINAL");
+		String sourceTerminal = um.getProperty("ID_SOURCE_TERMINAL");
+		String y = um.getProperty("ID_Y");
+
+		String isCall= um.getProperty("ID_CALL");
+		String isRet = um.getProperty("ID_RETURN");
+		String isNew = um.getProperty("ID_NEW");
+		String isSyn = um.getProperty("ID_SYN");
+
+		//property start
+		HashMap detailProp = new HashMap();
+		detailProp.put("ID_TARGET_ALLOWDUPLICATES",um.getProperty("ID_TARGET_ALLOWDUPLICATES"));
+		detailProp.put("ID_TARGET_QUALIFIER",um.getProperty("ID_TARGET_QUALIFIER"));
+		detailProp.put("ID_TARGET_DERIVED",um.getProperty("ID_TARGET_DERIVED"));
+		detailProp.put("ID_TARGET_DERIVEDUNION",um.getProperty("ID_TARGET_DERIVEDUNION"));
+		detailProp.put("ID_SOURCE_OWNED",um.getProperty("ID_SOURCE_OWNED"));
+		detailProp.put("ID_DESCRIPTORS",um.getProperty("ID_DESCRIPTORS"));//2008043001 PKY S 라인선에 설명이 들어가지 않는문제
+		detailProp.put("ID_ACTORIMAGE",um.getProperty("ID_ACTORIMAGE"));//2008043001 PKY S 라인선에 설명이 들어가지 않는문제	
+		detailProp.put("ID_TARGET_OWNED",um.getProperty("ID_TARGET_OWNED"));
+		detailProp.put("ID_TARGET_ROLE_NOTE",um.getProperty("ID_TARGET_ROLE_NOTE"));
+		detailProp.put("ID_SOURCE_ORDERED",um.getProperty("ID_SOURCE_ORDERED"));
+		detailProp.put("ID_SOURCE_DERIVEDUNION",um.getProperty("ID_SOURCE_DERIVEDUNION"));
+		detailProp.put("ID_TARGET_AGGREGATION",um.getProperty("ID_TARGET_AGGREGATION"));
+		detailProp.put("ID_SOURCE_ROLE",um.getProperty("ID_SOURCE_ROLE"));
+		detailProp.put("ID_SOURCE_NAVIGABILITY",um.getProperty("ID_SOURCE_NAVIGABILITY"));
+		detailProp.put("ID_SOURCE_DERIVED",um.getProperty("ID_SOURCE_DERIVED"));
+		detailProp.put("ID_TARGET_NAVIGABILITY",um.getProperty("ID_TARGET_NAVIGABILITY"));
+		detailProp.put("ID_SOURCE_AGGREGATION",um.getProperty("ID_SOURCE_AGGREGATION"));
+		detailProp.put("ID_TARGET_CONSTRAINT",um.getProperty("ID_TARGET_CONSTRAINT"));
+		detailProp.put("ID_TARGET_ORDERED",um.getProperty("ID_TARGET_ORDERED"));
+		detailProp.put("ID_TARGET_MUL",um.getProperty("ID_TARGET_MUL"));
+		detailProp.put("ID_TARGET_ROLE",um.getProperty("ID_TARGET_ROLE"));
+		detailProp.put("ID_SOURCE_ALLOWDUPLICATES",um.getProperty("ID_SOURCE_ALLOWDUPLICATES"));
+		detailProp.put("ID_SOURCE_QUALIFIER",um.getProperty("ID_SOURCE_QUALIFIER"));
+		detailProp.put("ID_SOURCE_CONSTRAINT",um.getProperty("ID_SOURCE_CONSTRAINT"));
+		detailProp.put("ID_SOURCE_MUL",um.getProperty("ID_SOURCE_MUL"));
+		detailProp.put("ID_SOURCE_ROLE_NOTE",um.getProperty("ID_SOURCE_ROLE_NOTE"));
+		//property end
+
+		UMLModel umSource = (UMLModel)viewStore.get(sourceId);
+		UMLModel umTarget = (UMLModel)viewStore.get(targetId);
+		java.util.Vector bendpoints = (java.util.Vector)um.getElementProperty("Bendpoints");
+
+
+		if (type == 1000) {
+			lm=new ExtendLineModel();
+
+//			viewStore.get()
+		}
+		else if (type == 1001) {
+			lm=new IncludeLineModel();
+		}
+		else if (type == 1002) {
+			lm=new ConnectorLineModel();
+		}
+		else if (type == 1003) {
+			lm=new MessageAssoicateLineModel();
+			if(this.msgs.size()>0){
+//				LineTextModel ltm = ((MessageModel)lm).getMiddleLineTextModel();
+//				LineTextModel ltmS = ((MessageModel)lm).getSourceLineTextModel();
+//				LineTextModel ltmT = ((MessageModel)lm).getTargetLineTextModel();
+				for(int i=0;i<this.msgs.size();i++){
+					MessageCommunicationModel mm = (MessageCommunicationModel)msgs.get(i);
+					if(mm.getKey().equals("centerMsg")){
+						((MessageAssoicateLineModel)lm).addMiddleLineTextModel(mm);
+					}
+					else if(mm.getKey().equals("sourceMsg")){
+						((MessageAssoicateLineModel)lm).addSourceLineTextModel(mm);
+					}
+					else if(mm.getKey().equals("targetMsg")){
+						((MessageAssoicateLineModel)lm).addTargetLineTextModel(mm);
+					}
+				}
+			}
+			lm.setLoad(true);
+			this.msgs.clear();
+		}
+		else if (type == 1004) {
+			lm=new AssociateLineModel();
+
+
+		}
+		else if (type == 1005) {
+			lm=new GeneralizeLineModel();
+		}
+		else if (type == 1006) {
+			lm=new RealizeLineModel();
+		}
+		else if (type == 1007) {
+			lm=new NoteLineModel();
+		}
+		else if (type == 1008) {
+			lm=new DependencyLineModel();
+		}
+		else if (type == 1009) {
+			lm=new ControlFlowLineModel();
+		}
+		else if (type == 1010) {
+			lm=new RequiredInterfaceLineModel();
+		}
+		else if (type == 1011) {
+			lm=new ProvidedInterfaceLineModel();
+		}
+		else if (type == 1012) {
+			lm=new RoleBindingLineModel();
+		}
+		else if (type == 1013) {
+			lm=new DelegateLineModel();
+		}
+		else if (type == 1014) {
+			lm=new OccurrenceLineModel();
+		}
+		else if (type == 1015) {
+			lm=new RepresentsLineModel();
+		}
+		else if (type == 1016) {
+			lm=new ManifestLineModel();
+		}
+		else if (type == 1017) {
+			lm=new DeployLineModel();
+		}
+		else if (type == 1018) {
+			lm=new TimingMessageLineModel();
+		}
+		else if (type == 1019) {
+			lm=new CommunicationPathLineModel();
+		}
+		else if (type == 1020) {
+			lm=new MessageModel();
+			if(y!=null && !y.trim().equals("")){
+				((MessageModel)lm).setY(Integer.valueOf(y).intValue());
+			}
+
+			if(isCall!=null && isCall.trim().equals("true")){
+				((MessageModel)lm).setIsCall(true);
+			}
+			else{
+				((MessageModel)lm).setIsCall(false);
+			}
+
+			if(isRet!=null && isRet.trim().equals("true")){
+				((MessageModel)lm).setIsReturn(true);
+
+			}
+			else{
+				((MessageModel)lm).setIsReturn(false);
+			}
+			if(isNew!=null && isNew.trim().equals("true")){
+				((MessageModel)lm).setIsNew(true);
+			}
+			else{
+				((MessageModel)lm).setIsNew(false);
+			}
+			if(isSyn!=null && isSyn.trim().equals("true")){
+				((MessageModel)lm).setIsSynchronous(true);
+			}
+			else{
+				((MessageModel)lm).setIsSynchronous(false);
+			}
+
+
+
+			//center
+			if(this.msgs.size()>0){
+
+				for(int i=0;i<this.msgs.size();i++){
+					MessageCommunicationModel mm = (MessageCommunicationModel)msgs.get(i);
+					if(mm.getKey().equals("centerMsg")){
+						((MessageModel)lm).addMiddleLineTextModel(mm);
+					}
+					else if(mm.getKey().equals("sourceMsg")){
+						((MessageModel)lm).addSourceLineTextModel(mm);
+					}
+					else if(mm.getKey().equals("targetMsg")){
+						((MessageModel)lm).addTargetLineTextModel(mm);
+					}
+				}
+			}
+			lm.setLoad(true);
+			this.msgs.clear();
+		}
+		else if (type == 1021) {
+			lm=new TransitionLineModel();
+		}
+
+		else if (type == 1022) {
+			lm=new ImportLineModel();
+		}
+		else if (type == 1023) {
+			lm=new MergeLineModel();
+		}
+		else if (type == 1024) {
+			Object obj = this.viewStore.get("diagram");
+			if(obj!=null){
+				if(obj instanceof N3EditorDiagramModel){
+					ndm = (N3EditorDiagramModel)obj;
+				}
+			}
+			String size= um.getProperty("ID_SIZE");
+			String location = um.getProperty("ID_LOCATION");
+			UMLModel child = new SelfMessageModel();
+			child.setSize(this.getSize(size));
+			child.setLocation(this.getLocation(location));
+			ndm.initSelfMessageModel((SelfMessageModel)child);
+			ndm.addChild(child);
+			return;
+		}
+		else {
+			lm=new LineModel();
+		}
+
+		lm.setTargetTerminal(targetTerminal);
+		Object obj = this.viewStore.get("diagram");
+		if(obj!=null){
+			if(obj instanceof N3EditorDiagramModel){
+				ndm = (N3EditorDiagramModel)obj;
+			}
+		}
+		if(umSource!=null){
+			lm.setSource(umSource);
+		}
+		else{
+
+			umSource = (UMLModel)this.inModelViewStore.get(sourceId);
+			if(umSource!=null)
+				lm.setSource(umSource);
+
+
+		}
+
+		lm.setSourceTerminal(sourceTerminal);
+
+
+//		lm.detachTarget();
+		if(umTarget!=null){
+			lm.setTarget(umTarget);
+		}
+		else{
+
+			umTarget = (UMLModel)this.inModelViewStore.get(targetId);
+			if(umTarget!=null)
+				lm.setTarget(umTarget);
+		}
+
+
+		if(this.isBoundary){
+			Object obj1 = lineStore.get(diagramId);
+			if(obj1==null){
+				java.util.ArrayList list = new java.util.ArrayList();
+				list.add(lm);
+				lm.setSourceId(sourceId);
+				lm.setTargetId(targetId);
+				lineStore.put(diagramId, list);
+			}
+			else{
+				java.util.ArrayList list = (java.util.ArrayList)obj1;
+				lm.setSourceId(sourceId);
+				lm.setTargetId(targetId);
+				list.add(lm);
+			}
+		}
+		else{
+
+			lm.attachSource();
+			if(ndm!=null)
+				lm.attachTarget(ndm);
+
+		}
+		lm.setLoad(true);
+		lm.setDetailProp(detailProp);
+		if(bendpoints!=null)
+			lm.setBendpoints(bendpoints);
+
+	}
+
+
+	public void parse(File file) throws Exception	{
+		this.viewStore.clear();
+		this.modelStore.clear();
+		if (file.isDirectory())	{
+			File[] list = file.listFiles();
+
+			for (int i=0; i<list.length; i++)
+				parse(list[i]);
+		}
+		else if (file.getName().endsWith(".nmdl"))	{
+			parser = new N3ModelParser(
+					file, new TJavaBuilder(new PrintWriter(System.out)),loadProgressRun);
+
+			parser.parse();
+		}
+	}
+	//e_create_model
+
+	public String putLinesModel(UMLModel uMLModel){
+		for (int i1 = 0; i1 < uMLModel.getSourceConnections().size(); i1++) {
+			LineModel li = (LineModel)uMLModel.getSourceConnections().get(i1);
+			this.viewLines.add(li);
+		}
+		return "";	
+	}
+
+	public String wirteDetailProp(HashMap detailProp){
+		StringBuffer sb = new StringBuffer();
+		Iterator iterator = detailProp.keySet().iterator();
+		while (iterator.hasNext()) {
+			String key = (String)iterator.next();
+			Object obj = detailProp.get(key);
+			if (obj instanceof String ) {
+				String data = obj.toString();
+				sb.append("property "+key+"="+obj.toString()+IN3ModelTokenType.PROPERTY_N3EOF+"\n") ;
+			}
+		}
+		return sb.toString();
+	}
+
+	public String writeLineModel(LineModel lm){
+		StringBuffer sb = new StringBuffer("model");
+		String type = ProjectManager.getInstance().getLineModelName(lm);
+		sb.append(" "+type +" (\n");
+		sb.append("model_propertys" +" <\n");
+		sb.append("property ID_DIAGRAM="+lm.getDiagram().getUMLDataModel().getId()+IN3ModelTokenType.PROPERTY_N3EOF+"\n") ;
+		sb.append("property ID_SOURCE="+lm.getSource().getView_ID()+IN3ModelTokenType.PROPERTY_N3EOF+"\n") ;
+		sb.append("property ID_SOURCE_TERMINAL="+lm.getSourceTerminal()+IN3ModelTokenType.PROPERTY_N3EOF+"\n") ;
+		sb.append("property ID_TARGET="+lm.getTarget().getView_ID()+IN3ModelTokenType.PROPERTY_N3EOF+"\n") ;
+		sb.append("property ID_TARGET_TERMINAL="+lm.getTargetTerminal()+IN3ModelTokenType.PROPERTY_N3EOF+"\n") ;
+		sb.append(this.wirteDetailProp(lm.getDetailProp()));
+		if(lm instanceof MessageModel){
+			MessageModel mm = (MessageModel)lm;
+			LineTextModel ltm = mm.getMiddleLineTextModel();
+			LineTextModel ltmS = mm.getSourceLineTextModel();
+			LineTextModel ltmT = mm.getTargetLineTextModel();
+			sb.append("property ID_CALL="+mm.getIsCall()+IN3ModelTokenType.PROPERTY_N3EOF+"\n") ;
+			sb.append("property ID_RETURN="+mm.getIsReturn()+IN3ModelTokenType.PROPERTY_N3EOF+"\n") ;
+			sb.append("property ID_NEW="+mm.getIsNew()+IN3ModelTokenType.PROPERTY_N3EOF+"\n") ;
+			sb.append("property ID_SYN="+mm.getIsSynchronous()+IN3ModelTokenType.PROPERTY_N3EOF+"\n") ;
+
+
+			sb.append("property ID_Y="+mm.getY()+IN3ModelTokenType.PROPERTY_N3EOF+"\n") ;
+			if(ltm.getMessageSize()>0 || ltmS.getMessageSize()>0
+					|| ltmT.getMessageSize()>0){
+				sb.append("propertys_list [\n") ;
+				sb.append("objects MessageCommunications+\n") ;
+				for(int i=0;i<ltm.getMessageSize();i++){
+					MessageCommunicationModel mc = ltm.getMessageCommunicationModel(i);
+					sb.append("property centerMsg="+mc.wirteModel()+IN3ModelTokenType.PROPERTY_N3EOF+"\n") ;
+
+				}
+				for(int i=0;i<ltmS.getMessageSize();i++){
+					MessageCommunicationModel mc = ltmS.getMessageCommunicationModel(i);
+					sb.append("property sourceMsg="+mc.wirteModel()+IN3ModelTokenType.PROPERTY_N3EOF+"\n") ;
+
+				}
+				for(int i=0;i<ltmT.getMessageSize();i++){
+					MessageCommunicationModel mc = ltmS.getMessageCommunicationModel(i);
+					sb.append("property targetMsg="+mc.wirteModel()+IN3ModelTokenType.PROPERTY_N3EOF+"\n") ;
+
+				}
+				sb.append("-\n") ;
+				sb.append("]\n") ;
+			}
+
+		}
+		else if(lm instanceof MessageAssoicateLineModel){
+			MessageAssoicateLineModel mm = (MessageAssoicateLineModel)lm;
+			LineTextModel ltm = mm.getMiddleLineTextModel();
+			LineTextModel ltmS = mm.getSourceLineTextModel();
+			LineTextModel ltmT = mm.getTargetLineTextModel();
+			if(ltm.getMessageSize()>0 || ltmS.getMessageSize()>0
+					|| ltmT.getMessageSize()>0){
+				sb.append("propertys_list [\n") ;
+				sb.append("objects MessageCommunications+\n") ;
+				for(int i=0;i<ltm.getMessageSize();i++){
+					MessageCommunicationModel mc = ltm.getMessageCommunicationModel(i);
+					sb.append("property centerMsg="+mc.wirteModel()+IN3ModelTokenType.PROPERTY_N3EOF+"\n") ;
+
+				}
+				for(int i=0;i<ltmS.getMessageSize();i++){
+					MessageCommunicationModel mc = ltmS.getMessageCommunicationModel(i);
+					sb.append("property sourceMsg="+mc.wirteModel()+IN3ModelTokenType.PROPERTY_N3EOF+"\n") ;
+
+				}
+				for(int i=0;i<ltmT.getMessageSize();i++){
+					MessageCommunicationModel mc = ltmS.getMessageCommunicationModel(i);
+					sb.append("property targetMsg="+mc.wirteModel()+IN3ModelTokenType.PROPERTY_N3EOF+"\n") ;
+
+				}
+				sb.append("-\n") ;
+				sb.append("]\n") ;
+			}
+		}
+		if(lm.getBendpoints().size()>0){
+			sb.append("propertys_list [\n") ;
+			sb.append("objects Bendpoints+\n") ;
+			for(int i=0;i<lm.getBendpoints().size();i++){
+				LineBendpointModel lbm =  (LineBendpointModel)lm.getBendpoints().get(i);
+				sb.append("property Bendpoint="+lbm.writeModel()+IN3ModelTokenType.PROPERTY_N3EOF+"\n") ;
+
+			}
+			sb.append("-\n") ;
+			sb.append("]\n") ;
+		}
+		sb.append(">\n");
+		sb.append(")\n");
+		return sb.toString();
+
+	}
+
+	public void writeViews(StringBuffer sb){
+		Collection collection = viewStore.values();
+		Collection collection1 = this.inModelViewStore.values();
+		Object[] objs = collection.toArray();
+		Object[] objs2 = collection1.toArray();
+
+		for(int i=0;i<objs2.length;i++){
+			Object obj = objs2[i];
+			if(obj instanceof NodeContainerModel){
+				sb.append(this.writeInModelViewDiagram((NodeContainerModel)obj));
+			}
+		}
+		sb.append("views\n");
+		for(int i=0;i<objs.length;i++){
+			Object obj = objs[i];
+			if(obj instanceof N3EditorDiagramModel){
+				sb.append(this.writeDiagram((N3EditorDiagramModel)obj));
+			}
+		}
+		sb.append(";\n");
+		viewStore.clear();
+	}
+
+	public String writeInModelViewDiagram(NodeContainerModel boundaryModel){
+		java.util.HashMap views = new java.util.HashMap();
+		StringBuffer sb = new StringBuffer("model");
+		UMLModel ump = (UMLModel)boundaryModel.getAcceptParentModel();
+
+//		String type = ProjectManager.getInstance().getDiagramPath(n3EditorDiagramModel.getDiagramType());
+		sb.append(" boundary (\n");
+		sb.append("model_propertys" +" <\n");
+
+		sb.append("property parentID="+ump.getUMLDataModel().getId()+IN3ModelTokenType.PROPERTY_N3EOF+"\n") ;
+		for(int i=0;i<boundaryModel.getChildren().size();i++){
+			Object obj = boundaryModel.getChildren().get(i);
+			if(obj instanceof SubPartitonModel){
+				if(i==0){
+					sb.append("propertys_list [\n");
+					sb.append("objects subPartition +\n");
+
+				}
+				SubPartitonModel sm = (SubPartitonModel)obj;
+				sb.append(sm.writeModel()+"\n");
+				if(i==boundaryModel.getChildren().size()-1){
+					sb.append("-\n");
+					sb.append("]\n");
+				}
+			}
+		}
+
+		sb.append(">\n");
+		sb.append(")\n");
+		for(int i=0;i<boundaryModel.getChildren().size();i++){
+			Object obj = boundaryModel.getChildren().get(i);
+			if(obj instanceof UMLModel){
+				UMLModel um = (UMLModel)obj;
+				putLinesModel(um);
+//				this.viewStore.put(um.getView_ID(), um);
+				sb.append(this.writeView(um, um.getUMLDataModel().getId()));
+			}
+		}
+		sb.append("lines\n");
+		for(int i=0;i<viewLines.size();i++){
+			Object obj = viewLines.get(i);
+			if(obj instanceof LineModel){
+				LineModel um = (LineModel)obj;
+				sb.append(this.writeLineModel(um));
+
+//				this.viewStore.put(um.getView_ID(), um);
+//				sb.append(this.writeView(um, n3EditorDiagramModel.getID()));
+			}
+		}
+		viewLines.clear();
+
+
+		return sb.toString();
+
+	}
+
+
+	public String writeDiagram(N3EditorDiagramModel n3EditorDiagramModel){
+		System.out.println("ddddddddddddd");
+		java.util.HashMap views = new java.util.HashMap();
+		StringBuffer sb = new StringBuffer("model");
+		String type = ProjectManager.getInstance().getDiagramPath(n3EditorDiagramModel.getDiagramType());
+		sb.append(" diagram (\n");
+		sb.append("model_propertys" +" <\n");
+		if(n3EditorDiagramModel.getUMLTreeModel()!=null && n3EditorDiagramModel.getUMLTreeModel().getParent()!=null){
+			UMLModel up =(UMLModel)n3EditorDiagramModel.getUMLTreeModel().getParent().getRefModel();
+			if(up!=null ){
+				sb.append("property parentID="+up.getID()+IN3ModelTokenType.PROPERTY_N3EOF+"\n") ;
+			}
+		}
+		sb.append("property ID="+n3EditorDiagramModel.getUMLDataModel().getId()+IN3ModelTokenType.PROPERTY_N3EOF+"\n") ;
+		sb.append("property ID_NAME="+n3EditorDiagramModel.getName()+IN3ModelTokenType.PROPERTY_N3EOF+"\n") ;
+		sb.append("property ID_TYPE="+n3EditorDiagramModel.getDiagramType()+IN3ModelTokenType.PROPERTY_N3EOF+"\n") ;
+		sb.append("property ID_OPEN="+n3EditorDiagramModel.isOpen()+IN3ModelTokenType.PROPERTY_N3EOF+"\n") ;
+		sb.append(">\n");
+		sb.append(")\n");
+		for(int i=0;i<n3EditorDiagramModel.getChildren().size();i++){
+			Object obj = n3EditorDiagramModel.getChildren().get(i);
+			if(obj instanceof UMLModel){
+				UMLModel um = (UMLModel)obj;
+				putLinesModel(um);
+//				this.viewStore.put(um.getView_ID(), um);
+				sb.append(this.writeView(um, n3EditorDiagramModel.getID()));
+			}
+		}
+		sb.append("lines\n");
+		for(int i=0;i<viewLines.size();i++){
+			Object obj = viewLines.get(i);
+			if(obj instanceof LineModel){
+				LineModel um = (LineModel)obj;
+				sb.append(this.writeLineModel(um));
+
+//				this.viewStore.put(um.getView_ID(), um);
+//				sb.append(this.writeView(um, n3EditorDiagramModel.getID()));
+			}
+		}
+
+		for(int j=0;j<this.selfMsgs.size();j++){
+			Object obj = selfMsgs.get(j);
+			if(obj instanceof SelfMessageModel){
+				SelfMessageModel um = (SelfMessageModel)obj;
+				sb.append(um.writeModel());
+			}
+		}
+		viewLines.clear();
+		this.selfMsgs.clear();
+
+
+		return sb.toString();
+
+	}
+
+	public String writeView(UMLModel um,String parentId){
+		String type = ProjectManager.getInstance().getModelTypeName(ProjectManager.getInstance().getModelType(um, -1));
+		StringBuffer sb = new StringBuffer();
+		if(um instanceof SelfMessageModel){
+			this.selfMsgs.add(um);
+		}
+		else if(type!=null && !type.trim().equals("")){
+			sb.append("model");
+			sb.append(" "+type +" (\n");
+			sb.append("model_propertys" +" <\n");
+			sb.append("property View_ID="+um.getView_ID()+IN3ModelTokenType.PROPERTY_N3EOF+"\n") ;
+			sb.append("property ID="+um.getUMLDataModel().getId()+IN3ModelTokenType.PROPERTY_N3EOF+"\n") ;
+			sb.append("property parentID="+parentId+IN3ModelTokenType.PROPERTY_N3EOF+"\n") ;
+			sb.append("property ID_SIZE="+um.getSize().width+","+um.getSize().height+IN3ModelTokenType.PROPERTY_N3EOF+"\n") ;
+			sb.append("property ID_LOCATION="+um.getLocation().x+","+um.getLocation().y+IN3ModelTokenType.PROPERTY_N3EOF+"\n") ;
+			sb.append("property ID_COLOR="+parentId+IN3ModelTokenType.PROPERTY_N3EOF+"\n") ;
+
+			if(um instanceof PortContainerModel){
+				PortContainerModel cm = (PortContainerModel)um;
+				if(cm.getPorts().size()>0){
+					sb.append("propertys_list [\n") ;
+					sb.append("objects ports+\n") ;
+					for(int i=0;i<cm.getPorts().size();i++){
+						Object obj = cm.getPorts().get(i);
+						if(obj instanceof ActivityParameterModel){
+							PortModel pm = (PortModel)cm.getPorts().get(i);
+//							putLinesModel(pm);
+							sb.append("property activityParamterport="+pm.getLocation().x+","+pm.getLocation().y+","+pm.getSize().width+","+pm.getSize().height+","+pm.getPtDifference().width+","+pm.getPtDifference().height+","+pm.view_ID +IN3ModelTokenType.PROPERTY_N3EOF+"\n") ;
+						}
+						else if(obj instanceof ExpansionNodeModel){
+							PortModel pm = (PortModel)cm.getPorts().get(i);
+//							putLinesModel(pm);
+							sb.append("property expansionNodeport="+pm.getLocation().x+","+pm.getLocation().y+","+pm.getSize().width+","+pm.getSize().height+","+pm.getPtDifference().width+","+pm.getPtDifference().height+","+pm.view_ID +IN3ModelTokenType.PROPERTY_N3EOF+"\n") ;
+						}
+						else{
+							PortModel pm = (PortModel)cm.getPorts().get(i);
+//							putLinesModel(pm);
+							sb.append("property port="+pm.getLocation().x+","+pm.getLocation().y+","+pm.getSize().width+","+pm.getSize().height+","+pm.getPtDifference().width+","+pm.getPtDifference().height+","+pm.view_ID +IN3ModelTokenType.PROPERTY_N3EOF+"\n") ;
+						}
+
+
+					}
+					sb.append("-\n") ;
+					sb.append("]\n") ;
+				}
+			}
+			else if(um instanceof LifeLineModel){
+				LifeLineModel lm = (LifeLineModel)um;
+				sb.append("propertys_list [\n") ;
+				sb.append("objects groups+\n") ;
+				for(int i=0;i<lm.getGroup().size();i++){
+					SeqGroup sg = (SeqGroup)lm.getGroup().get(i);
+					sb.append("property seqGroup="+sg.getR().x+","+sg.getR().y+","+sg.getR().width+","+sg.getR().height+IN3ModelTokenType.PROPERTY_N3EOF+"\n") ;
+				}
+				sb.append("-\n") ;
+				sb.append("]\n") ;
+
+			}
+
+			sb.append(">\n");
+			sb.append(")\n");
+		}
+		return sb.toString();
+	}
+
+
+	public String writeModel(UMLModel um,String id){
+		StringBuffer sb = new StringBuffer("");
+		if(um instanceof N3EditorDiagramModel){
+			this.viewStore.put(um.getUMLDataModel().getId(), um);
+		}
+		else{
+//			StringBuffer sb = new StringBuffer("model");
+			sb.append("model");
+			String type = ProjectManager.getInstance().getModelTypeName(ProjectManager.getInstance().getModelType(um, -1));
+			if(um instanceof TypeRefModel){
+				type= "TypeRefModel";
+			}
+			else if(um instanceof ClassModel){
+				type= "ClassModel";
+			}
+			sb.append(" "+type +" (\n");
+			sb.append("model_propertys" +" <\n");
+			if(id==null){
+			sb.append("property ID="+um.getUMLDataModel().getId()+IN3ModelTokenType.PROPERTY_N3EOF+"\n") ;
+			}
+			else{
+				sb.append("property ID="+id+IN3ModelTokenType.PROPERTY_N3EOF+"\n") ;
+			}
+			sb.append("property ID_NAME="+um.getName()+IN3ModelTokenType.PROPERTY_N3EOF+"\n") ;
+			sb.append("property ID_STEREOTYPE="+um.getStereotype()+IN3ModelTokenType.PROPERTY_N3EOF+"\n") ;
+			UMLModel umRef  = (UMLModel)um.getUMLDataModel().getElementProperty("typeRefModel");
+			if(umRef!=null){
+				sb.append("property REF_ID="+umRef.getUMLDataModel().getId()+IN3ModelTokenType.PROPERTY_N3EOF+"\n") ;
+			}
+			if(um.getUMLTreeModel()!=null && um.getUMLTreeModel().getParent()!=null){
+				UMLModel up =(UMLModel)um.getUMLTreeModel().getParent().getRefModel();
+				if(up!=null && !(um instanceof ClassModel)){
+					sb.append("property parentID="+up.getID()+IN3ModelTokenType.PROPERTY_N3EOF+"\n") ;
+				}
+			}
+			if(um instanceof ClassifierModel){
+				ClassifierModel cm = (ClassifierModel)um;
+				UMLDataModel umd = cm.getUMLDataModel();
+				sb.append(umd.writeModel());
+				if(cm.getBoundaryModel().getChildren().size()>0){
+					this.inModelViewStore.put(um.getUMLDataModel().getId(), cm.getBoundaryModel());
+				}
+			}
+			else if(um instanceof LifeLineModel){
+				if(um instanceof LifeLineActorModel){
+					sb.append("property isActor=true"+IN3ModelTokenType.PROPERTY_N3EOF+"\n") ;
+				}
+				else{
+					sb.append("property isActor=false"+IN3ModelTokenType.PROPERTY_N3EOF+"\n") ;
+				}
+			}
+
+			else{
+				sb.append(um.getUMLDataModel().writeModel());
+			}
+			sb.append(">\n");
+			sb.append(")\n");
+
+		}
+		return sb.toString();
+
+	}
+
+	public int getIntValue(Object obj){
+		if(obj==null){
+			return -1; 
+		}
+		else{
+			try{
+				return Integer.valueOf((String)obj).intValue();
+			}
+			catch(Exception e){
+				e.printStackTrace();
+				return -1;
+			}
+		}
+
+	}
+
+
+
+
+	public void execute(int cmmd,String token){
+		if(cmmd == e_create_model){
+			if(objectTypes_begin==-1 && inModelType==-1){
+				if(token.trim().equals("diagram")){
+					current_model_type = 1;
+					isLine = false;
+					isBoundary = false;
+					this.viewStore.clear();
+				}
+				else if(token.trim().equals("boundary")){
+					current_model_type = 2000;
+					isLine = false;
+					isBoundary = true;
+					this.viewStore.clear();
+					boundaryModel = new NodeContainerModel();
+				}
+				else{
+					if(!this.isLine){
+						this.current_model_type = ProjectManager.getInstance().getModelTypeName(token);
+						current_UMLDataModel = new UMLDataModel();
+					}
+					else{
+						this.current_model_type = ProjectManager.getInstance().getLineModelType(token);
+						current_UMLDataModel = new UMLDataModel();
+					}
+				}
+			}
+			else{
+				//Attribute
+				if(objectTypes_begin==1){
+
+
+				}
+				else if(inModelType>-1){
+					current_ClassModel_UMLDataModel = new UMLDataModel(); 
+				}
+
+			}
+		}
+		else if(cmmd == e_views_begin){
+			this.isView = true;
+			
+		}
+		else if(cmmd == e_lines_begin){
+			this.isLine = true;
+			if(this.isBoundary){
+				UMLTreeModel up = (UMLTreeModel)this.modelStore.get(this.boundaryParentID);
+				if(up!=null){
+					UMLModel um = (UMLModel)up.getRefModel();
+					if(um instanceof ClassifierModel){
+						ClassifierModel cm = (ClassifierModel)um;
+//						cm.addContainer(this.boundaryModel);
+						ClassifierModel ud = (ClassifierModel)this.inModelViewListStore.get(this.boundaryParentID);
+						if(ud!=null){
+							ClassifierModel ud1 = (ClassifierModel)ud;
+							ud1.addContainer(this.boundaryModel);
+							if(this.subPartitons!=null
+									&& this.subPartitons.size()>0
+									&& ud1 instanceof PartitionModel){
+								PartitionModel pm =(PartitionModel)ud1;
+								for(int i=0;i<this.subPartitons.size();i++){
+									Object obj = this.subPartitons.get(i);
+									SubPartitonModel sm =(SubPartitonModel)obj;
+									sm.setIsMode(true);
+									boundaryModel.addChild(sm);
+									pm.getPm().addPartition(sm);
+								}
+
+							}
+
+						}
+						else{
+
+							cm.addContainer(this.boundaryModel);
+							if(this.subPartitons!=null
+									&& this.subPartitons.size()>0
+									&& cm instanceof PartitionModel){
+								PartitionModel pm =(PartitionModel)cm;
+								for(int i=0;i<this.subPartitons.size();i++){
+									Object obj = this.subPartitons.get(i);
+									SubPartitonModel sm =(SubPartitonModel)obj;
+
+									sm.setIsMode(true);
+									boundaryModel.addChild(sm);
+									pm.getPm().addPartition(sm);
+								}
+
+							}
+						}
+					}
+					this.subPartitons.clear();
+				}
+
+
+			}
+			else{
+				N3EditorDiagramModel n3EditorDiagramModel = (N3EditorDiagramModel)this.viewStore.get("diagram");
+				Object obj1 = lineStore.get(n3EditorDiagramModel.getUMLDataModel().getId());
+				if(obj1!=null){
+					java.util.ArrayList list = (java.util.ArrayList)obj1;
+					for(int i=0;i<list.size();i++){
+						LineModel lm1 = (LineModel)list.get(i);
+						if(n3EditorDiagramModel!=null){
+							UMLModel umS = (UMLModel)this.viewStore.get(lm1.getSourceId());
+							UMLModel umT = (UMLModel)this.viewStore.get(lm1.getTargetId());
+							if(umS!=null){
+								lm1.setSource(umS);
+							}
+							if(umT!=null){
+
+								lm1.setTarget(umT);
+							}
+							lm1.attachSource();
+							lm1.attachTarget(n3EditorDiagramModel);
+						}
+					}
+					list.clear();
+					lineStore.put(n3EditorDiagramModel.getUMLDataModel().getId(), null);
+				}
+			}
+		}
+		else if(cmmd == e_property_push){
+			if(objectTypes_begin==-1){
+				if(inModelType!=-1){
+					int keyIndex = token.indexOf("=");
+					String id = token.substring(0,keyIndex);
+					String value = token.substring(keyIndex+1,token.length());
+					int index = value.lastIndexOf("PROPERTY_N3EOF");
+					value = value.substring(0, index);
+					current_ClassModel_UMLDataModel.setProperty(id, value);
+				}
+				else{
+					int keyIndex = token.indexOf("=");
+					String id = token.substring(0,keyIndex);
+					String value = token.substring(keyIndex+1,token.length());
+					int index = value.lastIndexOf("PROPERTY_N3EOF");
+					value = value.substring(0, index);
+					current_UMLDataModel.setProperty(id, value);
+				}
+			}
+			else {
+				if(objectTypes_begin==3){
+					int keyIndex = token.indexOf("=");
+					String id = token.substring(0,keyIndex);
+					String value = token.substring(keyIndex+1,token.length());
+					int index = value.lastIndexOf("PROPERTY_N3EOF");
+					value = value.substring(0, index);
+					current_objects_v.add(this.getLineBendpointModel(value));
+
+//					current_objects.add(o);
+
+				}
+				else if(objectTypes_begin==4){
+					int keyIndex = token.indexOf("=");
+					String id = token.substring(0,keyIndex);
+					String value = token.substring(keyIndex+1,token.length());
+					int index = value.lastIndexOf("PROPERTY_N3EOF");
+					value = value.substring(0, index);
+					if(id.equals("activityParamterport")){
+						current_objects_v.add(this.getActivityParameterModel(value));
+					}
+					else if(id.equals("expansionNodeport")){
+						current_objects_v.add(this.getExpansionNodeModel(value));
+					}
+					else{
+						current_objects_v.add(this.getPortModel(value));
+					}
+
+				}
+				else if(objectTypes_begin==9){
+					int keyIndex = token.indexOf("=");
+					String id = token.substring(0,keyIndex);
+					String value = token.substring(keyIndex+1,token.length());
+					int index = value.lastIndexOf("PROPERTY_N3EOF");
+					value = value.substring(0, index);
+					subPartitons.add(this.getSubPartitionModel(value));
+				}
+				else if(objectTypes_begin==10){
+					int keyIndex = token.indexOf("=");
+					String id = token.substring(0,keyIndex);
+					String value = token.substring(keyIndex+1,token.length());
+					int index = value.lastIndexOf("PROPERTY_N3EOF");
+					value = value.substring(0, index);
+					seqGroups.add(this.getSeqGroup(value));
+
+
+				}
+				else if(objectTypes_begin==11){
+					int keyIndex = token.indexOf("=");
+					String id = token.substring(0,keyIndex);
+					String value = token.substring(keyIndex+1,token.length());
+					int index = value.lastIndexOf("PROPERTY_N3EOF");
+					value = value.substring(0, index);
+					MessageCommunicationModel mcm = this.getMessageCommunicationModel(value);
+					mcm.setKey(id);
+					this.msgs.add(mcm);
+
+
+				}
+				else{
+					int keyIndex = token.indexOf("=");
+					String id = token.substring(0,keyIndex);
+					String value = token.substring(keyIndex+1,token.length());
+					int index = value.lastIndexOf("PROPERTY_N3EOF");
+					value = value.substring(0, index);
+					tempData.put(id, value); 
+				}
+			}
+		}
+		else if(cmmd == e_objects_end){
+			if(objectTypes_begin==1){
+				this.current_ClassModel_UMLDataModel.setElementProperty("ATTR_A", this.current_objects);
+				current_objects = new java.util.ArrayList();
+				objectTypes_begin = -1;
+			}
+			else if(objectTypes_begin==2){
+				this.current_ClassModel_UMLDataModel.setElementProperty("OPER_A", this.current_objects);
+				current_objects = new java.util.ArrayList();
+				objectTypes_begin = -1;
+			}
+			else if(objectTypes_begin==3){
+				current_UMLDataModel.setElementProperty("Bendpoints", this.current_objects_v);
+				current_objects_v = new java.util.Vector();
+				objectTypes_begin = -1;
+			}
+			else if(objectTypes_begin==4){
+				current_UMLDataModel.setElementProperty("ports", this.current_objects_v);
+				current_objects_v = new java.util.Vector();
+				objectTypes_begin = -1;
+			}
+			else if(objectTypes_begin==5){
+				current_UMLDataModel.setElementProperty("ID_DETAIL", this.current_objects);
+				current_objects = new java.util.ArrayList();
+				objectTypes_begin = -1;
+			}
+			else if(objectTypes_begin==6){
+				current_UMLDataModel.setElementProperty("ID_TAG", this.current_objects);
+				current_objects = new java.util.ArrayList();
+				objectTypes_begin = -1;
+			}
+			else if(objectTypes_begin==7){
+				current_UMLDataModel.setElementProperty("ID_EXTENSIONPOINT", this.current_objects);
+				current_objects = new java.util.ArrayList();
+				objectTypes_begin = -1;
+			}
+			else if(objectTypes_begin==8){
+				objectTypes_begin = -1;
+			}
+			else if(objectTypes_begin==9){
+//				current_UMLDataModel.setElementProperty("subPartition", this.current_objects_v);
+
+//				current_objects_v = new java.util.Vector();
+				objectTypes_begin = -1;
+			}
+			else if(objectTypes_begin==10){
+
+//				current_UMLDataModel.setElementProperty("subPartition", this.current_objects_v);
+
+//				current_objects_v = new java.util.Vector();
+				objectTypes_begin = -1;
+			}
+			else if(objectTypes_begin==11){
+
+//				current_UMLDataModel.setElementProperty("subPartition", this.current_objects_v);
+
+//				current_objects_v = new java.util.Vector();
+				objectTypes_begin = -1;
+			}
+			else if(inModelType==0){
+				ClassModel cm = new ClassModel();
+				String refId = (String)current_ClassModel_UMLDataModel.getProperty("REF_ID");
+				if(refId!=null){
+					RefLinkModel refLinkModel = new RefLinkModel();
+					refLinkModel.id = (String)current_ClassModel_UMLDataModel.getProperty("ID");
+					refLinkModel.refId = refId;
+					this.refStore.add(refLinkModel);
+					
+				}
+				cm.setLoadModel(current_ClassModel_UMLDataModel);
+				current_UMLDataModel.setElementProperty("ClassModel", cm);
+				this.current_ClassModel_UMLDataModel = new UMLDataModel();
+				inModelType = -1;
+
+
+			}
+			else if(inModelType==1){
+				TypeRefModel cm = new TypeRefModel();
+				String refId = (String)current_ClassModel_UMLDataModel.getProperty("REF_ID");
+				if(refId!=null){
+					RefLinkModel refLinkModel = new RefLinkModel();
+					refLinkModel.id = (String)current_ClassModel_UMLDataModel.getProperty("ID");
+					refLinkModel.refId = refId;
+					this.refStore.add(refLinkModel);
+					
+				}
+				cm.setLoadModel(current_ClassModel_UMLDataModel);
+				current_UMLDataModel.setElementProperty("ClassModel", cm);
+				this.current_ClassModel_UMLDataModel = new UMLDataModel();
+				inModelType = -1;
+
+			}
+		}
+		else if(cmmd == e_object_create_objectType){
+			current_objects = new java.util.ArrayList();
+			current_objects_v = new java.util.Vector();
+			if(token!=null && token.equals("ATTR_A")){
+				objectTypes_begin = 1;
+			}
+			else if(token!=null && token.equals("OPER_A")){
+				objectTypes_begin = 2;
+			}
+			else if(token!=null && token.equals("Bendpoints")){
+				objectTypes_begin = 3;
+			}
+			else if(token!=null && token.equals("ports")){
+				objectTypes_begin = 4;
+			}
+			else if(token!=null && token.equals("ID_DETAIL")){
+				objectTypes_begin = 5;
+			}
+			else if(token!=null && token.equals("ID_TAG")){
+				objectTypes_begin = 6;
+			}
+			else if(token!=null && token.equals("ID_EXTENSIONPOINT")){
+				objectTypes_begin = 7;
+			}
+			else if(token!=null && token.equals("ID_UPDATE_LISTENER")){
+				objectTypes_begin = 8;
+			}
+			else if(token!=null && token.equals("subPartition")){
+				objectTypes_begin = 9;
+			}
+			else if(token!=null && token.equals("groups")){
+				objectTypes_begin = 10;
+			}
+			else if(token!=null && token.equals("MessageCommunications")){
+				objectTypes_begin = 11;
+			}
+			else if(token!=null && token.equals("ClassModel")){
+				inModelType = 0;
+			}
+			else if(token!=null && token.equals("TypeRefModel")){
+				inModelType = 1;
+			}
+
+		}
+		else if(cmmd == e_model_end){
+			if(objectTypes_begin==1){
+				String scope = (String)this.tempData.get("scope");
+				String name = (String)this.tempData.get("name");
+				String initValue = (String)this.tempData.get("initValue");
+				String stype = (String)this.tempData.get("stype");
+				String isDerived = (String)this.tempData.get("DERIVED");
+				String isStatic = (String)this.tempData.get("STATIC");
+				String isConst = (String)this.tempData.get("CONST");
+				String desc=  (String)this.tempData.get("DESC");
+
+				AttributeEditableTableItem newItem 
+				= new AttributeEditableTableItem(new Integer(scope),name,stype,initValue);
+				newItem.desc = desc;
+				this.current_objects.add(newItem);
+
+			}
+			else if(objectTypes_begin==2){
+				String scope = (String)this.tempData.get("scope");
+				String name = (String)this.tempData.get("name");
+				String initValue = (String)this.tempData.get("initValue");
+				String stype = (String)this.tempData.get("stype");
+				String isDerived = (String)this.tempData.get("DERIVED");
+				String isStatic = (String)this.tempData.get("STATIC");
+				String isConst = (String)this.tempData.get("CONST");
+				String desc=  (String)this.tempData.get("DESC");
+				String params =  (String)this.tempData.get("params");
+
+				OperationEditableTableItem newItem 
+				= new OperationEditableTableItem(new Integer(scope),name,stype,initValue);
+				newItem.setIsState(Boolean.getBoolean(isStatic));
+				newItem.desc = desc;
+				newItem.setParams(this.getParams(params));
+				this.current_objects.add(newItem);
+
+			}
+			else if(objectTypes_begin==5 || objectTypes_begin==6|| objectTypes_begin==7){
+				DetailPropertyTableItem newItem = new DetailPropertyTableItem();
+				newItem.key = (String)this.tempData.get("key");
+				newItem.desc = (String)this.tempData.get("desc");
+				newItem.index = getIntValue((String)this.tempData.get("index"));
+				newItem.tapIndex = getIntValue((String)this.tempData.get("tapIndex"));
+				newItem.tapName = (String)this.tempData.get("tapName");
+				newItem.sName = (String)this.tempData.get("sName");
+				newItem.sType = getIntValue(this.tempData.get("sType"));
+				newItem.sSpecification=  (String)this.tempData.get("sSpecification");
+
+
+
+				this.current_objects.add(newItem);
+
+			}
+
+			else if(this.isView){
+				if(current_model_type==1){
+					String isOpen = current_UMLDataModel.getProperty("ID_OPEN");
+					String id = current_UMLDataModel.getProperty("ID");
+					String type = current_UMLDataModel.getProperty("ID_TYPE");
+					String name = current_UMLDataModel.getProperty("ID_NAME");
+					String parentID = current_UMLDataModel.getProperty("parentID");
+					Object parentObject = modelStore.get(parentID);
+//					UMLTreeParentModel uMLTreeParentModel = (UMLTreeParentModel)parentObject;
+					int diagramType = Integer.valueOf(type).intValue();
+					UMLTreeModel to1 =new UMLTreeModel(name);
+					to1.setParent((UMLTreeParentModel)parentObject);
+					UMLTreeParentModel up= (UMLTreeParentModel)parentObject;
+					if (to1 != null) {
+						up.addChild(to1);
+					}
+					N3EditorDiagramModel n3EditorDiagramModel = new N3EditorDiagramModel();
+					IEditorInput input = null;
+					input = new LogicEditorInput(new Path("쓰임새도"));
+					to1.setRefModel(n3EditorDiagramModel);
+					n3EditorDiagramModel.setName(name);
+					n3EditorDiagramModel.setTreeModel(to1);
+					n3EditorDiagramModel.getUMLDataModel().setId(id);
+					to1.setParent(up);
+					n3EditorDiagramModel.setIEditorInput(input);
+					n3EditorDiagramModel.setDiagramType( diagramType);
+					this.viewStore.put(id, n3EditorDiagramModel);
+					this.viewStore.put("diagram", n3EditorDiagramModel);
+					if("true".equals(isOpen)){
+						this.openDiagarams.add(n3EditorDiagramModel);
+					}
+
+
+				}
+				else{
+					if(current_model_type>=1000 && current_model_type!=2000){
+						createLineModel(current_model_type,current_UMLDataModel,viewStore);
+
+					}
+					else{
+						String view_id = current_UMLDataModel.getProperty("View_ID");
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						String size = current_UMLDataModel.getProperty("ID_SIZE");
+						String location = current_UMLDataModel.getProperty("ID_LOCATION");
+						String view_Type = current_UMLDataModel.getProperty("View_Type");
+
+						Object obj = this.viewStore.get(parentID);
+						UMLTreeModel up = null;
+						UMLModel um = null;
+						if(obj instanceof N3EditorDiagramModel){
+							N3EditorDiagramModel n3d = (N3EditorDiagramModel)obj;
+
+							up = (UMLTreeModel)this.modelStore.get(id);
+							if(up!=null){
+								um = (UMLModel)up.getRefModel();
+							}
+
+							if(um!=null){
+								this.factory.setN3d(n3d);
+								UMLModel child = this.factory.createModle(um);
+								this.factory.setN3d(null);
+								child.setSize(this.getSize(size));
+								child.setLocation(this.getLocation(location));
+								n3d.addChild(child);
+								up.addN3UMLModelDeleteListener(n3d);
+								if(child instanceof ClassifierModel){
+									ClassifierModel cm = (ClassifierModel)child;
+//									cm.addContainer(this.boundaryModel);
+									if(cm !=null
+											&& cm.getBoundaryModel().getChildren().size()>0
+											&& cm instanceof PartitionModel){
+										PartitionModel pm =(PartitionModel)cm;
+										for(int i=0;i<cm.getBoundaryModel().getChildren().size();i++){
+											Object obj1 = cm.getBoundaryModel().getChildren().get(i);
+											if(obj1 instanceof SubPartitonModel){
+												SubPartitonModel sm =(SubPartitonModel)obj1;
+												pm.getPm().addPartition(sm);
+											}
+
+										}
+
+									}
+
+								}
+								if(child instanceof PortContainerModel){
+									java.util.ArrayList ports = new java.util.ArrayList();
+									PortContainerModel cm = (PortContainerModel)child;
+									Object oports = current_UMLDataModel.getElementProperty("ports");
+									if(oports!=null){
+										java.util.Vector aprts = (java.util.Vector)oports;
+										for(int i=0;i<aprts.size();i++){
+
+											PortModel pm = (PortModel)aprts.get(i);
+											pm.setPortContainerModel(cm);
+											pm.setSize(new Dimension(pm.w,pm.h));
+											pm.setPtDifference(new Dimension(pm.dw,pm.dh));
+											cm.createPort(pm, n3d);
+											pm.setLocation(new Point(pm.x,pm.y));
+											ports.add(pm);
+
+
+										}
+										cm.uMLDataModel.setElementProperty("port", ports);
+									}
+								}
+								if(child instanceof LifeLineModel){
+									LifeLineModel lm = (LifeLineModel)child;
+									lm.initGroup(this.seqGroups);
+									this.seqGroups.clear();
+								}
+								if (child instanceof TextAttachModel) {
+						            TextAttachModel ipc = (TextAttachModel)child;
+						            ipc.addTextAttachParentDiagram(n3d, null);
+						        }
+
+
+								this.viewStore.put(view_id, child);
+							}
+						}
+						else{//기타 내부 다이어그램
+
+						}
+					}
+				}
+			}
+			else if(objectTypes_begin==-1 && inModelType==-1){
+				if(current_model_type==2000 ){
+					this.boundaryParentID = current_UMLDataModel.getProperty("parentID");
+				}
+				else if(current_model_type>=1000 && current_model_type!=2000){
+					createLineModel(current_model_type,current_UMLDataModel,viewStore);
+
+				}
+				else if(current_model_type==0 ){
+					if(this.isBoundary){
+
+						String view_id = current_UMLDataModel.getProperty("View_ID");
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						String size = current_UMLDataModel.getProperty("ID_SIZE");
+						String location = current_UMLDataModel.getProperty("ID_LOCATION");
+						if(this.boundaryModel!=null){
+							UMLTreeModel up = (UMLTreeModel)this.modelStore.get(parentID);
+							UMLModel um = (UMLModel)up.getRefModel();
+							if(um!=null){
+								UMLModel child = this.factory.createModle(um);
+								child.setSize(this.getSize(size));
+								child.setLocation(this.getLocation(location));
+								boundaryModel.addChild(child);
+
+								this.viewStore.put(view_id, child);
+								this.inModelViewStore.put(view_id, child);
+							}
+						}
+					}
+					else{
+						String id = current_UMLDataModel.getProperty("ID");
+						current_UMLDataModel.setId(id);
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						PackageTreeModel  to1 = new PackageTreeModel(name);
+						UMLModel finalPackageModel = null;
+						finalPackageModel = new FinalPackageModel();
+						finalPackageModel.getUMLDataModel().setId(id);
+						to1.setRefModel(finalPackageModel);
+						finalPackageModel.setName(name);
+						finalPackageModel.setTreeModel(to1);
+						Object parentObject = modelStore.get(parentID);
+						if(parentObject==null){
+							to1.setParent(root);
+							root.addChild(to1);
+						}
+						else{
+							to1.setParent((UMLTreeParentModel)parentObject);
+							UMLTreeParentModel up= (UMLTreeParentModel)parentObject;
+							if (to1 != null) {
+								up.addChild(to1);
+							}
+						}
+						modelStore.put(id , to1);
+					}
+				}
+				else if(current_model_type==2){
+					if(this.isBoundary){
+
+						String view_id = current_UMLDataModel.getProperty("View_ID");
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						String size = current_UMLDataModel.getProperty("ID_SIZE");
+						String location = current_UMLDataModel.getProperty("ID_LOCATION");
+						if(this.boundaryModel!=null){
+							UMLTreeModel up = (UMLTreeModel)this.modelStore.get(parentID);
+							UMLModel um = (UMLModel)up.getRefModel();
+							if(um!=null){
+								UMLModel child = this.factory.createModle(um);
+								child.setView_ID(view_id);
+								child.setSize(this.getSize(size));
+								child.setLocation(this.getLocation(location));
+								boundaryModel.addChild(child);
+								this.viewStore.put(view_id, child);
+								this.inModelViewStore.put(view_id, child);
+								this.inModelViewListStore.put(parentID, child);
+							}
+						}
+					}
+					else{
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						UMLTreeParentModel  to1 = new StrcuturedPackageTreeModel(name);
+						UMLModel umlModel = null;
+						umlModel = new UseCaseModel(current_UMLDataModel,true);
+
+
+
+						to1.setRefModel(umlModel);
+						umlModel.setName(name);
+
+						umlModel.setTreeModel(to1);
+						Object parentObject = modelStore.get(parentID);
+						if(parentObject==null){
+							to1.setParent(root);
+							root.addChild(to1);
+						}
+						else{
+							to1.setParent((UMLTreeParentModel)parentObject);
+							UMLTreeParentModel up= (UMLTreeParentModel)parentObject;
+							if (to1 != null) {
+								up.addChild(to1);
+							}
+						}
+						modelStore.put(id, to1);
+					}
+				}
+				else if(current_model_type==3){
+					if(this.isBoundary){
+
+						String view_id = current_UMLDataModel.getProperty("View_ID");
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						String size = current_UMLDataModel.getProperty("ID_SIZE");
+						String location = current_UMLDataModel.getProperty("ID_LOCATION");
+						if(this.boundaryModel!=null){
+							UMLTreeModel up = (UMLTreeModel)this.modelStore.get(parentID);
+							UMLModel um = (UMLModel)up.getRefModel();
+							if(um!=null){
+								UMLModel child = this.factory.createModle(um);
+								child.setView_ID(view_id);
+								child.setSize(this.getSize(size));
+								child.setLocation(this.getLocation(location));
+								boundaryModel.addChild(child);
+								this.viewStore.put(view_id, child);
+								this.inModelViewStore.put(view_id, child);
+								this.inModelViewListStore.put(parentID, child);
+							}
+						}
+					}
+					else{
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+
+						String stere = current_UMLDataModel.getProperty("ID_STEREOTYPE");
+						String scope = current_UMLDataModel.getProperty("ID_SCOPE");
+						String multi = current_UMLDataModel.getProperty("ID_MULTI");
+						String desc = current_UMLDataModel.getProperty("ID_DESCRIPTION");
+
+
+						UMLTreeModel  to1 = new UMLTreeModel(name);
+						UMLModel umlModel = null;
+						umlModel = new FinalActorModel();
+
+						to1.setRefModel(umlModel);
+						umlModel.setName(name);
+						umlModel.setTreeModel(to1);
+						Object parentObject = modelStore.get(parentID);
+						if(parentObject==null){
+							to1.setParent(root);
+							root.addChild(to1);
+						}
+						else{
+							to1.setParent((UMLTreeParentModel)parentObject);
+							UMLTreeParentModel up= (UMLTreeParentModel)parentObject;
+							if (to1 != null) {
+								up.addChild(to1);
+							}
+						}
+						if(stere!=null && stere.trim().length()>0){
+							umlModel.setStereotype(stere);
+						}
+						if(scope!=null && scope.trim().length()>0){
+							umlModel.setScope(scope);
+						}
+						if(multi!=null && multi.trim().length()>0){
+							umlModel.setMultiplicity(multi);
+						}
+						if(desc!=null && desc.trim().length()>0){
+							umlModel.setDesc(desc);
+						}
+
+
+						Object obj = current_UMLDataModel.getElementProperty("ID_DETAIL");
+						if(obj!=null && obj instanceof java.util.ArrayList){
+							java.util.ArrayList arrest = (java.util.ArrayList)obj;
+							if(arrest.size()>0){
+								umlModel.setDetailProperty(arrest);
+							}
+						}
+						obj = current_UMLDataModel.getElementProperty("ID_TAG");
+						if(obj!=null && obj instanceof java.util.ArrayList){
+							java.util.ArrayList arrest = (java.util.ArrayList)obj;
+							if(arrest.size()>0){
+								umlModel.setTags(arrest);
+							}
+						}
+						obj = current_UMLDataModel.getElementProperty("ID_EXTENSIONPOINT");
+						if(obj!=null && obj instanceof java.util.ArrayList){
+							java.util.ArrayList arrest = (java.util.ArrayList)obj;
+							if(arrest.size()>0){
+								umlModel.setExtendsPoints(arrest);
+							}
+						}
+						obj = current_UMLDataModel.getElementProperty("ATTR_A");
+						if(obj!=null && obj instanceof java.util.ArrayList){
+							java.util.ArrayList arrest = (java.util.ArrayList)obj;
+							if(arrest.size()>0){
+
+							}
+						}
+						modelStore.put(id, to1);
+					}
+				}
+				else if(current_model_type==4){
+					if(this.isBoundary){
+
+						String view_id = current_UMLDataModel.getProperty("View_ID");
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						String size = current_UMLDataModel.getProperty("ID_SIZE");
+						String location = current_UMLDataModel.getProperty("ID_LOCATION");
+						if(this.boundaryModel!=null){
+							UMLTreeModel up = (UMLTreeModel)this.modelStore.get(parentID);
+							UMLModel um = (UMLModel)up.getRefModel();
+							if(um!=null){
+								UMLModel child = this.factory.createModle(um);
+								child.setSize(this.getSize(size));
+								child.setLocation(this.getLocation(location));
+								boundaryModel.addChild(child);
+								this.viewStore.put(view_id, child);
+								this.inModelViewStore.put(view_id, child);
+								this.inModelViewListStore.put(parentID, child);
+							}
+						}
+					}
+					else{
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						UMLTreeModel  to1 = new UMLTreeModel(name);
+						UMLModel umlModel = null;
+						umlModel = new FinalBoundryModel();
+						to1.setRefModel(umlModel);
+						umlModel.setName(name);
+						umlModel.setTreeModel(to1);
+						Object parentObject = modelStore.get(parentID);
+						if(parentObject==null){
+							to1.setParent(root);
+							root.addChild(to1);
+						}
+						else{
+							to1.setParent((UMLTreeParentModel)parentObject);
+							UMLTreeParentModel up= (UMLTreeParentModel)parentObject;
+							if (to1 != null) {
+								up.addChild(to1);
+							}
+						}
+						modelStore.put(id, to1);
+					}
+				}
+				else if(current_model_type==5){
+					if(this.isBoundary){
+
+						String view_id = current_UMLDataModel.getProperty("View_ID");
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						String size = current_UMLDataModel.getProperty("ID_SIZE");
+						String location = current_UMLDataModel.getProperty("ID_LOCATION");
+						if(this.boundaryModel!=null){
+							UMLTreeModel up = (UMLTreeModel)this.modelStore.get(parentID);
+							UMLModel um = (UMLModel)up.getRefModel();
+							if(um!=null){
+								UMLModel child = this.factory.createModle(um);
+								child.setSize(this.getSize(size));
+								child.setLocation(this.getLocation(location));
+								boundaryModel.addChild(child);
+								this.viewStore.put(view_id, child);
+								this.inModelViewStore.put(view_id, child);
+								this.inModelViewListStore.put(parentID, child);
+							}
+						}
+					}
+					else{
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						UMLTreeModel  to1 = new UMLTreeModel(name);
+						UMLModel umlModel = null;
+						umlModel = new CollaborationModel(current_UMLDataModel,true);
+						to1.setRefModel(umlModel);
+						umlModel.setName(name);
+						umlModel.setTreeModel(to1);
+						Object parentObject = modelStore.get(parentID);
+						if(parentObject==null){
+							to1.setParent(root);
+							root.addChild(to1);
+						}
+						else{
+							to1.setParent((UMLTreeParentModel)parentObject);
+							UMLTreeParentModel up= (UMLTreeParentModel)parentObject;
+							if (to1 != null) {
+								up.addChild(to1);
+							}
+						}
+						modelStore.put(id, to1);
+					}
+				}
+				else if(current_model_type==6){
+					if(this.isBoundary){
+
+						String view_id = current_UMLDataModel.getProperty("View_ID");
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						String size = current_UMLDataModel.getProperty("ID_SIZE");
+						String location = current_UMLDataModel.getProperty("ID_LOCATION");
+						if(this.boundaryModel!=null){
+							UMLTreeModel up = (UMLTreeModel)this.modelStore.get(parentID);
+							UMLModel um = (UMLModel)up.getRefModel();
+							if(um!=null){
+								UMLModel child = this.factory.createModle(um);
+								child.setSize(this.getSize(size));
+								child.setLocation(this.getLocation(location));
+								boundaryModel.addChild(child);
+								if(child instanceof ClassifierModel){
+									java.util.ArrayList ports = new java.util.ArrayList();
+									ClassifierModel cm = (ClassifierModel)child;
+									Object oports = current_UMLDataModel.getElementProperty("ports");
+									if(oports!=null){
+										java.util.Vector aprts = (java.util.Vector)oports;
+										for(int i=0;i<aprts.size();i++){
+
+											PortModel pm = (PortModel)aprts.get(i);
+											pm.setPortContainerModel(cm);
+											pm.setSize(new Dimension(pm.w,pm.h));
+											pm.setPtDifference(new Dimension(pm.dw,pm.dh));
+											cm.createPort(pm, (UMLContainerModel)cm.getAcceptParentModel());
+											pm.setLocation(new Point(pm.x,pm.y));
+										}
+									}
+								}
+								
+								if (child instanceof TextAttachModel) {
+						            TextAttachModel ipc = (TextAttachModel)child;
+						            ipc.addTextAttachParentDiagram(boundaryModel, null);
+						        }
+								this.viewStore.put(view_id, child);
+								this.inModelViewListStore.put(parentID, child);
+								this.inModelViewStore.put(view_id, child);
+							}
+						}
+					}
+					else{
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						StrcuturedPackageTreeModel  to1 = new StrcuturedPackageTreeModel(name);
+						UMLModel umlModel = null;
+						umlModel = new FinalClassModel(current_UMLDataModel,true);
+						to1.setRefModel(umlModel);
+						umlModel.setName(name);
+						umlModel.setTreeModel(to1);
+						Object parentObject = modelStore.get(parentID);
+						if(parentObject==null){
+							to1.setParent(root);
+							root.addChild(to1);
+						}
+						else{
+							to1.setParent((UMLTreeParentModel)parentObject);
+							UMLTreeParentModel up= (UMLTreeParentModel)parentObject;
+							if (to1 != null) {
+								up.addChild(to1);
+							}
+						}
+						modelStore.put(id, to1);
+					}
+
+				}
+				else if(current_model_type==7){
+					if(this.isBoundary){
+
+						String view_id = current_UMLDataModel.getProperty("View_ID");
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						String size = current_UMLDataModel.getProperty("ID_SIZE");
+						String location = current_UMLDataModel.getProperty("ID_LOCATION");
+						if(this.boundaryModel!=null){
+							UMLTreeModel up = (UMLTreeModel)this.modelStore.get(parentID);
+							UMLModel um = (UMLModel)up.getRefModel();
+							if(um!=null){
+								UMLModel child = this.factory.createModle(um);
+								child.setSize(this.getSize(size));
+								child.setLocation(this.getLocation(location));
+								boundaryModel.addChild(child);
+								if (child instanceof TextAttachModel) {
+						            TextAttachModel ipc = (TextAttachModel)child;
+						            ipc.addTextAttachParentDiagram(boundaryModel, null);
+						        }
+								this.viewStore.put(view_id, child);
+								this.inModelViewListStore.put(parentID, child);
+								this.inModelViewStore.put(view_id, child);
+							}
+						}
+					}
+					else{
+						String id = current_UMLDataModel.getProperty("ID");
+						String isMode = current_UMLDataModel.getProperty("isMode");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						StrcuturedPackageTreeModel  to1 = new StrcuturedPackageTreeModel(name);
+						UMLModel umlModel = null;
+						umlModel = new InterfaceModel(current_UMLDataModel,true);
+						to1.setRefModel(umlModel);
+						umlModel.setName(name);
+						umlModel.setTreeModel(to1);
+						if(isMode.equals("true")|| isMode.equals("false")){
+							((InterfaceModel)umlModel).setMode(Boolean.getBoolean(isMode));
+							
+						}
+						Object parentObject = modelStore.get(parentID);
+						if(parentObject==null){
+							to1.setParent(root);
+							root.addChild(to1);
+						}
+						else{
+							to1.setParent((UMLTreeParentModel)parentObject);
+							UMLTreeParentModel up= (UMLTreeParentModel)parentObject;
+							if (to1 != null) {
+								up.addChild(to1);
+							}
+						}
+						modelStore.put(id, to1);
+					}
+				}
+				else if(current_model_type==8){
+					if(this.isBoundary){
+
+						String view_id = current_UMLDataModel.getProperty("View_ID");
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						String size = current_UMLDataModel.getProperty("ID_SIZE");
+						String location = current_UMLDataModel.getProperty("ID_LOCATION");
+						if(this.boundaryModel!=null){
+							UMLTreeModel up = (UMLTreeModel)this.modelStore.get(parentID);
+							UMLModel um = (UMLModel)up.getRefModel();
+							if(um!=null){
+								UMLModel child = this.factory.createModle(um);
+								child.setSize(this.getSize(size));
+								child.setLocation(this.getLocation(location));
+								boundaryModel.addChild(child);
+								this.viewStore.put(view_id, child);
+								this.inModelViewListStore.put(parentID, child);
+								this.inModelViewStore.put(view_id, child);
+							}
+						}
+					}
+					else{
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						StrcuturedPackageTreeModel  to1 = new StrcuturedPackageTreeModel(name);
+						UMLModel umlModel = null;
+						umlModel = new EnumerationModel(current_UMLDataModel,true);
+						to1.setRefModel(umlModel);
+						umlModel.setName(name);
+						umlModel.setTreeModel(to1);
+						Object parentObject = modelStore.get(parentID);
+						if(parentObject==null){
+							to1.setParent(root);
+							root.addChild(to1);
+						}
+						else{
+							to1.setParent((UMLTreeParentModel)parentObject);
+							UMLTreeParentModel up= (UMLTreeParentModel)parentObject;
+							if (to1 != null) {
+								up.addChild(to1);
+							}
+						}
+						modelStore.put(id, to1);
+					}
+				}
+				else if(current_model_type==9){
+					if(this.isBoundary){
+
+						String view_id = current_UMLDataModel.getProperty("View_ID");
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						String size = current_UMLDataModel.getProperty("ID_SIZE");
+						String location = current_UMLDataModel.getProperty("ID_LOCATION");
+						if(this.boundaryModel!=null){
+							UMLTreeModel up = (UMLTreeModel)this.modelStore.get(parentID);
+							UMLModel um = (UMLModel)up.getRefModel();
+							if(um!=null){
+								UMLModel child = this.factory.createModle(um);
+								child.setSize(this.getSize(size));
+								child.setLocation(this.getLocation(location));
+								boundaryModel.addChild(child);
+								this.viewStore.put(view_id, child);
+								this.inModelViewListStore.put(parentID, child);
+								this.inModelViewStore.put(view_id, child);
+							}
+						}
+					}
+					else{
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						UMLTreeModel  to1 = new UMLTreeModel(name);
+						UMLModel umlModel = null;
+						umlModel = new ExceptionModel();
+						to1.setRefModel(umlModel);
+						umlModel.setName(name);
+						umlModel.setTreeModel(to1);
+						Object parentObject = modelStore.get(parentID);
+						if(parentObject==null){
+							to1.setParent(root);
+							root.addChild(to1);
+						}
+						else{
+							to1.setParent((UMLTreeParentModel)parentObject);
+							UMLTreeParentModel up= (UMLTreeParentModel)parentObject;
+							if (to1 != null) {
+								up.addChild(to1);
+							}
+						}
+						modelStore.put(id, to1);
+					}
+				}
+				else if(current_model_type==10){
+					if(this.isBoundary){
+
+						String view_id = current_UMLDataModel.getProperty("View_ID");
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						String size = current_UMLDataModel.getProperty("ID_SIZE");
+						String location = current_UMLDataModel.getProperty("ID_LOCATION");
+						if(this.boundaryModel!=null){
+							UMLTreeModel up = (UMLTreeModel)this.modelStore.get(parentID);
+							UMLModel um = (UMLModel)up.getRefModel();
+							if(um!=null){
+								UMLModel child = this.factory.createModle(um);
+								child.setSize(this.getSize(size));
+								child.setLocation(this.getLocation(location));
+								boundaryModel.addChild(child);
+								this.viewStore.put(view_id, child);
+								this.inModelViewListStore.put(parentID, child);
+								this.inModelViewStore.put(view_id, child);
+							}
+						}
+					}
+					else{
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						StrcuturedPackageTreeModel  to1 = new StrcuturedPackageTreeModel(name);
+						UMLModel umlModel = null;
+						umlModel = new FinalActivityModel(current_UMLDataModel,true);
+						to1.setRefModel(umlModel);
+						umlModel.setName(name);
+						umlModel.setTreeModel(to1);
+						Object parentObject = modelStore.get(parentID);
+						if(parentObject==null){
+							to1.setParent(root);
+							root.addChild(to1);
+						}
+						else{
+							to1.setParent((UMLTreeParentModel)parentObject);
+							UMLTreeParentModel up= (UMLTreeParentModel)parentObject;
+							if (to1 != null) {
+								up.addChild(to1);
+							}
+						}
+						modelStore.put(id, to1);
+					}
+				}
+				else if(current_model_type==11){
+					if(this.isBoundary){
+
+						String view_id = current_UMLDataModel.getProperty("View_ID");
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						String size = current_UMLDataModel.getProperty("ID_SIZE");
+						String location = current_UMLDataModel.getProperty("ID_LOCATION");
+						if(this.boundaryModel!=null){
+							UMLTreeModel up = (UMLTreeModel)this.modelStore.get(parentID);
+							UMLModel um = (UMLModel)up.getRefModel();
+							if(um!=null){
+								UMLModel child = this.factory.createModle(um);
+								child.setSize(this.getSize(size));
+								child.setLocation(this.getLocation(location));
+								boundaryModel.addChild(child);
+								this.viewStore.put(view_id, child);
+								this.inModelViewListStore.put(parentID, child);
+								this.inModelViewStore.put(view_id, child);
+							}
+						}
+					}
+					else{
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						UMLTreeModel  to1 = new UMLTreeModel(name);
+						UMLModel umlModel = null;
+						umlModel = new FinalActiionModel(current_UMLDataModel,true);
+						to1.setRefModel(umlModel);
+						umlModel.setName(name);
+						umlModel.setTreeModel(to1);
+						Object parentObject = modelStore.get(parentID);
+						if(parentObject==null){
+							to1.setParent(root);
+							root.addChild(to1);
+						}
+						else{
+							to1.setParent((UMLTreeParentModel)parentObject);
+							UMLTreeParentModel up= (UMLTreeParentModel)parentObject;
+							if (to1 != null) {
+								up.addChild(to1);
+							}
+						}
+						modelStore.put(id, to1);
+					}
+				}
+				else if(current_model_type==12){
+					if(this.isBoundary){
+
+						String view_id = current_UMLDataModel.getProperty("View_ID");
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						String size = current_UMLDataModel.getProperty("ID_SIZE");
+						String location = current_UMLDataModel.getProperty("ID_LOCATION");
+						if(this.boundaryModel!=null){
+							UMLTreeModel up = (UMLTreeModel)this.modelStore.get(parentID);
+							UMLModel um = (UMLModel)up.getRefModel();
+							if(um!=null){
+								UMLModel child = this.factory.createModle(um);
+								child.setSize(this.getSize(size));
+								child.setLocation(this.getLocation(location));
+								boundaryModel.addChild(child);
+								this.viewStore.put(view_id, child);
+								this.inModelViewListStore.put(parentID, child);
+								this.inModelViewStore.put(view_id, child);
+							}
+						}
+					}
+					else{
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						UMLTreeModel  to1 = new UMLTreeModel(name);
+						UMLModel umlModel = null;
+						umlModel = new SendModel();
+						to1.setRefModel(umlModel);
+						umlModel.setName(name);
+						umlModel.setTreeModel(to1);
+						Object parentObject = modelStore.get(parentID);
+						if(parentObject==null){
+							to1.setParent(root);
+							root.addChild(to1);
+						}
+						else{
+							to1.setParent((UMLTreeParentModel)parentObject);
+							UMLTreeParentModel up= (UMLTreeParentModel)parentObject;
+							if (to1 != null) {
+								up.addChild(to1);
+							}
+						}
+						modelStore.put(id, to1);
+					}
+				}
+				else if(current_model_type==13){
+					if(this.isBoundary){
+
+						String view_id = current_UMLDataModel.getProperty("View_ID");
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						String size = current_UMLDataModel.getProperty("ID_SIZE");
+						String location = current_UMLDataModel.getProperty("ID_LOCATION");
+						if(this.boundaryModel!=null){
+							UMLTreeModel up = (UMLTreeModel)this.modelStore.get(parentID);
+							UMLModel um = (UMLModel)up.getRefModel();
+							if(um!=null){
+								UMLModel child = this.factory.createModle(um);
+								child.setSize(this.getSize(size));
+								child.setLocation(this.getLocation(location));
+								boundaryModel.addChild(child);
+								this.viewStore.put(view_id, child);
+								this.inModelViewListStore.put(parentID, child);
+								this.inModelViewStore.put(view_id, child);
+							}
+						}
+					}
+					else{
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						UMLTreeModel  to1 = new UMLTreeModel(name);
+						UMLModel umlModel = null;
+						umlModel = new ReceiveModel();
+						to1.setRefModel(umlModel);
+						umlModel.setName(name);
+						umlModel.setTreeModel(to1);
+						Object parentObject = modelStore.get(parentID);
+						if(parentObject==null){
+							to1.setParent(root);
+							root.addChild(to1);
+						}
+						else{
+							to1.setParent((UMLTreeParentModel)parentObject);
+							UMLTreeParentModel up= (UMLTreeParentModel)parentObject;
+							if (to1 != null) {
+								up.addChild(to1);
+							}
+						}
+						modelStore.put(id, to1);
+					}
+				}
+				else if(current_model_type==14){
+					if(this.isBoundary){
+
+						String view_id = current_UMLDataModel.getProperty("View_ID");
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						String size = current_UMLDataModel.getProperty("ID_SIZE");
+						String location = current_UMLDataModel.getProperty("ID_LOCATION");
+						if(this.boundaryModel!=null){
+							UMLTreeModel up = (UMLTreeModel)this.modelStore.get(parentID);
+							UMLModel um = (UMLModel)up.getRefModel();
+							if(um!=null){
+								UMLModel child = this.factory.createModle(um);
+								child.setSize(this.getSize(size));
+								child.setLocation(this.getLocation(location));
+								boundaryModel.addChild(child);
+								if (child instanceof TextAttachModel) {
+						            TextAttachModel ipc = (TextAttachModel)child;
+						            ipc.addTextAttachParentDiagram(boundaryModel, null);
+						        }
+								this.viewStore.put(view_id, child);
+								this.inModelViewListStore.put(parentID, child);
+								this.inModelViewStore.put(view_id, child);
+							}
+						}
+					}
+					else{
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						UMLTreeModel  to1 = new UMLTreeModel(name);
+						UMLModel umlModel = null;
+						umlModel = new InitialModel();
+						to1.setRefModel(umlModel);
+
+						umlModel.setName(name);
+						umlModel.setTreeModel(to1);
+						Object parentObject = modelStore.get(parentID);
+						if(parentObject==null){
+							to1.setParent(root);
+							root.addChild(to1);
+						}
+						else{
+							to1.setParent((UMLTreeParentModel)parentObject);
+							UMLTreeParentModel up= (UMLTreeParentModel)parentObject;
+							if (to1 != null) {
+								up.addChild(to1);
+							}
+						}
+						modelStore.put(id, to1);
+					}
+				}
+				else if(current_model_type==15){
+					if(this.isBoundary){
+
+						String view_id = current_UMLDataModel.getProperty("View_ID");
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						String size = current_UMLDataModel.getProperty("ID_SIZE");
+						String location = current_UMLDataModel.getProperty("ID_LOCATION");
+						if(this.boundaryModel!=null){
+							UMLTreeModel up = (UMLTreeModel)this.modelStore.get(parentID);
+							UMLModel um = (UMLModel)up.getRefModel();
+							if(um!=null){
+								UMLModel child = this.factory.createModle(um);
+								child.setSize(this.getSize(size));
+								child.setLocation(this.getLocation(location));
+								boundaryModel.addChild(child);
+								this.viewStore.put(view_id, child);
+								this.inModelViewListStore.put(parentID, child);
+								this.inModelViewStore.put(view_id, child);
+							}
+						}
+					}
+					else{
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						UMLTreeModel  to1 = new UMLTreeModel(name);
+						UMLModel umlModel = null;
+						umlModel = new FinalModel();
+						to1.setRefModel(umlModel);
+						umlModel.setName(name);
+						umlModel.setTreeModel(to1);
+						Object parentObject = modelStore.get(parentID);
+						if(parentObject==null){
+							to1.setParent(root);
+							root.addChild(to1);
+						}
+						else{
+							to1.setParent((UMLTreeParentModel)parentObject);
+							UMLTreeParentModel up= (UMLTreeParentModel)parentObject;
+							if (to1 != null) {
+								up.addChild(to1);
+							}
+						}
+						modelStore.put(id, to1);
+					}
+				}
+				else if(current_model_type==16){
+					if(this.isBoundary){
+
+						String view_id = current_UMLDataModel.getProperty("View_ID");
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						String size = current_UMLDataModel.getProperty("ID_SIZE");
+						String location = current_UMLDataModel.getProperty("ID_LOCATION");
+						if(this.boundaryModel!=null){
+							UMLTreeModel up = (UMLTreeModel)this.modelStore.get(parentID);
+							UMLModel um = (UMLModel)up.getRefModel();
+							if(um!=null){
+								UMLModel child = this.factory.createModle(um);
+								child.setSize(this.getSize(size));
+								child.setLocation(this.getLocation(location));
+								boundaryModel.addChild(child);
+								this.viewStore.put(view_id, child);
+								this.inModelViewListStore.put(parentID, child);
+								this.inModelViewStore.put(view_id, child);
+							}
+						}
+					}
+					else{
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						UMLTreeModel  to1 = new UMLTreeModel(name);
+						UMLModel umlModel = null;
+						umlModel = new FlowFinalModel();
+						to1.setRefModel(umlModel);
+						umlModel.setName(name);
+						umlModel.setTreeModel(to1);
+						Object parentObject = modelStore.get(parentID);
+						if(parentObject==null){
+							to1.setParent(root);
+							root.addChild(to1);
+						}
+						else{
+							to1.setParent((UMLTreeParentModel)parentObject);
+							UMLTreeParentModel up= (UMLTreeParentModel)parentObject;
+							if (to1 != null) {
+								up.addChild(to1);
+							}
+						}
+						modelStore.put(id, to1);
+					}
+				}
+				else if(current_model_type==17){
+					if(this.isBoundary){
+
+						String view_id = current_UMLDataModel.getProperty("View_ID");
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						String size = current_UMLDataModel.getProperty("ID_SIZE");
+						String location = current_UMLDataModel.getProperty("ID_LOCATION");
+						if(this.boundaryModel!=null){
+							UMLTreeModel up = (UMLTreeModel)this.modelStore.get(parentID);
+							UMLModel um = (UMLModel)up.getRefModel();
+							if(um!=null){
+								UMLModel child = this.factory.createModle(um);
+								child.setSize(this.getSize(size));
+								child.setLocation(this.getLocation(location));
+								boundaryModel.addChild(child);
+								this.viewStore.put(view_id, child);
+								this.inModelViewListStore.put(parentID, child);
+								this.inModelViewStore.put(view_id, child);
+							}
+						}
+					}
+					else{
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						UMLTreeModel  to1 = new UMLTreeModel(name);
+						UMLModel umlModel = null;
+						umlModel = new SynchModel();
+						to1.setRefModel(umlModel);
+						umlModel.setName(name);
+						umlModel.setTreeModel(to1);
+						Object parentObject = modelStore.get(parentID);
+						if(parentObject==null){
+							to1.setParent(root);
+							root.addChild(to1);
+						}
+						else{
+							to1.setParent((UMLTreeParentModel)parentObject);
+							UMLTreeParentModel up= (UMLTreeParentModel)parentObject;
+							if (to1 != null) {
+								up.addChild(to1);
+							}
+						}
+						modelStore.put(id, to1);
+					}
+				}
+				else if(current_model_type==18){
+					if(this.isBoundary){
+
+						String view_id = current_UMLDataModel.getProperty("View_ID");
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						String size = current_UMLDataModel.getProperty("ID_SIZE");
+						String location = current_UMLDataModel.getProperty("ID_LOCATION");
+						if(this.boundaryModel!=null){
+							UMLTreeModel up = (UMLTreeModel)this.modelStore.get(parentID);
+							UMLModel um = (UMLModel)up.getRefModel();
+							if(um!=null){
+								UMLModel child = this.factory.createModle(um);
+								child.setSize(this.getSize(size));
+								child.setLocation(this.getLocation(location));
+								boundaryModel.addChild(child);
+								this.viewStore.put(view_id, child);
+								this.inModelViewListStore.put(parentID, child);
+								this.inModelViewStore.put(view_id, child);
+							}
+						}
+					}
+					else{
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						UMLTreeModel  to1 = new UMLTreeModel(name);
+						UMLModel umlModel = null;
+						umlModel = new DecisionModel();
+						to1.setRefModel(umlModel);
+						umlModel.setName(name);
+						umlModel.setTreeModel(to1);
+						Object parentObject = modelStore.get(parentID);
+						if(parentObject==null){
+							to1.setParent(root);
+							root.addChild(to1);
+						}
+						else{
+							to1.setParent((UMLTreeParentModel)parentObject);
+							UMLTreeParentModel up= (UMLTreeParentModel)parentObject;
+							if (to1 != null) {
+								up.addChild(to1);
+							}
+						}
+						modelStore.put(id, to1);
+					}
+				}
+				else if(current_model_type==19){
+					if(this.isBoundary){
+
+						String view_id = current_UMLDataModel.getProperty("View_ID");
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						String size = current_UMLDataModel.getProperty("ID_SIZE");
+						String location = current_UMLDataModel.getProperty("ID_LOCATION");
+						if(this.boundaryModel!=null){
+							UMLTreeModel up = (UMLTreeModel)this.modelStore.get(parentID);
+							UMLModel um = (UMLModel)up.getRefModel();
+							if(um!=null){
+								UMLModel child = this.factory.createModle(um);
+								child.setSize(this.getSize(size));
+								child.setLocation(this.getLocation(location));
+								boundaryModel.addChild(child);
+								this.viewStore.put(view_id, child);
+								this.inModelViewListStore.put(parentID, child);
+								this.inModelViewStore.put(view_id, child);
+							}
+						}
+					}
+					else{
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						UMLTreeModel  to1 = new UMLTreeModel(name);
+						UMLModel umlModel = null;
+						umlModel = new FinalObjectNodeModel(current_UMLDataModel,true);
+						to1.setRefModel(umlModel);
+						umlModel.setName(name);
+						umlModel.setTreeModel(to1);
+						Object parentObject = modelStore.get(parentID);
+						if(parentObject==null){
+							to1.setParent(root);
+							root.addChild(to1);
+						}
+						else{
+							to1.setParent((UMLTreeParentModel)parentObject);
+							UMLTreeParentModel up= (UMLTreeParentModel)parentObject;
+							if (to1 != null) {
+								up.addChild(to1);
+							}
+						}
+						modelStore.put(id, to1);
+					}
+				}
+				else if(current_model_type==20){
+					if(this.isBoundary){
+
+						String view_id = current_UMLDataModel.getProperty("View_ID");
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						String size = current_UMLDataModel.getProperty("ID_SIZE");
+						String location = current_UMLDataModel.getProperty("ID_LOCATION");
+						if(this.boundaryModel!=null){
+							UMLTreeModel up = (UMLTreeModel)this.modelStore.get(parentID);
+							UMLModel um = (UMLModel)up.getRefModel();
+							if(um!=null){
+								UMLModel child = this.factory.createModle(um);
+								child.setSize(this.getSize(size));
+								child.setLocation(this.getLocation(location));
+								boundaryModel.addChild(child);
+								this.viewStore.put(view_id, child);
+								this.inModelViewListStore.put(parentID, child);
+								this.inModelViewStore.put(view_id, child);
+							}
+						}
+					}
+					else{
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						UMLTreeModel  to1 = new UMLTreeModel(name);
+						UMLModel umlModel = null;
+						umlModel = new CentralBufferNodeModel(current_UMLDataModel,true);
+						to1.setRefModel(umlModel);
+						umlModel.setName(name);
+						umlModel.setTreeModel(to1);
+						Object parentObject = modelStore.get(parentID);
+						if(parentObject==null){
+							to1.setParent(root);
+							root.addChild(to1);
+						}
+						else{
+							to1.setParent((UMLTreeParentModel)parentObject);
+							UMLTreeParentModel up= (UMLTreeParentModel)parentObject;
+							if (to1 != null) {
+								up.addChild(to1);
+							}
+						}
+						modelStore.put(id, to1);
+					}
+				}
+				else if(current_model_type==21){
+					if(this.isBoundary){
+
+						String view_id = current_UMLDataModel.getProperty("View_ID");
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						String size = current_UMLDataModel.getProperty("ID_SIZE");
+						String location = current_UMLDataModel.getProperty("ID_LOCATION");
+						if(this.boundaryModel!=null){
+							UMLTreeModel up = (UMLTreeModel)this.modelStore.get(parentID);
+							UMLModel um = (UMLModel)up.getRefModel();
+							if(um!=null){
+								UMLModel child = this.factory.createModle(um);
+								child.setSize(this.getSize(size));
+								child.setLocation(this.getLocation(location));
+								boundaryModel.addChild(child);
+								this.viewStore.put(view_id, child);
+								this.inModelViewListStore.put(parentID, child);
+								this.inModelViewStore.put(view_id, child);
+							}
+						}
+					}
+					else{
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						UMLTreeModel  to1 = new UMLTreeModel(name);
+						UMLModel umlModel = null;
+						umlModel = new DataStoreModel(current_UMLDataModel,true);
+						to1.setRefModel(umlModel);
+						umlModel.setName(name);
+						umlModel.setTreeModel(to1);
+						Object parentObject = modelStore.get(parentID);
+						if(parentObject==null){
+							to1.setParent(root);
+							root.addChild(to1);
+						}
+						else{
+							to1.setParent((UMLTreeParentModel)parentObject);
+							UMLTreeParentModel up= (UMLTreeParentModel)parentObject;
+							if (to1 != null) {
+								up.addChild(to1);
+							}
+						}
+						modelStore.put(id, to1);
+					}
+				}
+				else if(current_model_type==22){
+					if(this.isBoundary){
+
+						String view_id = current_UMLDataModel.getProperty("View_ID");
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						String size = current_UMLDataModel.getProperty("ID_SIZE");
+						String location = current_UMLDataModel.getProperty("ID_LOCATION");
+						if(this.boundaryModel!=null){
+							UMLTreeModel up = (UMLTreeModel)this.modelStore.get(parentID);
+							UMLModel um = (UMLModel)up.getRefModel();
+							if(um!=null){
+								UMLModel child = this.factory.createModle(um);
+								child.setSize(this.getSize(size));
+								child.setLocation(this.getLocation(location));
+								boundaryModel.addChild(child);
+								this.viewStore.put(view_id, child);
+								this.inModelViewListStore.put(parentID, child);
+								this.inModelViewStore.put(view_id, child);
+							}
+						}
+					}
+					else{
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						UMLTreeModel  to1 = new UMLTreeModel(name);
+						UMLModel umlModel = null;
+						umlModel = new HPartitionModel();
+						to1.setRefModel(umlModel);
+						umlModel.setName(name);
+						umlModel.setTreeModel(to1);
+						Object parentObject = modelStore.get(parentID);
+						if(parentObject==null){
+							to1.setParent(root);
+							root.addChild(to1);
+						}
+						else{
+							to1.setParent((UMLTreeParentModel)parentObject);
+							UMLTreeParentModel up= (UMLTreeParentModel)parentObject;
+							if (to1 != null) {
+								up.addChild(to1);
+							}
+						}
+						modelStore.put(id, to1);
+					}
+				}
+				else if(current_model_type==23){
+					if(this.isBoundary){
+
+						String view_id = current_UMLDataModel.getProperty("View_ID");
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						String size = current_UMLDataModel.getProperty("ID_SIZE");
+						String location = current_UMLDataModel.getProperty("ID_LOCATION");
+						if(this.boundaryModel!=null){
+							UMLTreeModel up = (UMLTreeModel)this.modelStore.get(parentID);
+							UMLModel um = (UMLModel)up.getRefModel();
+							if(um!=null){
+								UMLModel child = this.factory.createModle(um);
+								child.setSize(this.getSize(size));
+								child.setLocation(this.getLocation(location));
+								boundaryModel.addChild(child);
+								this.viewStore.put(view_id, child);
+								this.inModelViewListStore.put(parentID, child);
+								this.inModelViewStore.put(view_id, child);
+							}
+						}
+					}
+					else{
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						UMLTreeModel  to1 = new UMLTreeModel(name);
+						UMLModel umlModel = null;
+						umlModel = new VPartitionModel();
+						to1.setRefModel(umlModel);
+						umlModel.setName(name);
+						umlModel.setTreeModel(to1);
+						Object parentObject = modelStore.get(parentID);
+						if(parentObject==null){
+							to1.setParent(root);
+							root.addChild(to1);
+						}
+						else{
+							to1.setParent((UMLTreeParentModel)parentObject);
+							UMLTreeParentModel up= (UMLTreeParentModel)parentObject;
+							if (to1 != null) {
+								up.addChild(to1);
+							}
+						}
+						modelStore.put(id, to1);
+					}
+				}
+				else if(current_model_type==24){
+					if(this.isBoundary){
+
+						String view_id = current_UMLDataModel.getProperty("View_ID");
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						String size = current_UMLDataModel.getProperty("ID_SIZE");
+						String location = current_UMLDataModel.getProperty("ID_LOCATION");
+						if(this.boundaryModel!=null){
+							UMLTreeModel up = (UMLTreeModel)this.modelStore.get(parentID);
+							UMLModel um = (UMLModel)up.getRefModel();
+							if(um!=null){
+								UMLModel child = this.factory.createModle(um);
+								child.setSize(this.getSize(size));
+								child.setLocation(this.getLocation(location));
+								boundaryModel.addChild(child);
+								this.viewStore.put(view_id, child);
+								this.inModelViewListStore.put(parentID, child);
+								this.inModelViewStore.put(view_id, child);
+							}
+						}
+					}
+					else{
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						UMLTreeModel  to1 = new UMLTreeModel(name);
+						UMLModel umlModel = null;
+						umlModel = new HForkJoinModel();
+						to1.setRefModel(umlModel);
+						umlModel.setName(name);
+						umlModel.setTreeModel(to1);
+						Object parentObject = modelStore.get(parentID);
+						if(parentObject==null){
+							to1.setParent(root);
+							root.addChild(to1);
+						}
+						else{
+							to1.setParent((UMLTreeParentModel)parentObject);
+							UMLTreeParentModel up= (UMLTreeParentModel)parentObject;
+							if (to1 != null) {
+								up.addChild(to1);
+							}
+						}
+						modelStore.put(id, to1);
+					}
+				}
+				else if(current_model_type==25){
+					if(this.isBoundary){
+
+						String view_id = current_UMLDataModel.getProperty("View_ID");
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						String size = current_UMLDataModel.getProperty("ID_SIZE");
+						String location = current_UMLDataModel.getProperty("ID_LOCATION");
+						if(this.boundaryModel!=null){
+							UMLTreeModel up = (UMLTreeModel)this.modelStore.get(parentID);
+							UMLModel um = (UMLModel)up.getRefModel();
+							if(um!=null){
+								UMLModel child = this.factory.createModle(um);
+								child.setSize(this.getSize(size));
+								child.setLocation(this.getLocation(location));
+								boundaryModel.addChild(child);
+								this.viewStore.put(view_id, child);
+								this.inModelViewListStore.put(parentID, child);
+								this.inModelViewStore.put(view_id, child);
+							}
+						}
+					}
+					else{
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						UMLTreeModel  to1 = new UMLTreeModel(name);
+						UMLModel umlModel = null;
+						umlModel = new VForkJoinModel();
+						to1.setRefModel(umlModel);
+						umlModel.setName(name);
+						umlModel.setTreeModel(to1);
+						Object parentObject = modelStore.get(parentID);
+						if(parentObject==null){
+							to1.setParent(root);
+							root.addChild(to1);
+						}
+						else{
+							to1.setParent((UMLTreeParentModel)parentObject);
+							UMLTreeParentModel up= (UMLTreeParentModel)parentObject;
+							if (to1 != null) {
+								up.addChild(to1);
+							}
+						}
+						modelStore.put(id, to1);
+					}
+				}
+				else if(current_model_type==26){
+					if(this.isBoundary){
+
+						String view_id = current_UMLDataModel.getProperty("View_ID");
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						String size = current_UMLDataModel.getProperty("ID_SIZE");
+						String location = current_UMLDataModel.getProperty("ID_LOCATION");
+						if(this.boundaryModel!=null){
+							UMLTreeModel up = (UMLTreeModel)this.modelStore.get(parentID);
+							UMLModel um = (UMLModel)up.getRefModel();
+							if(um!=null){
+								UMLModel child = this.factory.createModle(um);
+								child.setSize(this.getSize(size));
+								child.setLocation(this.getLocation(location));
+								boundaryModel.addChild(child);
+								this.viewStore.put(view_id, child);
+								this.inModelViewListStore.put(parentID, child);
+								this.inModelViewStore.put(view_id, child);
+							}
+						}
+					}
+					else{
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						UMLTreeModel  to1 = new StrcuturedActivityPackageTreeModel(name);
+						UMLModel umlModel = null;
+						umlModel = new VForkJoinModel();
+						to1.setRefModel(umlModel);
+						umlModel.setName(name);
+						umlModel.setTreeModel(to1);
+						Object parentObject = modelStore.get(parentID);
+						if(parentObject==null){
+							to1.setParent(root);
+							root.addChild(to1);
+						}
+						else{
+							to1.setParent((UMLTreeParentModel)parentObject);
+							UMLTreeParentModel up= (UMLTreeParentModel)parentObject;
+							if (to1 != null) {
+								up.addChild(to1);
+							}
+						}
+						modelStore.put(id, to1);
+					}
+				}
+				else if(current_model_type==27){
+					if(this.isBoundary){
+
+						String view_id = current_UMLDataModel.getProperty("View_ID");
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						String size = current_UMLDataModel.getProperty("ID_SIZE");
+						String location = current_UMLDataModel.getProperty("ID_LOCATION");
+						if(this.boundaryModel!=null){
+							UMLTreeModel up = (UMLTreeModel)this.modelStore.get(parentID);
+							UMLModel um = (UMLModel)up.getRefModel();
+							if(um!=null){
+								UMLModel child = this.factory.createModle(um);
+								child.setSize(this.getSize(size));
+								child.setLocation(this.getLocation(location));
+								boundaryModel.addChild(child);
+								this.viewStore.put(view_id, child);
+								this.inModelViewListStore.put(parentID, child);
+								this.inModelViewStore.put(view_id, child);
+							}
+						}
+					}
+					else{
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						UMLTreeModel  to1 = new StrcuturedActivityPackageTreeModel(name);
+						UMLModel umlModel = null;
+						umlModel = new PartModel(current_UMLDataModel,true);
+						to1.setRefModel(umlModel);
+						umlModel.setName(name);
+						umlModel.setTreeModel(to1);
+						Object parentObject = modelStore.get(parentID);
+						if(parentObject==null){
+							to1.setParent(root);
+							root.addChild(to1);
+						}
+						else{
+							to1.setParent((UMLTreeParentModel)parentObject);
+							UMLTreeParentModel up= (UMLTreeParentModel)parentObject;
+							if (to1 != null) {
+								up.addChild(to1);
+							}
+						}
+						modelStore.put(id, to1);
+					}
+				}
+				else if(current_model_type==50){
+					if(this.isBoundary){
+
+						String view_id = current_UMLDataModel.getProperty("View_ID");
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						String size = current_UMLDataModel.getProperty("ID_SIZE");
+						String location = current_UMLDataModel.getProperty("ID_LOCATION");
+						if(this.boundaryModel!=null){
+							UMLTreeModel up = (UMLTreeModel)this.modelStore.get(parentID);
+							UMLModel um = (UMLModel)up.getRefModel();
+							if(um!=null){
+								UMLModel child = this.factory.createModle(um);
+								child.setSize(this.getSize(size));
+								child.setLocation(this.getLocation(location));
+								boundaryModel.addChild(child);
+								this.viewStore.put(view_id, child);
+								this.inModelViewListStore.put(parentID, child);
+								this.inModelViewStore.put(view_id, child);
+							}
+						}
+					}
+					else{
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						UMLTreeModel  to1 = new UMLTreeModel(name);
+						UMLModel umlModel = null;
+						umlModel = new LifeLineActorModel();
+						to1.setRefModel(umlModel);
+						umlModel.setName(name);
+						umlModel.setTreeModel(to1);
+						Object parentObject = modelStore.get(parentID);
+						if(parentObject==null){
+							to1.setParent(root);
+							root.addChild(to1);
+						}
+						else{
+							to1.setParent((UMLTreeParentModel)parentObject);
+							UMLTreeParentModel up= (UMLTreeParentModel)parentObject;
+							if (to1 != null) {
+								up.addChild(to1);
+							}
+						}
+						modelStore.put(id, to1);
+					}
+				}
+				else if(current_model_type==28){
+					if(this.isBoundary){
+
+						String view_id = current_UMLDataModel.getProperty("View_ID");
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						String size = current_UMLDataModel.getProperty("ID_SIZE");
+						String location = current_UMLDataModel.getProperty("ID_LOCATION");
+						if(this.boundaryModel!=null){
+							UMLTreeModel up = (UMLTreeModel)this.modelStore.get(parentID);
+							UMLModel um = (UMLModel)up.getRefModel();
+
+							if(um!=null){
+								UMLModel child = this.factory.createModle(um);
+								child.setSize(this.getSize(size));
+								child.setLocation(this.getLocation(location));
+								boundaryModel.addChild(child);
+								this.viewStore.put(view_id, child);
+								this.inModelViewListStore.put(parentID, child);
+								this.inModelViewStore.put(view_id, child);
+							}
+						}
+					}
+					else{
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String isActor = current_UMLDataModel.getProperty("isActor");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						String ref_ID = current_UMLDataModel.getProperty("REF_ID");
+						UMLTreeModel  to1 = new UMLTreeModel(name);
+						UMLModel umlModel = null;
+
+						if("true".equals(isActor)){
+							umlModel = new LifeLineActorModel();
+							if(ref_ID!=null && !ref_ID.trim().equals("")){
+								umlModel.getUMLDataModel().setProperty("REF_ID",ref_ID);
+							}
+						}
+						else{
+							umlModel = new LifeLineModel();
+							if(ref_ID!=null && !ref_ID.trim().equals("")){
+								umlModel.getUMLDataModel().setProperty("REF_ID",ref_ID);
+							}
+						}
+
+						to1.setRefModel(umlModel);
+
+						umlModel.setName(name);
+						umlModel.setTreeModel(to1);
+						Object parentObject = modelStore.get(parentID);
+						if(parentObject==null){
+							to1.setParent(root);
+							root.addChild(to1);
+						}
+						else{
+							to1.setParent((UMLTreeParentModel)parentObject);
+							UMLTreeParentModel up= (UMLTreeParentModel)parentObject;
+							if (to1 != null) {
+								up.addChild(to1);
+							}
+						}
+						modelStore.put(id, to1);
+					}
+				}
+				else if(current_model_type==29){
+					if(this.isBoundary){
+
+						String view_id = current_UMLDataModel.getProperty("View_ID");
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						String size = current_UMLDataModel.getProperty("ID_SIZE");
+						String location = current_UMLDataModel.getProperty("ID_LOCATION");
+						if(this.boundaryModel!=null){
+							UMLTreeModel up = (UMLTreeModel)this.modelStore.get(parentID);
+							UMLModel um = (UMLModel)up.getRefModel();
+							if(um!=null){
+								UMLModel child = this.factory.createModle(um);
+								child.setSize(this.getSize(size));
+								child.setLocation(this.getLocation(location));
+								boundaryModel.addChild(child);
+								this.viewStore.put(view_id, child);
+								this.inModelViewListStore.put(parentID, child);
+								this.inModelViewStore.put(view_id, child);
+							}
+						}
+					}
+					else{
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						StrcuturedPackageTreeModel  to1 = new StrcuturedPackageTreeModel(name);
+						UMLModel umlModel = null;
+						umlModel = new ComponentModel(current_UMLDataModel,true);
+						to1.setRefModel(umlModel);
+						umlModel.setName(name);
+						umlModel.setTreeModel(to1);
+						Object parentObject = modelStore.get(parentID);
+						if(parentObject==null){
+							to1.setParent(root);
+							root.addChild(to1);
+						}
+						else{
+							to1.setParent((UMLTreeParentModel)parentObject);
+							UMLTreeParentModel up= (UMLTreeParentModel)parentObject;
+							if (to1 != null) {
+								up.addChild(to1);
+							}
+						}
+						modelStore.put(id, to1);
+					}
+				}
+				else if(current_model_type==30){
+					if(this.isBoundary){
+
+						String view_id = current_UMLDataModel.getProperty("View_ID");
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						String size = current_UMLDataModel.getProperty("ID_SIZE");
+						String location = current_UMLDataModel.getProperty("ID_LOCATION");
+						if(this.boundaryModel!=null){
+							UMLTreeModel up = (UMLTreeModel)this.modelStore.get(parentID);
+							UMLModel um = (UMLModel)up.getRefModel();
+							if(um!=null){
+								UMLModel child = this.factory.createModle(um);
+								child.setSize(this.getSize(size));
+								child.setLocation(this.getLocation(location));
+								boundaryModel.addChild(child);
+								this.viewStore.put(view_id, child);
+								this.inModelViewListStore.put(parentID, child);
+								this.inModelViewStore.put(view_id, child);
+							}
+						}
+					}
+					else{
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						UMLTreeModel  to1 = new UMLTreeModel(name);
+						UMLModel umlModel = null;
+						umlModel = new ArtfifactModel(current_UMLDataModel,true);
+						to1.setRefModel(umlModel);
+						umlModel.setName(name);
+						umlModel.setTreeModel(to1);
+						Object parentObject = modelStore.get(parentID);
+						if(parentObject==null){
+							to1.setParent(root);
+							root.addChild(to1);
+						}
+						else{
+							to1.setParent((UMLTreeParentModel)parentObject);
+							UMLTreeParentModel up= (UMLTreeParentModel)parentObject;
+							if (to1 != null) {
+								up.addChild(to1);
+							}
+						}
+						modelStore.put(id, to1);
+					}
+				}
+				else if(current_model_type==31){
+					if(this.isBoundary){
+
+						String view_id = current_UMLDataModel.getProperty("View_ID");
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						String size = current_UMLDataModel.getProperty("ID_SIZE");
+						String location = current_UMLDataModel.getProperty("ID_LOCATION");
+						if(this.boundaryModel!=null){
+							UMLTreeModel up = (UMLTreeModel)this.modelStore.get(parentID);
+							UMLModel um = (UMLModel)up.getRefModel();
+							if(um!=null){
+								UMLModel child = this.factory.createModle(um);
+								child.setSize(this.getSize(size));
+								child.setLocation(this.getLocation(location));
+								boundaryModel.addChild(child);
+								this.viewStore.put(view_id, child);
+								this.inModelViewListStore.put(parentID, child);
+								this.inModelViewStore.put(view_id, child);
+							}
+						}
+					}
+					else{
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						StrcuturedPackageTreeModel  to1 = new StrcuturedPackageTreeModel(name);
+						UMLModel umlModel = null;
+						umlModel = new StateModel(current_UMLDataModel,true);
+						to1.setRefModel(umlModel);
+						umlModel.setName(name);
+						umlModel.setTreeModel(to1);
+						Object parentObject = modelStore.get(parentID);
+						if(parentObject==null){
+							to1.setParent(root);
+							root.addChild(to1);
+						}
+						else{
+							to1.setParent((UMLTreeParentModel)parentObject);
+							UMLTreeParentModel up= (UMLTreeParentModel)parentObject;
+							if (to1 != null) {
+								up.addChild(to1);
+							}
+						}
+						modelStore.put(id, to1);
+					}
+				}
+				else if(current_model_type==32){
+					if(this.isBoundary){
+
+						String view_id = current_UMLDataModel.getProperty("View_ID");
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						String size = current_UMLDataModel.getProperty("ID_SIZE");
+						String location = current_UMLDataModel.getProperty("ID_LOCATION");
+						if(this.boundaryModel!=null){
+							UMLTreeModel up = (UMLTreeModel)this.modelStore.get(parentID);
+							UMLModel um = (UMLModel)up.getRefModel();
+							if(um!=null){
+								UMLModel child = this.factory.createModle(um);
+								child.setSize(this.getSize(size));
+								child.setLocation(this.getLocation(location));
+								boundaryModel.addChild(child);
+								this.viewStore.put(view_id, child);
+								this.inModelViewListStore.put(parentID, child);
+								this.inModelViewStore.put(view_id, child);
+							}
+						}
+					}
+					else{
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						UMLTreeModel  to1 = new StrcuturedStatePackageTreeModel(name);
+						UMLModel umlModel = null;
+						umlModel = new StrcuturedStateModel(current_UMLDataModel,true);
+						to1.setRefModel(umlModel);
+						umlModel.setName(name);
+						umlModel.setTreeModel(to1);
+						Object parentObject = modelStore.get(parentID);
+						if(parentObject==null){
+							to1.setParent(root);
+							root.addChild(to1);
+						}
+						else{
+							to1.setParent((UMLTreeParentModel)parentObject);
+							UMLTreeParentModel up= (UMLTreeParentModel)parentObject;
+							if (to1 != null) {
+								up.addChild(to1);
+							}
+						}
+						modelStore.put(id, to1);
+					}
+				}
+				else if(current_model_type==33){
+					if(this.isBoundary){
+
+						String view_id = current_UMLDataModel.getProperty("View_ID");
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						String size = current_UMLDataModel.getProperty("ID_SIZE");
+						String location = current_UMLDataModel.getProperty("ID_LOCATION");
+						if(this.boundaryModel!=null){
+							UMLTreeModel up = (UMLTreeModel)this.modelStore.get(parentID);
+							UMLModel um = (UMLModel)up.getRefModel();
+							if(um!=null){
+								UMLModel child = this.factory.createModle(um);
+								child.setSize(this.getSize(size));
+								child.setLocation(this.getLocation(location));
+								boundaryModel.addChild(child);
+								this.viewStore.put(view_id, child);
+								this.inModelViewListStore.put(parentID, child);
+								this.inModelViewStore.put(view_id, child);
+							}
+						}
+					}
+					else{
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						UMLTreeModel  to1 = new UMLTreeModel(name);
+						UMLModel umlModel = null;
+						umlModel = new HistoryModel();
+						to1.setRefModel(umlModel);
+						umlModel.setName(name);
+						umlModel.setTreeModel(to1);
+						Object parentObject = modelStore.get(parentID);
+						if(parentObject==null){
+							to1.setParent(root);
+							root.addChild(to1);
+						}
+						else{
+							to1.setParent((UMLTreeParentModel)parentObject);
+							UMLTreeParentModel up= (UMLTreeParentModel)parentObject;
+							if (to1 != null) {
+								up.addChild(to1);
+							}
+						}
+						modelStore.put(id, to1);
+					}
+				}
+				else if(current_model_type==34){
+					if(this.isBoundary){
+
+						String view_id = current_UMLDataModel.getProperty("View_ID");
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						String size = current_UMLDataModel.getProperty("ID_SIZE");
+						String location = current_UMLDataModel.getProperty("ID_LOCATION");
+						if(this.boundaryModel!=null){
+							UMLTreeModel up = (UMLTreeModel)this.modelStore.get(parentID);
+							UMLModel um = (UMLModel)up.getRefModel();
+							if(um!=null){
+								UMLModel child = this.factory.createModle(um);
+								child.setSize(this.getSize(size));
+								child.setLocation(this.getLocation(location));
+								boundaryModel.addChild(child);
+								this.viewStore.put(view_id, child);
+								this.inModelViewListStore.put(parentID, child);
+								this.inModelViewStore.put(view_id, child);
+							}
+						}
+					}
+					else{
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						UMLTreeModel  to1 = new UMLTreeModel(name);
+						UMLModel umlModel = null;
+						umlModel = new TerminateModel();
+						to1.setRefModel(umlModel);
+						umlModel.setName(name);
+						umlModel.setTreeModel(to1);
+						Object parentObject = modelStore.get(parentID);
+						if(parentObject==null){
+							to1.setParent(root);
+							root.addChild(to1);
+						}
+						else{
+							to1.setParent((UMLTreeParentModel)parentObject);
+							UMLTreeParentModel up= (UMLTreeParentModel)parentObject;
+							if (to1 != null) {
+								up.addChild(to1);
+							}
+						}
+						modelStore.put(id, to1);
+					}
+				}
+				else if(current_model_type==36){
+					if(this.isBoundary){
+
+						String view_id = current_UMLDataModel.getProperty("View_ID");
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						String size = current_UMLDataModel.getProperty("ID_SIZE");
+						String location = current_UMLDataModel.getProperty("ID_LOCATION");
+						if(this.boundaryModel!=null){
+							UMLTreeModel up = (UMLTreeModel)this.modelStore.get(parentID);
+							UMLModel um = (UMLModel)up.getRefModel();
+							if(um!=null){
+								UMLModel child = this.factory.createModle(um);
+								child.setSize(this.getSize(size));
+								child.setLocation(this.getLocation(location));
+								boundaryModel.addChild(child);
+								this.viewStore.put(view_id, child);
+								this.inModelViewListStore.put(parentID, child);
+								this.inModelViewStore.put(view_id, child);
+							}
+						}
+					}
+					else{
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						UMLTreeModel  to1 = new UMLTreeModel(name);
+						UMLModel umlModel = null;
+						umlModel = new EntryPointModelNoPort();
+						to1.setRefModel(umlModel);
+						umlModel.setName(name);
+						umlModel.setTreeModel(to1);
+						Object parentObject = modelStore.get(parentID);
+						if(parentObject==null){
+							to1.setParent(root);
+							root.addChild(to1);
+						}
+						else{
+							to1.setParent((UMLTreeParentModel)parentObject);
+							UMLTreeParentModel up= (UMLTreeParentModel)parentObject;
+							if (to1 != null) {
+								up.addChild(to1);
+							}
+						}
+						modelStore.put(id, to1);
+					}
+				}
+				else if(current_model_type==35){
+					if(this.isBoundary){
+
+						String view_id = current_UMLDataModel.getProperty("View_ID");
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						String size = current_UMLDataModel.getProperty("ID_SIZE");
+						String location = current_UMLDataModel.getProperty("ID_LOCATION");
+						if(this.boundaryModel!=null){
+							UMLTreeModel up = (UMLTreeModel)this.modelStore.get(parentID);
+							UMLModel um = (UMLModel)up.getRefModel();
+							if(um!=null){
+								UMLModel child = this.factory.createModle(um);
+								child.setSize(this.getSize(size));
+								child.setLocation(this.getLocation(location));
+								boundaryModel.addChild(child);
+								this.viewStore.put(view_id, child);
+								this.inModelViewListStore.put(parentID, child);
+								this.inModelViewStore.put(view_id, child);
+							}
+						}
+					}
+					else{
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						StrcuturedPackageTreeModel  to1 = new StrcuturedPackageTreeModel(name);
+						UMLModel umlModel = null;
+						umlModel = new NodeModel(current_UMLDataModel,true);
+						to1.setRefModel(umlModel);
+						umlModel.setName(name);
+						umlModel.setTreeModel(to1);
+						Object parentObject = modelStore.get(parentID);
+						if(parentObject==null){
+							to1.setParent(root);
+							root.addChild(to1);
+						}
+						else{
+							to1.setParent((UMLTreeParentModel)parentObject);
+							UMLTreeParentModel up= (UMLTreeParentModel)parentObject;
+							if (to1 != null) {
+								up.addChild(to1);
+							}
+						}
+						modelStore.put(id, to1);
+					}
+				}
+				else if(current_model_type==37){
+					if(this.isBoundary){
+
+						String view_id = current_UMLDataModel.getProperty("View_ID");
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						String size = current_UMLDataModel.getProperty("ID_SIZE");
+						String location = current_UMLDataModel.getProperty("ID_LOCATION");
+						if(this.boundaryModel!=null){
+							UMLTreeModel up = (UMLTreeModel)this.modelStore.get(parentID);
+							UMLModel um = (UMLModel)up.getRefModel();
+							if(um!=null){
+								UMLModel child = this.factory.createModle(um);
+								child.setSize(this.getSize(size));
+								child.setLocation(this.getLocation(location));
+								boundaryModel.addChild(child);
+								this.viewStore.put(view_id, child);
+								this.inModelViewListStore.put(parentID, child);
+								this.inModelViewStore.put(view_id, child);
+							}
+						}
+					}
+					else{
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						UMLTreeModel  to1 = new UMLTreeModel(name);
+						UMLModel umlModel = null;
+						umlModel = new DeviceModel(current_UMLDataModel,true);
+						to1.setRefModel(umlModel);
+						umlModel.setName(name);
+						umlModel.setTreeModel(to1);
+						Object parentObject = modelStore.get(parentID);
+						if(parentObject==null){
+							to1.setParent(root);
+							root.addChild(to1);
+						}
+						else{
+							to1.setParent((UMLTreeParentModel)parentObject);
+							UMLTreeParentModel up= (UMLTreeParentModel)parentObject;
+							if (to1 != null) {
+								up.addChild(to1);
+							}
+						}
+						modelStore.put(id, to1);
+					}
+				}
+				else if(current_model_type==38){
+					if(this.isBoundary){
+
+						String view_id = current_UMLDataModel.getProperty("View_ID");
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						String size = current_UMLDataModel.getProperty("ID_SIZE");
+						String location = current_UMLDataModel.getProperty("ID_LOCATION");
+						if(this.boundaryModel!=null){
+							UMLTreeModel up = (UMLTreeModel)this.modelStore.get(parentID);
+							UMLModel um = (UMLModel)up.getRefModel();
+							if(um!=null){
+								UMLModel child = this.factory.createModle(um);
+								child.setSize(this.getSize(size));
+								child.setLocation(this.getLocation(location));
+								boundaryModel.addChild(child);
+								this.viewStore.put(view_id, child);
+								this.inModelViewListStore.put(parentID, child);
+								this.inModelViewStore.put(view_id, child);
+							}
+						}
+					}
+					else{
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						UMLTreeModel  to1 = new UMLTreeModel(name);
+						UMLModel umlModel = null;
+						umlModel = new ExecutionEnvironmentModel(current_UMLDataModel,true);
+						to1.setRefModel(umlModel);
+						umlModel.setName(name);
+						umlModel.setTreeModel(to1);
+						Object parentObject = modelStore.get(parentID);
+						if(parentObject==null){
+							to1.setParent(root);
+							root.addChild(to1);
+						}
+						else{
+							to1.setParent((UMLTreeParentModel)parentObject);
+							UMLTreeParentModel up= (UMLTreeParentModel)parentObject;
+							if (to1 != null) {
+								up.addChild(to1);
+							}
+						}
+						modelStore.put(id, to1);
+					}
+				}
+				else if(current_model_type==39){
+					if(this.isBoundary){
+
+						String view_id = current_UMLDataModel.getProperty("View_ID");
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						String size = current_UMLDataModel.getProperty("ID_SIZE");
+						String location = current_UMLDataModel.getProperty("ID_LOCATION");
+						if(this.boundaryModel!=null){
+							UMLTreeModel up = (UMLTreeModel)this.modelStore.get(parentID);
+							UMLModel um = (UMLModel)up.getRefModel();
+							if(um!=null){
+								UMLModel child = this.factory.createModle(um);
+								child.setSize(this.getSize(size));
+								child.setLocation(this.getLocation(location));
+								boundaryModel.addChild(child);
+								this.viewStore.put(view_id, child);
+								this.inModelViewListStore.put(parentID, child);
+								this.inModelViewStore.put(view_id, child);
+							}
+						}
+					}
+					else{
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						UMLTreeModel  to1 = new UMLTreeModel(name);
+						UMLModel umlModel = null;
+						umlModel = new DeploymentSpecificationModel(current_UMLDataModel,true);
+						to1.setRefModel(umlModel);
+						umlModel.setName(name);
+						umlModel.setTreeModel(to1);
+						Object parentObject = modelStore.get(parentID);
+						if(parentObject==null){
+							to1.setParent(root);
+							root.addChild(to1);
+						}
+						else{
+							to1.setParent((UMLTreeParentModel)parentObject);
+							UMLTreeParentModel up= (UMLTreeParentModel)parentObject;
+							if (to1 != null) {
+								up.addChild(to1);
+							}
+						}
+						modelStore.put(id, to1);
+					}
+				}
+				else if(current_model_type==40){
+					if(this.isBoundary){
+
+						String view_id = current_UMLDataModel.getProperty("View_ID");
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						String size = current_UMLDataModel.getProperty("ID_SIZE");
+						String location = current_UMLDataModel.getProperty("ID_LOCATION");
+						if(this.boundaryModel!=null){
+							UMLTreeModel up = (UMLTreeModel)this.modelStore.get(parentID);
+							UMLModel um = (UMLModel)up.getRefModel();
+							if(um!=null){
+								UMLModel child = this.factory.createModle(um);
+								child.setSize(this.getSize(size));
+								child.setLocation(this.getLocation(location));
+								boundaryModel.addChild(child);
+								this.viewStore.put(view_id, child);
+								this.inModelViewListStore.put(parentID, child);
+								this.inModelViewStore.put(view_id, child);
+							}
+						}
+					}
+					else{
+						String id = current_UMLDataModel.getProperty("ID");
+						String name = current_UMLDataModel.getProperty("ID_NAME");
+						String parentID = current_UMLDataModel.getProperty("parentID");
+						UMLTreeModel  to1 = new UMLTreeModel(name);
+						UMLModel umlModel = null;
+						umlModel = new StateLifelineModel();
+						to1.setRefModel(umlModel);
+						umlModel.setName(name);
+						umlModel.setTreeModel(to1);
+						Object parentObject = modelStore.get(parentID);
+						if(parentObject==null){
+							to1.setParent(root);
+							root.addChild(to1);
+						}
+						else{
+							to1.setParent((UMLTreeParentModel)parentObject);
+							UMLTreeParentModel up= (UMLTreeParentModel)parentObject;
+							if (to1 != null) {
+								up.addChild(to1);
+							}
+						}
+						modelStore.put(id, to1);
+					}
+				}
+				current_model_type = -1;
+			}
+
+
+
+		}
+
+	}
+
+	public void eCcreateModel(String token){
+
+		this.current_model_type = ProjectManager.getInstance().getModelTypeName(token);
+//		this.buildModel(current_model_type);
+	}
+
+	public void eModelPropertysBegin(String token){
+
+
+//		this.buildModel(current_model_type);
+	}
+
+	public void ePropertysListBegin(int type){
+		UMLTreeModel to1 = null;
+		//package
+		if(this.current_model_type==0){
+			PackageTreeModel packageTreeModel = new PackageTreeModel(""); 
+			FinalPackageModel finalPackageModel = new FinalPackageModel();
+			packageTreeModel.setRefModel(finalPackageModel);
+			finalPackageModel.setTreeModel(to1);
+
+		}//usecase
+		else if(this.current_model_type==2){
+
+		}
+		//actor
+		else if(this.current_model_type==3){
+
+		}
+		//컬레보레이션
+		else if(this.current_model_type==4){
+
+		}
+
+
+	}
+	public java.util.ArrayList  getViewLines() {
+		return viewLines;
+	}
+	public void setViewLines(java.util.ArrayList viewLines) {
+		this.viewLines = viewLines;
+	}
+	public HashMap getModelStore() {
+		return modelStore;
+	}
+	public void setModelStore(HashMap modelStore) {
+		this.modelStore = modelStore;
+	}
+
+	public Parser getParser() {
+		return parser;
+	}
+
+	public void setParser(Parser parser) {
+		this.parser = parser;
+	}
+
+	public LoadProgressRun getLoadProgressRun() {
+		return loadProgressRun;
+	}
+
+	public void setLoadProgressRun(LoadProgressRun loadProgressRun) {
+		this.loadProgressRun = loadProgressRun;
+	}
+
+	public java.util.ArrayList getOpenDiagarams() {
+		return openDiagarams;
+	}
+
+	public void setOpenDiagarams(java.util.ArrayList openDiagarams) {
+		this.openDiagarams = openDiagarams;
+	}
+
+	public java.util.ArrayList getRefStore() {
+		return refStore;
+	}
+
+	public void setRefStore(java.util.ArrayList refStore) {
+		this.refStore = refStore;
+	}
+
+
+
+
+}

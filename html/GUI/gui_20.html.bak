@@ -1,0 +1,26 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE> New Document </TITLE>
+<META NAME="Generator" CONTENT="EditPlus">
+<META NAME="Author" CONTENT="">
+<META NAME="Keywords" CONTENT="">
+<META NAME="Description" CONTENT="">
+</HEAD>
+
+<BODY>
+<H1 CLASS="Head">역공학</H1>
+<p>자바나 C++ 파일의 소스코드를 분석해서 클래스도를 생성해 내는 기능이다. java와 C++ 두가지의 사용 방법은 같다.
+<P CLASS="Para" align="center"><img src="../images/GUI/19/image001.jpg" alt="start1" border="0"><br>
+그림 2.1-2 역공학 기능
+</p>
+<p>도구에서 java 나 C++ 을 선택하고 버튼을 누르면 파일을 선택할수 있는 창이 뜬다. 선택한 내용에 맞는 소스코드를 선택한 후 확인버튼을 누른다.
+<P CLASS="Para" align="center"><img src="../images/GUI/19/image002.jpg" alt="start1" border="0"><br>
+그림 2.1-2 소스 코드 선택 창
+</p>
+<p>소스 코드를 분석한 클래스 파일이 생성된 모습이다.
+<P CLASS="Para" align="center"><img src="../images/GUI/19/image005_detached_2.jpg" alt="start1" border="0"><br>
+그림 2.1-2 생성된 클래스
+</p>
+</BODY>
+</HTML>

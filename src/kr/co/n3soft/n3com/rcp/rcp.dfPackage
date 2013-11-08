@@ -1,0 +1,54 @@
+package id8eb0ff91zz67uf9202ikr;
+
+/**
+@version 2.0
+@physicalPackage
+@__modelType diagram 
+*/
+class diagram {
+/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.rcp.N3EditorInput:oiref><oihard>
+@__modelType reference 
+*/
+class reference {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.rcp.N3ContextMenuProvider:oiref><oihard>
+@__modelType reference 
+*/
+class reference62 {
+}/**
+@__ref <oiref:design#Class#idb2euf91zz67uf9202il6.diagram:oiref><oihard>
+@__modelType reference
+@__fqn <oiref:#Package#co.n3soft.n3com.rcp.dialog:oiref> 
+*/
+class reference63 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.rcp.N3CreationWizard:oiref><oihard>
+@__modelType reference 
+*/
+class reference64 {
+}/**
+@__ref <oiref:design#Class#iddjo60f91zz67uf9202ikr.diagram:oiref><oihard>
+@__modelType reference
+@__fqn <oiref:#Package#co.n3soft.n3com.rcp.actions:oiref> 
+*/
+class reference65 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.rcp.N3WizardPage:oiref><oihard>
+@__modelType reference 
+*/
+class reference66 {
+}}/**
+@__tags
+@shapeType ClassDiagram 
+*/
+class __tags {
+}/**
+@__options 
+*/
+class __options {
+}/**
+@__positions 
+*/
+class __positions {
+}

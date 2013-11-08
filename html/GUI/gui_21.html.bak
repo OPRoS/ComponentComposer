@@ -1,0 +1,46 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE> New Document </TITLE>
+<META NAME="Generator" CONTENT="EditPlus">
+<META NAME="Author" CONTENT="">
+<META NAME="Keywords" CONTENT="">
+<META NAME="Description" CONTENT="">
+</HEAD>
+
+<BODY>
+<H1 CLASS="Head">패턴 적용</H1>
+<p>이미 정의되어있는 패턴형식으로 클래스를 만들어야 할때 유용한 기능이다.
+<P CLASS="Para" align="center"><img src="../images/GUI/21/image001.jpg" alt="start1" border="0"><br>
+그림 2.1-2 패턴 적용
+</p>
+<p>도구에서 apply pattern버튼을 누르면 다음과 같이 패턴창이 뜬다.
+<P CLASS="Para" align="center"><img src="../images/GUI/21/image002.jpg" alt="start1" border="0"><br>
+그림 2.1-2 패턴 창
+</p>
+<p>생성할 패턴을 선택하면 오른쪽에 패턴이 생성할 클래스들이 보이는데 클래스에대해서 수정을 할 수 있다.
+<P CLASS="Para" align="center"><img src="../images/GUI/21/image002_1.jpg" alt="start1" border="0"><br>
+그림 2.1-2 클래스 수정 버튼
+</p>
+<p>클래스를 선택하면 버튼이 생기는데 버튼을 누르면 수정 창이 열린다.
+<P CLASS="Para" align="center"><img src="../images/GUI/21/image003.jpg" alt="start1" border="0"><br>
+그림 2.1-2 instance Classifier 창
+</p>
+<p>instance Classifier창에는 현재 다이어그램에 있는 클래스들을 볼 수 있는데 선택한후 확인버튼을 누르면 선택한 클래스에 적용되어 나타나게 된다.
+<P CLASS="Para" align="center"><img src="../images/GUI/21/image004.jpg" alt="start1" border="0"><br>
+그림 2.1-2 instance Classifier 창
+</p>
+<p>instance Classifier창에 이름 란은 사용자가 생성될 클래스의 이름을 설정할수 있는 부분이다. 이름을 적은 후 확인버튼을 누르면 지정한 이름이 클래스에 적용되어 나타나게 된다.
+<P CLASS="Para" align="center"><img src="../images/GUI/21/image005.jpg" alt="start1" border="0"><br>
+그림 2.1-2 instance Classifier 창
+</p>
+<p>변경작업이 다 끝나고 확인버튼을 누르면 패턴이 적용된 클래스들이 생성된다.
+<P CLASS="Para" align="center"><img src="../images/GUI/21/image006.jpg" alt="start1" border="0"><br>
+그림 2.1-2 적용된 클래스 이름
+</p>
+<p>패턴 적용이 된 다이어그램 화면이다.
+<P CLASS="Para" align="center"><img src="../images/GUI/21/image007.jpg" alt="start1" border="0"><br>
+그림 2.1-2 패턴 적용된 다이어그램
+</p>
+</BODY>
+</HTML>

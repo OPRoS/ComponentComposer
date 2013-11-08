@@ -1,0 +1,60 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE> New Document </TITLE>
+<META NAME="Generator" CONTENT="EditPlus">
+<META NAME="Author" CONTENT="">
+<META NAME="Keywords" CONTENT="">
+<META NAME="Description" CONTENT="">
+</HEAD>
+
+<BODY>
+
+<h1 class="NavTitle">툴바</h1>
+<p>파일 바로서 왼쪽부터 설명하면,  새로운 프로젝트를 생성하는데 이용되는 [새 프로젝트], 저장된 프로젝트를 읽어 들이는 [프로젝트 열기], 작업 중인 프로젝트를 저장하는 [프로젝트 저장], 다이어그램을 프린트하는 [프린트]로 구성된 프로젝트/DIAGRAM 메뉴의 툴바를 보여준다.
+<P CLASS="Para" align="center"><img src="../images/construction/4/image001.jpg" alt="start1" border="0"><br>
+그림 2.2-1 컴포넌트 생성 지원 도구의 초기 화면
+</p>
+<p>편집 바로서 왼쪽부터 설명하면, [복사], [붙여넣기], [삭제], [찾기] 메뉴로 선택된 객체에 대한 각 기능을 제공한다.
+<P CLASS="Para" align="center"><img src="../images/construction/4/image002.jpg" alt="start1" border="0"><br>
+그림 2.2-1 컴포넌트 생성 지원 도구의 초기 화면
+</p>
+<p>도구에 관련된 툴 바로서 왼쪽부터 설명하면, 자바 파일을 읽고 모델링파일로 생성해주는 [자바 역공학], C++파일을 읽고 모델링파일로 생성해주는 [C++ 역공학], 모델링된 내용을 자바파일로 생성해주는[자바 파일 생성], 모델링된 내용을 C++ 파일로 생성해주는 [C++ 파일 생성]으로 구성된 메뉴 툴바를 보여준다.
+<P CLASS="Para" align="center"><img src="../images/construction/4/image003.jpg" alt="start1" border="0"><br>
+그림 2.2-1 컴포넌트 생성 지원 도구의 초기 화면
+</p>
+<p>객체 생성에 관련된 툴바로서 왼쪽부터 설명하면 [새 패키지 생성], [새 다이어그램 생성], [새 객체 생성], 패턴에 의한 정의된 객체들을 생성해주는 [패턴 적용]으로 구성된 메뉴 툴바를 보여준다.
+<P CLASS="Para" align="center"><img src="../images/construction/4/image004.jpg" alt="start1" border="0"><br>
+그림 2.2-1 컴포넌트 생성 지원 도구의 초기 화면
+</p>
+<p>윈도우에 관련된 툴바로서 왼쪽부터 설명하면 [콘솔 창 보기], [아웃라인 창 보기], [프로퍼티 창 보기]로 윈도우에서 각 창을 보고싶을때 사용하는 기능이다.
+<P CLASS="Para" align="center"><img src="../images/construction/4/image005.jpg" alt="start1" border="0"><br>
+그림 2.2-1 컴포넌트 생성 지원 도구의 초기 화면
+</p>
+<p>도움말에 관련된 툴바로서 왼쪽부터 설명하면 도움말을 볼 수 있는 [도움말 보기]구성된 메뉴 툴바를 보여준다.
+<P CLASS="Para" align="center"><img src="../images/construction/4/image006.jpg" alt="start1" border="0"><br>
+그림 2.2-1 컴포넌트 생성 지원 도구의 초기 화면
+</p>
+<p>언두/리두 에 대한 툴바이다.
+<P CLASS="Para" align="center"><img src="../images/construction/4/image007.jpg" alt="start1" border="0"><br>
+그림 2.2-1 언두/리두
+</p>
+<p>도움말에 관련된 툴바로서 왼쪽부터 설명하면 도움말을 볼 수 있는 [도움말 보기]구성된 메뉴 툴바를 보여준다.
+<P CLASS="Para" align="center"><img src="../images/construction/4/image008.jpg" alt="start1" border="0"><br>
+그림 2.2-1 컴포넌트 생성 지원 도구의 초기 화면
+</p>
+<p>객체가 여러개 선택됐을때 기준에 따라서 객체를 이동시키는 툴바이다.
+<P CLASS="Para" align="center"><img src="../images/construction/4/image009.jpg" alt="start1" border="0">
+<img src="../images/construction/4/image010.jpg" alt="start1" border="0"><br>
+그림 2.2-1 위치 정렬 툴바
+</p>
+<p>객체가 여러개 선택됐을때 기준이 되는 객체에 맞춰서 객체의 크기를 조정하는 툴바이다.
+<P CLASS="Para" align="center"><img src="../images/construction/4/image011.jpg" alt="start1" border="0"><br>
+그림 2.2-1 크기 정렬 툴바
+</p>
+<p>다이어그램을 확대 축소 하는 툴바이다.
+<P CLASS="Para" align="center"><img src="../images/construction/4/image012.jpg" alt="start1" border="0"><br>
+그림 2.2-1 확대/축소 툴바
+</p>
+</BODY>
+</HTML>

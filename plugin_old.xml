@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.perspectives">
+      <perspective
+            class="uuu.Perspective"
+            icon="icons/title.gif"
+            id="uuu.perspective"
+            name="OPRoS Component Composer">
+      </perspective>
+   </extension>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="kr.co.n3soft.n3com.UMLEditor"
+            contributorClass="kr.co.n3soft.n3com.rcp.actions.N3ActionBarContributor"
+            default="false"
+            icon="icons/diagram.gif"
+            id="kr.co.n3soft.n3com.rcp.N3Editor"
+            name="N3Editor">
+      </editor>
+   </extension>
+      <extension
+         id="product"
+         point="org.eclipse.core.runtime.products">
+      <product
+            application="uuu.application"
+            name="N3COM Constructor V3.0">
+         <property
+               name="appName"
+               value="N3COM Constructor V3.0">
+         </property>
+         <property
+               name="preferenceCustomization"
+               value="plugin_customization.ini">
+         </property>
+         <property
+               name="aboutText"
+               value="N3COM Constructor&#x0A;&#x0A;Version: 3.0&#x0A;Build id: I20070625-1500&#x0A;&#x0A;(c) Copyright N3soft contributors and others 2000, 2007.  All rights reserved.&#x0A;Visit http://www.n3soft.co.kr">
+         </property>
+         <property
+               name="aboutImage"
+               value="icons/constructor2.gif">
+         </property>
+         <property
+               name="windowImages"
+               value="logo.gif">
+         </property>
+      </product>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            category="uuu"
+            class="uuu.views.SampleView"
+            icon="icons/console.GIF"
+            id="uuu.views.SampleView"
+            name="Console">
+      </view>
+      <view
+            category="uuu"
+            class="kr.co.n3soft.n3com.project.browser.ModelBrowser"
+            icon="icons/model.gif"
+            id="uuu.views.SampleView4"
+            name="Project Browser">
+      </view>
+      <view
+            category="uuu"
+            class="uuu.views.DescriptionView"
+            icon="icons/circuit16.gif"
+            id="uuu.views.DescriptionView"
+            name="Description">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension
+            targetID="org.eclipse.ui.resourcePerspective">
+         <view
+               id="uuu.views.SampleView"
+               ratio="0.5"
+               relationship="right"
+               relative="org.eclipse.ui.views.TaskList">
+         </view>
+      </perspectiveExtension>
+      <perspectiveExtension
+            targetID="org.eclipse.ui.resourcePerspective">
+         <view
+               id="uuu.views.SampleView4"
+               ratio="0.5"
+               relationship="right"
+               relative="org.eclipse.ui.views.TaskList">
+         </view>
+      </perspectiveExtension>
+   </extension>
+   <extension
+         point="org.eclipse.ui.intro">
+      <intro
+            class="org.eclipse.ui.intro.config.CustomizableIntroPart"
+            id="uuu.intro">
+      </intro>
+      <introProductBinding
+            introId="uuu.intro"
+            productId="uuu.product">
+      </introProductBinding>
+   </extension>
+   <extension
+         point="org.eclipse.ui.intro.config">
+      <config
+            content="introContent.xml"
+            id="uuu.introConfigId"
+            introId="uuu.intro">
+         <presentation
+               home-page-id="root">
+            <implementation
+                  kind="html"
+                  os="win32,linux,macosx">
+            </implementation>
+         </presentation>
+      </config>
+   </extension>
+   <extension
+         point="org.eclipse.ui.actionSets">
+      <actionSet
+            id="uuu.actionSet"
+            label="Sample Action Set"
+            visible="true">
+         <menu
+               id="sampleMenu"
+               label="&amp;ToolRun">
+            <separator
+                  name="sampleGroup">
+            </separator>
+         </menu>
+         <action
+               class="uuu.actions.MonitoringToolRunAction"
+               icon="icons/m.gif"
+               id="uuu.actions.MonitoringToolRunAction"
+               label="&amp;Monitoring Run "
+               menubarPath="sampleMenu/sampleGroup"
+               toolbarPath="sampleGroup"
+               tooltip="Monitoring Run ">
+         </action>
+         <action
+               class="uuu.actions.SimulationToolRunAction"
+               icon="icons/s.gif"
+               id="uuu.actions.SimulationToolRunAction"
+               label="&amp;Simulation Run"
+               menubarPath="sampleMenu/sampleGroup"
+               toolbarPath="sampleGroup"
+               tooltip="Simulation Run">
+         </action>
+         <action
+               class="uuu.actions.EtcToolRunAction"
+               icon="icons/t1.gif"
+               id="uuu.actions.EtcToolRunAction"
+               label="&amp;T1 Run"
+               menubarPath="sampleMenu/sampleGroup"
+               toolbarPath="sampleGroup"
+               tooltip="T1 Run">
+         </action>
+         <action
+               class="uuu.actions.EtcTool2RunAction"
+               icon="icons/t2.gif"
+               id="uuu.actions.EtcTool2RunAction"
+               label="&amp;T2 Run"
+               menubarPath="sampleMenu/sampleGroup"
+               toolbarPath="sampleGroup"
+               tooltip="T2 Run">
+         </action>
+      </actionSet>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="preferences.OPRoS_CC_PreferencePage"
+            class="uuu.preferences.SamplePreferencePage"
+            id="uuu.preferences.SamplePreferencePage"
+            name="OPRoS_CC_Directory Preference">
+      </page>
+      <page
+            class="uuu.preferences.OPRoS_CC_PreferencePage"
+            id="preferences.OPRoS_CC_PreferencePage"
+            name="OPRoS_CC Preference">
+      </page>
+      <page
+            category="preferences.OPRoS_CC_PreferencePage"
+            class="uuu.preferences.OPRoS_CC_DirectoryPage"
+            id="uuu.page1"
+            name="OPRoS_CC Compile Preference">
+      </page>
+      <page
+            category="preferences.OPRoS_CC_PreferencePage"
+            class="uuu.preferences.OPRoS_CC_CopyrighterPage"
+            id="uuu.page2"
+            name="OPRoS_CC Copyright">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="uuu.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
+
+</plugin>

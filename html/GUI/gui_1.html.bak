@@ -1,0 +1,19 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE> New Document </TITLE>
+<META NAME="Generator" CONTENT="EditPlus">
+<META NAME="Author" CONTENT="">
+<META NAME="Keywords" CONTENT="">
+<META NAME="Description" CONTENT="">
+</HEAD>
+
+<BODY>
+<div class="help_breadcrumbs"><a href="../main.html">사용자 메뉴얼</a> > 
+<a href="../GUI/gui_main.html"> 통합 GUI 사용</a> > 
+</div>
+
+<H1 CLASS="Head">개요</H1>
+<P>통합 GUI는 사용자가 도구에 있는 다이어그램을 다루는데 필요한 UI를 제공한다. 프로젝트의 생성/저장/열기, 다이어그램의 생성, 브라우징 윈도우, 메시지 윈도우, 탐색기 등 다양한 형태로 사용자가 편리하게 다이어그램 작업을 할 수 있도록 한다. 모든 다이어그램은 통합 GUI에서 관리가 가능하며, 이들을 실행시키는데 필요한 환경 설정도 가능하다.
+</BODY>
+</HTML>

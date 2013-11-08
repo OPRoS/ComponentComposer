@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry exported="true" kind="lib" path="lib1/cb.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib1/commons-cli-1.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib1/etri.camus.client_all.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib1/etri.service.support.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib1/jxl.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib1/log4j-1.2.15.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib1/nsuml.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib1/opros.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib1/jdom.jar"/>
+	<classpathentry kind="lib" path="D:/etri/eclipse-rcp-helios-SR2-win32/eclipse/plugins/org.eclipse.jdt.core_3.6.2.v_A76_R36x.jar"/>
+	<classpathentry kind="lib" path="D:/etri/eclipse-rcp-helios-SR2-win32/eclipse/plugins/org.eclipse.jdt.ui_3.6.2.r362_v20110203.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

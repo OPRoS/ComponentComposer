@@ -1,0 +1,22 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE> New Document </TITLE>
+<META NAME="Generator" CONTENT="EditPlus">
+<META NAME="Author" CONTENT="">
+<META NAME="Keywords" CONTENT="">
+<META NAME="Description" CONTENT="">
+</HEAD>
+
+<BODY>
+<H1 CLASS="Head">객체 드래그 & 드랍</H1>
+<p>드래그&드랍은 트리로부터 다이어그램으로 가능하다. 트리에서 객체를 선택한 후 다이어그램으로 드래그할 경우 그 다이어그램으로 옮겨진다. 
+<P CLASS="Para" align="center"><img src="../images/GUI/8/image012.jpg" alt="start1" border="0"><br>
+그림 2.1-2 클래스 드랍
+</p>
+<p>이미 만들어진 클래스와 인터페이스 모델을 다이어그램에 드랍한다.
+<P CLASS="Para" align="center"><img src="../images/GUI/8/image012_1.jpg" alt="start1" border="0"><br>
+그림 2.1-2 인터페이스 드랍
+</p>
+</BODY>
+</HTML>

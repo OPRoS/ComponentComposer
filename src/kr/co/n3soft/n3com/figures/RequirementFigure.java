@@ -1,0 +1,200 @@
+package kr.co.n3soft.n3com.figures;
+
+import kr.co.n3soft.n3com.comm.figures.UMLFigure;
+import kr.co.n3soft.n3com.project.dialog.DetailPropertyTableItem;
+import kr.co.n3soft.n3com.projectmanager.ProjectManager;
+
+import org.eclipse.draw2d.ChopboxAnchor;
+import org.eclipse.draw2d.ColorConstants;
+import org.eclipse.draw2d.ConnectionAnchor;
+import org.eclipse.draw2d.Graphics;
+import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.draw2d.geometry.Insets;
+import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.draw2d.text.TextFlow;
+import org.eclipse.gef.handles.HandleBounds;
+
+public class RequirementFigure extends UMLFigure implements HandleBounds {
+    private IFigure pane;
+    private TextFlow textFlow;
+    java.util.ArrayList extendsPoints = new java.util.ArrayList();
+    private boolean isStereo=false;//2008041401PKY S
+    public RequirementFigure() {
+        setBorder(new RequirementBorder());
+        createConnectionAnchors();
+        setBackgroundColor(ProjectManager.getInstance().getDefaultColor());//PKY 08070901 S 모델 컬러 변경
+        this.setForegroundColor(ColorConstants.black);
+        setOpaque(false);
+    }
+
+    public IFigure getContentsPane() {
+        return pane;
+    }
+
+    public Dimension getPreferredSize(int w, int h) {
+        Dimension prefSize = super.getPreferredSize(w, h);
+        Dimension defaultSize = new Dimension(100, 50);
+        prefSize.union(defaultSize);
+        return prefSize;
+    }
+    
+    public void setExtendsPoints(java.util.ArrayList p){
+    	this.extendsPoints = p;
+//    	firePropertyChange(ID_EXTENSIONPOINT, null, null); //$NON-NLS-1$
+    }
+    
+    public java.util.ArrayList getExtendsPoints(){
+    	return this.extendsPoints;
+    }
+
+    /** @see org.eclipse.draw2d.Figure#paintFigure(Graphics) */
+    protected void paintFigure(Graphics graphics) {
+        Rectangle r = Rectangle.SINGLETON;
+        r.setBounds(getBounds());
+        r.width = r.width - 5;
+        r.height = r.height - 5;
+        int x1 = r.x+30;
+        int y1 = r.y+25;
+        int x2 = r.x+r.width-30;
+        
+        int x = r.x +10;
+        int y = r.y;
+        int y2 = r.y + r.height;
+        
+        
+//        graphics.drawOval(r);
+        graphics.fillRectangle(r);
+//        graphics.drawLine(x, y, x, y2);
+//        firePropertyChange("extensionPoint", null, null); //$NON-NLS-1$//2008041604PKY S
+//        if(this.extendsPoints.size()>0){
+//        	graphics.setForegroundColor(ColorConstants.black);
+////        	graphics.drawLine(x1, y1, x2, y1);
+//        	//2008041401PKY S
+//        	if(isStereo==true)
+//        				y1=y1+15;
+//        		
+//        	//2008041401PKY E
+//        	graphics.drawString("extension points:", r.x+20, y1+5);
+//        	int y2 = y1+8;
+//        	for(int i=0;i<this.extendsPoints.size();i++){
+//        		y2 = y2+12;
+//        		 DetailPropertyTableItem newItem  = (DetailPropertyTableItem)extendsPoints.get(i);
+//        		 graphics.drawString(newItem.desc, r.x+20, y2);
+//        	}
+//        	
+//        }
+        this.setForegroundColor(ProjectManager.getInstance().getDefaultColor());//PKY 08081101 S 프로젝트 전체의 객체 테두리 색상 설정 할  수있도록 수정
+    }
+
+    public String toString() {
+        return "CircuitBoardFigure"; //$NON-NLS-1$
+    }
+
+    public void validate() {
+        try {
+            if (isValid()) return;
+            //	layoutConnectionAnchors();
+            super.validate();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    protected boolean useLocalCoordinates() { return true; }
+
+    protected void createConnectionAnchors() {
+        ChopboxAnchor in, out;
+        //	for(int i=0;i<10;i++){
+        in = new ChopboxAnchor(this);
+        out = new ChopboxAnchor(this);
+        setOutputConnectionAnchor("B", out);
+        setInputConnectionAnchor("A", in);
+        outputConnectionAnchors.addElement(out);
+        inputConnectionAnchors.addElement(in);
+        //	}
+    }
+
+    //protected FixedConnectionAnchorFigure getInputConnectionAnchor(int i) {
+    //	return (FixedConnectionAnchorFigure) connectionAnchors.get(Circuit.TERMINALS_IN[i]);
+    //}
+    public void setInputConnectionAnchor(String anName, ConnectionAnchor c) {
+        connectionAnchors.put(anName, c);
+    }
+
+    public void setOutputConnectionAnchor(String anName, ConnectionAnchor c) {
+        connectionAnchors.put(anName, c);
+    }
+
+    public ConnectionAnchor getTargetConnectionAnchorAt(Point p) {
+        ConnectionAnchor anchor = new ChopboxAnchor(this);
+        //	inputConnectionAnchors.addElement(anchor);
+        return anchor;
+    }
+
+    public ConnectionAnchor getSourceConnectionAnchorAt(Point p) {
+        ConnectionAnchor anchor = new ChopboxAnchor(this);
+        //	outputConnectionAnchors.addElement(anchor);
+        return anchor;
+    }
+
+    protected void createConnectionAnchors(Point pt) {
+        FixedConnectionAnchorFigure in, out;
+        out = new FixedConnectionAnchorFigure(this);
+        out.getLocation(pt);
+        outputConnectionAnchors.addElement(out);
+    }
+    //public void setLocation(Point p) {
+    //	if (getLocation().equals(p))
+    //		return;
+    //	
+    //	Rectangle r = new Rectangle(getBounds());
+    //	r.setLocation(this.getLocation(p));
+    //	setBounds(r);
+    //}
+    //protected Rectangle getBox() {
+    //	
+    //	return this.getParent().getBounds();
+    //}
+    //
+    //public Point getLocation(Point reference) {
+    //	Rectangle r = Rectangle.SINGLETON;
+    //	r.setBounds(getBox());
+    //	r.translate(-1, -1);
+    //	r.resize(1, 1);
+    //
+    //	this.getParent().translateToAbsolute(r);
+    //	float centerX = r.x + 0.5f * r.width;
+    //	float centerY = r.y + 0.5f * r.height;
+    //	
+    //	if (r.isEmpty() || (reference.x == (int)centerX && reference.y == (int)centerY))
+    //		return new Point((int)centerX, (int)centerY);  //This avoids divide-by-zero
+    //
+    //	float dx = reference.x - centerX;
+    //	float dy = reference.y - centerY;
+    //	
+    //	//r.width, r.height, dx, and dy are guaranteed to be non-zero.
+    //	float scale = 0.5f / Math.max(Math.abs(dx) / r.width, Math.abs(dy) / r.height);
+    //
+    //	dx *= scale;
+    //	dy *= scale;
+    //	centerX += dx;
+    //	centerY += dy;
+    //
+    //	return new Point(Math.round(centerX), Math.round(centerY));
+    //}
+
+    /** @see org.eclipse.gef.handles.HandleBounds#getHandleBounds() */
+    public Rectangle getHandleBounds() {
+        return getBounds().getCropped(new Insets(2, 0, 2, 0));
+    }
+	public boolean isStereo() {
+		return isStereo;
+	}
+
+	public void setStereo(boolean isStereo) {
+		this.isStereo = isStereo;
+	}
+}

@@ -1,0 +1,4 @@
+#! /bin/bash
+
+javac ../builder/*.java ../parser/*.java ./*.java
+java junit.textui.TestRunner javac.test.Test

@@ -1,0 +1,50 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE> New Document </TITLE>
+<META NAME="Generator" CONTENT="EditPlus">
+<META NAME="Author" CONTENT="">
+<META NAME="Keywords" CONTENT="">
+<META NAME="Description" CONTENT="">
+</HEAD>
+
+<BODY>
+<div class="help_breadcrumbs"><a href="../main.html">사용자 메뉴얼</a> > 
+<a href="../GUI/gui_main.html"> 통합 GUI 사용</a> > 
+</div>
+
+<H1 CLASS="Head">엑셀시트 연동</H1>
+<p>Excell로 저장하는 기능은 패키지내에 포함된 노테이션들에 대해서 엑셀로 관리할 수 있도록 제공되는 기능이다. 왼쪽 브라우징 윈도우에서 해당 다이어그램을 볼수 있는 아이콘에서 오른쪽 마우스를 클릭하면 엑셀 저장 기능과 엑셀 열기 기능을 사용할 수 있으며, 단지 유즈케이스 모형에 대한 엑셀 저장 기능은 브라우징 윈도우에서 최상위 트리구조에서 유즈케이스 모형 구성 아이콘에서 오른쪽 마우스를 클릭하여 기능을 사용할 수 있다. 저장된 정보들을 편집한 후 읽어들이면 편집된 정보들을 다이어그램에 바로 반영할 수 있다. 
+<ol>
+<li>저장하려는 내용이 있는 다이어그램의 모형에서 마우스를 갔다대고 우클릭을 하면 그림 3.17-1과 같은 팝업창이 뜨는데 엑셀 저장탭을 클릭하면 저장을 할 수 있다.</li>
+<P CLASS="Para" align="center"><img src="../images/GUI/17/image001.jpg" alt="start1" border="0"><br>
+그림 3.17-1 엑셀 저장 탭
+</p>
+<li>버튼을 누르면 그림 3.17-2와 같이 저장할수 있는 창이 뜬다. 엑셀파일의 이름을 정하고 Select버튼을 누르면 엑셀파일이 저장된다.</li> 
+<P CLASS="Para" align="center"><img src="../images/GUI/17/image002.jpg" alt="start1" border="0"><br>
+그림 3.17-2 엑셀 파일 저장 화면
+</p>
+<li>저장된 엑셀 파일을 읽으면 그림 3.17-3과 같이 액터1, 액터2와 유즈케이스1, 유즈케이스2가 저장된 것을 확인할 수 있다.</li> 
+<P CLASS="Para" align="center"><img src="../images/GUI/17/image003.jpg" alt="start1" border="0"><br>
+그림 3.17-2 엑셀 파일 저장 화면
+</p>
+<li>읽어온 엑셀파일은 회색칸을 제외하고 사용자가 원하는대로 정보를 입력하여 읽어들일 수 있다. 또 “id”란에 “new”를 입력하여 정보를 넣으면 새로운 객체가 생성된다. 그림 3.170-4와 같이 저장된 엑셀파일에 정보를 추가하고 저장할 수 있다.</li> 
+<P CLASS="Para" align="center"><img src="../images/GUI/17/image004.jpg" alt="start1" border="0"><br>
+그림 3.17-2 엑셀 파일 저장 화면
+</p>
+<li>저장된 엑셀파일을 읽으려면 처음 엑셀파일을 저장할 때 했던것처럼 엑셀파일을 읽을 다이어그램모형을 우클릭하고 그림 3.17-5와 같이 엑셀 읽기 버튼을 클릭한다.</li> 
+<P CLASS="Para" align="center"><img src="../images/GUI/17/image005.jpg" alt="start1" border="0"><br>
+그림 3.17-2 엑셀 파일 저장 화면
+</p>
+<li>그림 3.17-6과같이 선택창이 뜨면 읽어올 엑셀파일을 선택한후 Select버튼을 누른다.</li> 
+<P CLASS="Para" align="center"><img src="../images/GUI/17/image006.jpg" alt="start1" border="0"><br>
+그림 3.17-2 엑셀 파일 저장 화면
+</p>
+<li>마지막으로 수정된 내용에 대해서 그림 3.17-7과 같이 변경된 내용을 확인할 수 있다.</li>
+<P CLASS="Para" align="center"><img src="../images/GUI/17/image007.jpg" alt="start1" border="0"><br>
+그림 3.17-2 엑셀 파일 저장 화면
+</p>
+<p>엑셀 저장/읽기 기능은 전체 모형에 동일하게 적용된다.
+</ol>
+</BODY>
+</HTML>

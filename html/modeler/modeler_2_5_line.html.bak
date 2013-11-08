@@ -1,0 +1,56 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE> New Document </TITLE>
+<META NAME="Generator" CONTENT="EditPlus">
+<META NAME="Author" CONTENT="">
+<META NAME="Keywords" CONTENT="">
+<META NAME="Description" CONTENT="">
+</HEAD>
+
+<BODY>
+<div class="help_breadcrumbs"><a href="../main.html">사용자 메뉴얼</a> > 
+<a href="./modeler_main.html">영역 모델러의 사용</a> > 
+<a href="./modeler_2.html">UML Behavioral(행위적 모델링 다이어그램)</a> > 
+<a href="./modeler_2_5.html">Sequence</a> > 
+</div>
+
+<h1 class="NavTitle">관계 연결 및 편집 </h1>
+
+<p>Sequence 다이어그램은 Sequence의 palett에서 객체를 이용하여 작성한다.
+<ol>
+<li>Message</li>
+<p>액터와 오브젝트간에 전송되는 메시지를 나타낸다.
+<P CLASS="Para" align="center"><img src="../images/modeler/2/sequence/image021.jpg" alt="start1" border="0"><br>
+그림 2.1-2 연관 관계 종류
+</p>
+<li>Self Message</li>
+<p>액터나 오브젝트가 스스로에게 전송하는 메시지를 나타낸다.
+<P CLASS="Para" align="center"><img src="../images/modeler/2/sequence/image022.jpg" alt="start1" border="0"><br>
+그림 2.1-2 연관 관계 종류
+</p>
+<li>관계 편집</li>
+<p>관계에 마우스를 갖다 대고 우클릭을 하면 다음과 같은 팝업창이 뜬다.
+<P CLASS="Para" align="center"><img src="../images/modeler/2/sequence/image023.jpg" alt="start1" border="0"><br>
+그림 2.1-2 관계 팝업창
+</p>
+<ul>
+<li>Edit Message - 메세지를 편집한다.</li>
+<li>Delete - 관계를 삭제한다.</li>
+</ul>
+<p>Edit Message버튼을 누르면 다음과 같은 창이 뜬다.
+<P CLASS="Para" align="center"><img src="../images/modeler/2/sequence/image024.jpg" alt="start1" border="0"><br>
+그림 2.1-2 관계 팝업창
+</p>
+<ul>
+<li>Message - 메시지 종류를 선택</li>
+<li>Signature - 시그네쳐를 나타내는지를 선택</li>
+<li>Condition - 상태를 편집한다.</li>
+<li>Constraint - 제약조건을 편집한다.</li>
+<li>Synch - 동기인지 비동기인지 편집한다.</li>
+<li>Kind - 신호인지 아닌지를 정한다.</li>
+<li>Lifecycle - new, delete, none인지를 정한다.</li>
+</ul>
+</ol>
+</BODY>
+</HTML>

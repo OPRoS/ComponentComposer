@@ -1,0 +1,3 @@
+
+a#uuu-introLink img { background-image : url(graphics/sample.gif); }
+a#uuu-introLink:hover img { background-image : url(graphics/sample_hov.gif); }

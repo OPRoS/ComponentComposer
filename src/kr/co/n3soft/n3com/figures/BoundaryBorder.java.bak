@@ -1,0 +1,140 @@
+package kr.co.n3soft.n3com.figures;
+
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+
+import kr.co.n3soft.n3com.model.timing.StateEditableTableItem;
+import kr.co.n3soft.n3com.model.timing.TransitionPointEditableTableItem;
+
+import org.eclipse.draw2d.AbstractBorder;
+import org.eclipse.draw2d.ColorConstants;
+import org.eclipse.draw2d.Graphics;
+import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.geometry.Insets;
+import org.eclipse.draw2d.geometry.PointList;
+import org.eclipse.draw2d.geometry.Rectangle;
+
+public class BoundaryBorder extends AbstractBorder {
+    protected static Insets insets = new Insets(0, 0, 0, 0);
+    protected static PointList connector = new PointList();
+    protected static PointList bottomConnector = new PointList();
+
+    private java.util.ArrayList states = new java.util.ArrayList();
+    private java.util.ArrayList transitionEventModels = new java.util.ArrayList();
+    private boolean isNum = true;
+//    private java.util.ArrayList xyline = new java.util.ArrayList();
+    private java.util.HashMap xData = new HashMap();
+    private int max= 100;
+    static final Comparator FILENAME_ORDER = 
+		new Comparator() { 
+		public int compare(Object obj1, Object obj2) {
+			
+			TransitionPointEditableTableItem aStr1 = (TransitionPointEditableTableItem)obj1;
+			TransitionPointEditableTableItem aStr2 = (TransitionPointEditableTableItem)obj2;
+//			if(aStr1.time>aStr2.time){
+//				
+//			}
+			
+		int ret = aStr1.time.compareTo(aStr2.time); 
+		return ret; 
+		} 
+		};
+	public	BoundaryBorder(){
+		
+	}
+	public void setIsNum(boolean p){
+		this.isNum = p;
+	}
+    public Insets getInsets(IFigure figure) {
+        return insets;
+    }
+    
+    public void setStates(java.util.ArrayList p){
+    	this.states = p;
+    }
+    
+    public void setTransitionEventModels(java.util.ArrayList p){
+    	transitionEventModels = p;
+    }
+
+    public void paint(IFigure figure, Graphics g, Insets in) {
+
+        Rectangle r = figure.getBounds().getCropped(in);
+//        r.width = r.width -2;
+//        r.height = r.height - 2;
+        int tenValue = r.width/130;
+
+        int stateValue = r.height/(states
+        		.size()+2);
+        for(int i=0;i<=100;i++){
+       	 
+        	if(i%10==0){
+        		if(this.isNum){
+        			g.drawString(String.valueOf(i), r.x+((i+30)*tenValue), r.y+r.height-10);	
+        		}
+        		else{
+        			g.drawString("|", r.x+((i+30)*tenValue), r.y+r.height-10);	
+        		}
+        	}
+        	xData.put(String.valueOf(i), String.valueOf(r.x+((i+30)*tenValue)));
+        	
+        }
+        Collections.sort(transitionEventModels, FILENAME_ORDER); 
+//		Object[] list1 = transitionEventModels.toArray();
+       
+        for(int i=0;i<transitionEventModels.size();i++){
+        	TransitionPointEditableTableItem t = (TransitionPointEditableTableItem)transitionEventModels.get(i);
+        	int y1 = r.y+((t.transitonToindex+1)*stateValue);
+        	String xs = (String)this.xData.get(String.valueOf(t.time));
+        	String xs2 = (String)this.xData.get(String.valueOf(100));
+        	int x1 = Integer.valueOf(xs);
+        	int x2 = Integer.valueOf(xs2).intValue();
+        	int y2 = y1;
+        	int y3 = y2;
+        	if(i!=transitionEventModels.size()-1){
+        		TransitionPointEditableTableItem t1 = (TransitionPointEditableTableItem)transitionEventModels.get(i+1);
+        		String x2s = (String)this.xData.get(String.valueOf(t1.time));
+        		x2 = Integer.valueOf(x2s);
+        		y3 = r.y+((t1.transitonToindex+1)*stateValue);
+        	
+        	}
+        	//event
+        	StringBuffer sb = new StringBuffer();
+    	if(t.event!=null && !t.event.trim().equals("")){
+    		sb.append(t.event);
+    	}
+    	if(t.timeConstraint!=null && !t.timeConstraint.trim().equals("")){
+    		sb.append("{"+t.timeConstraint+"}");
+    	}
+        if(!sb.toString().equals(""))	
+        	g.drawText(sb.toString(), x1, y1+2);
+        	//dc
+        	if(t.durationConstraint!=null && !t.durationConstraint.trim().equals("")){
+        		g.drawText("{"+t.durationConstraint+"}", (x1+x2)/2, y1-15);
+        		g.drawText("|¡ç", x1+3, y1-15);
+        		g.drawText("¡æ|", x2-15, y1-15);
+        	}
+        	g.drawLine(x1, y1, x2, y2);
+        	g.drawLine(x2, y2, x2, y3);
+
+        }
+
+        
+        g.setForegroundColor(ColorConstants.black);
+        for(int i=0;i<states.size();i++){
+        	StateEditableTableItem state = (StateEditableTableItem)states.get(i);
+        	g.drawString(state.name, r.x+10, r.y+((i+1)*stateValue));
+        	state.y = r.y+((i+1)*stateValue);
+        	state.tenValue = tenValue;
+        	String zeros = (String)this.xData.get(String.valueOf(0));
+        	state.zero = Integer.valueOf(zeros);
+        	state.stateValue = stateValue; 
+        	state.y0 = r.y;
+        	 
+        }
+
+        xData.clear();
+    
+    }
+}

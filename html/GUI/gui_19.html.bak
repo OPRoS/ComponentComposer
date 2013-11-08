@@ -1,0 +1,28 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE> New Document </TITLE>
+<META NAME="Generator" CONTENT="EditPlus">
+<META NAME="Author" CONTENT="">
+<META NAME="Keywords" CONTENT="">
+<META NAME="Description" CONTENT="">
+</HEAD>
+
+<BODY>
+<H1 CLASS="Head">창 분리</H1>
+<p>아웃라인, 콘솔, 프로퍼티 창을 도구에서 분리해서 사용할 수 있다. 상단에 이름에 마우스를 갖다 대고 오른쪽 버튼을 클릭하면 다음과 같은 메뉴가 나오는데 detached를 클릭하면 창이 분리되어 나온다.
+<P CLASS="Para" align="center"><img src="../images/GUI/19/image005_detached.jpg" alt="start1" border="0"><br>
+그림 2.1-2 detached 버튼
+</p>
+<P CLASS="Para" align="center"><img src="../images/GUI/19/image005_detached_1.jpg" alt="start1" border="0"><br>
+그림 2.1-2 분리되어 나온 상태
+</p>
+<p>체크상태일때 다시 한번 클릭 해주면 원상태로 돌아간다.
+<P CLASS="Para" align="center"><img src="../images/GUI/19/image005_detached_2.jpg" alt="start1" border="0"><br>
+그림 2.1-2 체크상태일때 클릭
+</p>
+<P CLASS="Para" align="center"><img src="../images//GUI/18/image001.jpg" alt="start1" border="0"><br>
+그림 2.1-2 원래모양대로 돌아온 상태
+</p>
+</BODY>
+</HTML>

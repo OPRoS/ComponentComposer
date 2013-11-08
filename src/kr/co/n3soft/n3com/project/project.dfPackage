@@ -1,0 +1,34 @@
+package idiytxwf91zz67uf9202ij0;
+
+/**
+@version 2.0
+@physicalPackage
+@__modelType diagram 
+*/
+class diagram {
+/**
+@__ref <oiref:design#Class#idf0437f91zz67uf9202ijv.diagram:oiref><oihard>
+@__modelType reference
+@__fqn <oiref:#Package#co.n3soft.n3com.project.dialog:oiref> 
+*/
+class reference {
+}/**
+@__ref <oiref:design#Class#iddhonzf91zz67uf9202ij0.diagram:oiref><oihard>
+@__modelType reference
+@__fqn <oiref:#Package#co.n3soft.n3com.project.browser:oiref> 
+*/
+class reference33 {
+}}/**
+@__tags
+@shapeType ClassDiagram 
+*/
+class __tags {
+}/**
+@__options 
+*/
+class __options {
+}/**
+@__positions 
+*/
+class __positions {
+}
