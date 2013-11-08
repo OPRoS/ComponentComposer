@@ -1,0 +1,48 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE> New Document </TITLE>
+<META NAME="Generator" CONTENT="EditPlus">
+<META NAME="Author" CONTENT="">
+<META NAME="Keywords" CONTENT="">
+<META NAME="Description" CONTENT="">
+</HEAD>
+
+<BODY>
+<div class="help_breadcrumbs"><a href="../main.html">사용자 메뉴얼</a> > 
+<a href="./modeler_main.html">영역 모델러의 사용</a> > 
+<a href="./modeler_2.html">UML Behavioral(행위적 모델링 다이어그램)</a> > 
+<a href="./modeler_2_5.html">Sequence</a> > 
+</div>
+
+<h1 class="NavTitle">Sequence 다이어그램</h1>
+<p>시스템을 구성하는 객체들 간의 메시지 흐름을 보여주는 다이어그램으로써 시스템을 구성하는 주요 객체와 이들이 주고받는 메시지들을 세로 방향으로 나 있는 시간흐름 선(Time line)에 따라 정의한다.
+<ol>
+<li>다이어그램 생성</li>
+<p>다이어그램 생성창에서 sequence 다이어그램을 선택하고 다이어그램의 이름을 쓴 후에 확인 버튼을 누른다.
+<P CLASS="Para" align="center"><img src="../images/modeler/2/sequence/image001.jpg" alt="start1" border="0"><br>
+그림 2.1-2 sequence 다이어그램
+</p>
+<li>다이어그램 작성</li>
+<p>sequence 다이어그램 palette를 이용하여 다이어그램을 작성하면 된다.
+<P CLASS="Para" align="center"><img src="../images/modeler/2/sequence/image002.jpg" alt="start1" border="0"><br>
+그림 2.1-2 sequence 다이어그램
+</p>
+<P CLASS="Para" align="center"><img src="../images/modeler/2/sequence/image003.jpg" alt="start1" border="0"><br>
+그림 2.1-2 sequence 다이어그램
+</p>
+<p>복잡한 시스템을 개발하는 경우에는 패키지 단위의 다이어그램을 통해서 전체적인 구조나 주요 기능을 가늠해 볼수 있다.
+각 패키지에 의사소통을 담당하게 될 인터페이스 역할을 하는 클래스를 두게되면 패키지 단위의 재사용까지도 가능하다.
+
+<p>다음은 fragment에 대한 프로퍼티를 변경할 수 있는 창이다.
+<P CLASS="Para" align="center"><img src="../images/modeler/2/sequence/image005.jpg" alt="start1" border="0"><br>
+그림 2.1-2 sequence 다이어그램
+</p>
+<ul>
+<li>Type - fragment type를 변경한다. alt, opt, break, par, loop, critical, neg, assert, strict, seq, ignore, consider가 있다.</li>
+<li>Name - fragment 이름을 변경한다.</li>
+<li>condition - 상태값을 변경한다.</li>
+</ul>
+</ol>
+</BODY>
+</HTML>

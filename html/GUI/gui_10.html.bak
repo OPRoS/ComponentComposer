@@ -1,0 +1,33 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE> New Document </TITLE>
+<META NAME="Generator" CONTENT="EditPlus">
+<META NAME="Author" CONTENT="">
+<META NAME="Keywords" CONTENT="">
+<META NAME="Description" CONTENT="">
+</HEAD>
+
+<BODY>
+<div class="help_breadcrumbs"><a href="../main.html">사용자 메뉴얼</a> > 
+<a href="../GUI/gui_main.html"> 통합 GUI 사용</a> > 
+</div>
+
+<H1 CLASS="Head">작업 윈도우 정렬</H1>
+<p>통합 GUI는 사용자의 편의성을 고려하여 작업 중인 윈도우들에 대한 정렬기능을 제공한다. 계단형 정렬, 가로 정렬, 세로 정렬을 제공하며, 빠른 윈도우 찾아가기 기능을 제공하여 작업 윈도우의 관리를 사용자가 편하게 할 수가 있다.
+<ul>
+<li>계단식 보기(ALIGN CASCADE) - 현재 열려 있는 모든 작업 윈도우를 계단형태로 정렬한다.</li>
+<li>가로 정렬(ALIGN HORIZONTAL) - 현재 열려 있는 모든 작업 윈도우를 다이어그램 패널의 너비에 맞추어 정렬한다.</li>
+<li>세로 정렬(ALIGN VERTICAL) - 현재 열려 있는 모든 작업 윈도우를 다이어그램 패널의 높이에 맞추어 정렬한다.</li>
+</ul>
+<P CLASS="Para" align="center"><img src="../images/GUI/10/image001.jpg" alt="start1" border="0"><br>
+그림 2.1-2 보기 옵션 메뉴 및 설명
+</p>
+<P CLASS="Para" align="center"><img src="../images/GUI/10/image002.jpg" alt="start1" border="0"><br>
+그림 2.1-2 브라우징 윈도우가 숨겨진 화면
+</p>
+<P CLASS="Para" align="center"><img src="../images/GUI/10/image003.jpg" alt="start1" border="0"><br>
+그림 2.1-2 툴바와 다이어그램 패널만 보여진 화면
+</p>
+</BODY>
+</HTML>

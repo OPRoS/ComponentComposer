@@ -1,0 +1,76 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE> New Document </TITLE>
+<META NAME="Generator" CONTENT="EditPlus">
+<META NAME="Author" CONTENT="">
+<META NAME="Keywords" CONTENT="">
+<META NAME="Description" CONTENT="">
+</HEAD>
+
+<BODY>
+
+<h1 class="NavTitle">관계 연결 및 편집 </h1>
+
+<p>Usecase 다이어그램은 Usecase의 palett에서 객체를 이용하여 작성한다.
+<ol>
+<li>연관 관계 </li>
+<p>연관 관계 라인은 연관의 종류에 따라 단순 연관, 집합, 조합으로 세분화된다. 연관의 종류는 팝업 메뉴를 통해 변경할 수 있다. 연관의 종류가 변경되면 라인의 화살표 모양이 변경되어 연관의 종류를 시각적으로 표현한다. 
+<P CLASS="Para" align="center"><img src="../images/modeler/2/usecase/image021.jpg" alt="start1" border="0"><br>
+그림 2.1-2 연관 관계 종류
+</p>
+<li>상속 관계 generalization</li>
+<p>한 클래스의 기능 수행 가능 여부가 다른 클래스에 전적으로 의존하고 있는지를 표현한다.
+<P CLASS="Para" align="center"><img src="../images/modeler/2/usecase/image022.jpg" alt="start1" border="0"><br>
+그림 2.1-2 의존 관계
+</p>
+<li>포함 관계</li>
+<p>유즈케이스 간에 포함관계를 나타낸다.
+<P CLASS="Para" align="center"><img src="../images/modeler/2/usecase/image023.jpg" alt="start1" border="0"><br>
+그림 2.1-2 상속 관계
+</p>
+<li>확장 관계</li>
+<p>유즈케이스 간에 확장관계를 나타낸다.
+<P CLASS="Para" align="center"><img src="../images/modeler/2/usecase/image024.jpg" alt="start1" border="0"><br>
+그림 2.1-2 상속 관계
+</p>
+<li>실체화 관계 Realize</li>
+<p>The source object implements or realizes the destination. Realize is used to express traceability and completeness in the model - a business process or requirement is realized by one or more use cases which are in turn realized by some classes, which in turn are realized by a component, etc. Mapping requirements, classes, etc. across the design of your system, up through the levels of modeling abstraction, ensures the big picture of your system remembers and reflects all the little pictures and details that constrain and define it.
+<P CLASS="Para" align="center"><img src="../images/modeler/2/usecase/image025.jpg" alt="start1" border="0"><br>
+그림 2.1-2 상속 관계
+</p>
+<li>관계 편집</li>
+<p>관계에 마우스를 갖다 대고 우클릭을 하면 다음과 같은 팝업창이 뜬다.
+<P CLASS="Para" align="center"><img src="../images/modeler/2/usecase/image026.jpg" alt="start1" border="0"><br>
+그림 2.1-2 관계 팝업창
+</p>
+<ul>
+<li>Aggregate - 집합 연관관계를 표현한다.</li>
+<li>Composite - 복합 연관관계를 표현한다.</li>
+<li>Vavigable - 방향성 관계를 표현한다.</li>
+<li>Role Name - 관계에 Role Name을 설정한다.</li>
+<li>Direct Line - 관계를 직선으로 만든다.</li>
+<li>Delete - 관계를 삭제한다.</li>
+</ul>
+<p>관계의 프로퍼티창은 이름, 프로퍼티, 스테레오타입으로 나뉘는데 프로퍼티에서는 세부 내용을 설정할 수 있다.
+SourceRole과 TargetRole는 대상이 다르고 같은 내용이며 Description은 관계에 대한 내용을 변경할 수 있다.
+<P CLASS="Para" align="center"><img src="../images/modeler/2/usecase/image027.jpg" alt="start1" border="0"><br>
+그림 2.1-2 관계 프로퍼티
+</p>
+<ul>
+<li>Role - role 이름을 변경한다.</li>
+<li>RoleNote - role에 설명내용을 변경한다.</li>
+<li>Constraint(s) - 추가 작업 필요</li>
+<li>Qualifier(s) - 추가 작업 필요</li>
+<li>Derived - 추가 작업 필요</li>
+<li>Derived Union - union을 설정한다.</li>
+<li>Owned - 추가 작업 필요</li>
+<li>Ordered - 추가 작업 필요</li>
+<li>Allow Duplicates - 추가 작업 필요</li>
+<li>Multiplicity - 추가 작업 필요</li>
+<li>Aggregation - 관계 타입을 설정한다.</li>
+<li>Navigability - 관계 방향성을 설정한다.</li>
+</ul>
+</ol>
+</BODY>
+</HTML>

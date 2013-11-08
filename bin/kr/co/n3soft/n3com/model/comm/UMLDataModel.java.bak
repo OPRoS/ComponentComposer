@@ -1,0 +1,221 @@
+package kr.co.n3soft.n3com.model.comm;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+
+import kr.co.n3soft.n3com.model.diagram.N3EditorDiagramModel;
+import kr.co.n3soft.n3com.model.umlclass.ArrayItem;
+import kr.co.n3soft.n3com.model.umlclass.CompartmentModel;
+import kr.co.n3soft.n3com.parser.IN3ModelTokenType;
+import kr.co.n3soft.n3com.parser.ModelManager;
+import kr.co.n3soft.n3com.projectmanager.ProjectManager;
+
+public class UMLDataModel {
+    //	public static String ID_NAME = "name"; //$NON-NLS-1$
+    protected String name = "";
+    private String id = "";
+    private HashMap property = new HashMap();
+    N3EditorDiagramModel n3EditorDiagramModel = null;
+
+    public UMLDataModel() {
+        this.setId(ProjectManager.getInstance().getID(this));
+        //		return name;
+    }
+
+    public void setId(String p) {
+        this.id = p;
+    }
+
+    public String getId() {
+        return this.id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String p) {
+        this.name = p;
+    }
+
+    public void setProperty(String key, String value) {
+        //		Object obj = property.get(key);
+        property.put(key, value);
+    }
+
+    public String getProperty(String key) {
+        return (String)property.get(key);
+    }
+
+    public void setElementProperty(String key, Object value) {
+        //юс╫ц╩Х
+        //		if(property.get(key)==null)
+        property.put(key, value);
+    }
+
+    public Object getElementProperty(String key) {
+        return (Object)property.get(key);
+    }
+
+    public void setProperty(HashMap cloneProperty) {
+        this.property = cloneProperty;
+    }
+    
+    public String writeModel(){
+    	StringBuffer sb = new StringBuffer();
+    	 Iterator iterator = property.keySet().iterator();
+         while (iterator.hasNext()) {
+             String key = (String)iterator.next();
+             Object obj = property.get(key);
+             
+             if (obj instanceof String ) {
+            	 String data = obj.toString();
+            	 if(data.trim().equals("ID")){
+            		 continue;
+            	 }
+            	 sb.append("property "+key+"="+obj.toString()+IN3ModelTokenType.PROPERTY_N3EOF+"\n") ;
+             }
+             
+         }
+         iterator = property.keySet().iterator();
+         sb.append("propertys_list [\n") ;
+         while (iterator.hasNext()) {
+             String key = (String)iterator.next();
+             Object obj = property.get(key);
+             if (obj instanceof java.util.ArrayList) {
+            	 sb.append("objects "+key+"+\n") ;
+            	 ArrayList arr = (ArrayList)obj;
+            	 for(int i=0;i<arr.size();i++){
+            		 if(arr.get(i) instanceof PortModel){
+            			 PortModel pm = (PortModel)arr.get(i);
+ 						sb.append("property port="+pm.getLocation().x+","+pm.getLocation().y+","+pm.getSize().width+","+pm.getSize().height+","+pm.getPtDifference().width+","+pm.getPtDifference().height+","+pm.getPortContainerModel().view_ID +IN3ModelTokenType.PROPERTY_N3EOF+"\n") ;
+            		 }
+            		 else {
+            			
+            			 ArrayItem arrayItem = (ArrayItem)arr.get(i);
+            			 sb.append(arrayItem.writeModel());
+            		 }
+            	 }
+            	 sb.append("-\n") ;
+             }
+             else if (obj instanceof TypeRefModel) {
+            	 sb.append("objects TypeRefModel +\n") ;
+            	 ClassModel arr = (ClassModel)obj;
+            	 sb.append(ModelManager.getInstance().writeModel(arr,id));
+            	 sb.append("-\n") ;
+             }
+             else if (obj instanceof ClassModel) {
+            	 sb.append("objects ClassModel +\n") ;
+            	 ClassModel arr = (ClassModel)obj;
+            	 sb.append(ModelManager.getInstance().writeModel(arr,id));
+            	 sb.append("-\n") ;
+             }
+             
+         }
+         sb.append("]\n") ;
+    	
+    	return sb.toString();
+    }
+
+    public Object clone() {
+        UMLDataModel clone = new UMLDataModel();
+        try {
+            HashMap cloneProperty = new HashMap();
+            Iterator iterator = property.keySet().iterator();
+            while (iterator.hasNext()) {
+                String key = (String)iterator.next();
+                Object obj = property.get(key);
+                if (obj != null) {
+                    if (obj instanceof ElementLabelModel) {
+                        ElementLabelModel elementModel = (ElementLabelModel)obj;
+                        ElementLabelModel elementClone = (ElementLabelModel)elementModel.clone();
+                        cloneProperty.put(key, elementClone);
+                    }
+                    else if (obj instanceof java.util.ArrayList) {
+                        java.util.ArrayList elementModel = (java.util.ArrayList) obj;
+                        java.util.ArrayList cloneModel = this.cloneArray(elementModel);
+                        cloneProperty.put(key, cloneModel);
+                    }
+                    else if (obj instanceof CompartmentModel) {
+                        CompartmentModel elementModel = new CompartmentModel();
+                        cloneProperty.put(key, elementModel);
+                    }
+                    if (obj instanceof PortModel) {
+                        PortModel elementModel = (PortModel)obj;
+                        PortModel elementClone = (PortModel)elementModel.clone();
+                        cloneProperty.put(key, elementClone);
+                    }
+                    if (obj instanceof BorderContainlModel) {
+                        BorderContainlModel elementModel = (BorderContainlModel)obj;
+                        BorderContainlModel elementClone = (BorderContainlModel)elementModel.clone();
+                        cloneProperty.put(key, elementClone);
+                    }
+                    if (obj instanceof TypeRefModel) {
+                        TypeRefModel elementModel = (TypeRefModel)obj;
+                        //				BorderContainlModel elementClone = (BorderContainlModel)elementModel.clone();
+                        TypeRefModel classModelClone = (TypeRefModel)elementModel.clone();
+                        cloneProperty.put(key, classModelClone);
+                    }
+                    if (obj instanceof UMLModel) {
+                        UMLModel elementModel = (UMLModel)obj;
+                        //				BorderContainlModel elementClone = (BorderContainlModel)elementModel.clone();
+                        UMLModel classModelClone = (UMLModel)elementModel.clone();
+                        cloneProperty.put(key, classModelClone);
+                    }
+                    if (obj instanceof String) {
+                        //				UMLModel elementModel = (UMLModel)obj;
+                        ////				BorderContainlModel elementClone = (BorderContainlModel)elementModel.clone();
+                        //				ClassModel classModelClone = (ClassModel)elementModel.clone();
+                        cloneProperty.put(key, obj);
+                    }
+                    //			if(obj instanceof UMLModel){
+                    //				BorderContainlModel elementModel = (BorderContainlModel)obj;
+                    //				BorderContainlModel elementClone = (BorderContainlModel)elementModel.clone();
+                    //				cloneProperty.put(key, elementClone);
+                    //			}
+                }
+            }
+            clone.setProperty(cloneProperty);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return clone;
+    }
+
+    public void setN3EditorDiagramModel(N3EditorDiagramModel p) {
+        this.n3EditorDiagramModel = p;
+        //		 uMLMainPackageModel
+    }
+
+    public N3EditorDiagramModel getN3EditorDiagramModel() {
+        return this.n3EditorDiagramModel;
+    }
+
+    public java.util.ArrayList cloneArray(java.util.ArrayList array) {
+        java.util.ArrayList clone = new java.util.ArrayList();
+        for (int i = 0; i < array.size(); i++) {
+            Object obj = array.get(i);
+            if (obj instanceof ArrayItem) {
+                ArrayItem arrayItem = (ArrayItem)obj;
+                clone.add(arrayItem.clone());
+            }
+            else if (obj instanceof PortModel) {
+                PortModel arrayItem = (PortModel)obj;
+                clone.add(arrayItem.clone());
+            }
+        }
+        return clone;
+    }
+    //	public java.util.ArrayList cloneOperations(){
+    //		java.util.ArrayList operationsClone = new java.util.ArrayList();
+    //		for(int i=0;i<this.operations.size();i++){
+    //			OperationEditableTableItem attrItem = (OperationEditableTableItem)this.operations.get(i);
+    //			operationsClone.add(attrItem.clone());
+    //		}
+    //		this.setOperations(operationsClone);
+    //		return operations;
+    //		
+    //	}
+}

@@ -1,0 +1,4833 @@
+package kr.co.n3soft.n3com.projectmanager;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Vector;
+
+import kr.co.n3soft.n3com.UMLEditor;
+import kr.co.n3soft.n3com.edit.UMLElementEditPart;
+import kr.co.n3soft.n3com.edit.UMLTreeEditPart;
+import kr.co.n3soft.n3com.lang.N3Messages;
+import kr.co.n3soft.n3com.model.activity.BehaviorActivityTableItem;
+import kr.co.n3soft.n3com.model.activity.CentralBufferNodeModel;
+import kr.co.n3soft.n3com.model.activity.ControlFlowLineModel;
+import kr.co.n3soft.n3com.model.activity.DataStoreModel;
+import kr.co.n3soft.n3com.model.activity.DecisionModel;
+import kr.co.n3soft.n3com.model.activity.ExceptionModel;
+import kr.co.n3soft.n3com.model.activity.FinalActiionModel;
+import kr.co.n3soft.n3com.model.activity.FinalActivityModel;
+import kr.co.n3soft.n3com.model.activity.FinalModel;
+import kr.co.n3soft.n3com.model.activity.FinalObjectNodeModel;
+import kr.co.n3soft.n3com.model.activity.FinalStrcuturedActivityModel;
+import kr.co.n3soft.n3com.model.activity.FlowFinalModel;
+import kr.co.n3soft.n3com.model.activity.HForkJoinModel;
+import kr.co.n3soft.n3com.model.activity.HPartitionModel;
+import kr.co.n3soft.n3com.model.activity.InitialModel;
+import kr.co.n3soft.n3com.model.activity.ObjectFlowLineModel;
+import kr.co.n3soft.n3com.model.activity.ReceiveModel;
+import kr.co.n3soft.n3com.model.activity.SendModel;
+import kr.co.n3soft.n3com.model.activity.SubPartitonModel;
+import kr.co.n3soft.n3com.model.activity.SynchModel;
+import kr.co.n3soft.n3com.model.activity.VForkJoinModel;
+import kr.co.n3soft.n3com.model.activity.VPartitionModel;
+import kr.co.n3soft.n3com.model.comm.AttributeElementModel;
+import kr.co.n3soft.n3com.model.comm.ClassModel;
+import kr.co.n3soft.n3com.model.comm.ClassifierModel;
+import kr.co.n3soft.n3com.model.comm.ClassifierModelTextAttach;
+import kr.co.n3soft.n3com.model.comm.ElementLabelModel;
+import kr.co.n3soft.n3com.model.comm.FinalPackageModel;
+import kr.co.n3soft.n3com.model.comm.FrameModel;
+import kr.co.n3soft.n3com.model.comm.IStructured;
+import kr.co.n3soft.n3com.model.comm.IUpdateType;
+import kr.co.n3soft.n3com.model.comm.LineModel;
+import kr.co.n3soft.n3com.model.comm.NodeContainerModel;
+import kr.co.n3soft.n3com.model.comm.OperationElementModel;
+import kr.co.n3soft.n3com.model.comm.PortModel;
+import kr.co.n3soft.n3com.model.comm.StrcuturedActivityPackageTreeModel;
+import kr.co.n3soft.n3com.model.comm.StrcuturedPackageTreeModel;
+import kr.co.n3soft.n3com.model.comm.UMLDataModel;
+import kr.co.n3soft.n3com.model.comm.UMLElementModel;
+import kr.co.n3soft.n3com.model.comm.UMLModel;
+import kr.co.n3soft.n3com.model.comm.UMLNoteModel;
+import kr.co.n3soft.n3com.model.comm.UpdateEvent;
+import kr.co.n3soft.n3com.model.communication.MessageAssoicateLineModel;
+import kr.co.n3soft.n3com.model.component.ArtfifactModel;
+import kr.co.n3soft.n3com.model.component.ComponentModel;
+import kr.co.n3soft.n3com.model.composite.ConnectorLineModel;
+import kr.co.n3soft.n3com.model.composite.DelegateLineModel;
+import kr.co.n3soft.n3com.model.composite.OccurrenceLineModel;
+import kr.co.n3soft.n3com.model.composite.PartModel;
+import kr.co.n3soft.n3com.model.composite.ProvidedInterfaceLineModel;
+import kr.co.n3soft.n3com.model.composite.RepresentsLineModel;
+import kr.co.n3soft.n3com.model.composite.RequiredInterfaceLineModel;
+import kr.co.n3soft.n3com.model.composite.RoleBindingLineModel;
+import kr.co.n3soft.n3com.model.deployment.CommunicationPathLineModel;
+import kr.co.n3soft.n3com.model.deployment.DeployLineModel;
+import kr.co.n3soft.n3com.model.deployment.DeploymentSpecificationModel;
+import kr.co.n3soft.n3com.model.deployment.DeviceModel;
+import kr.co.n3soft.n3com.model.deployment.ExecutionEnvironmentModel;
+import kr.co.n3soft.n3com.model.deployment.ManifestLineModel;
+import kr.co.n3soft.n3com.model.deployment.NodeModel;
+import kr.co.n3soft.n3com.model.diagram.N3EditorDiagramModel;
+import kr.co.n3soft.n3com.model.diagram.UMLDiagramModel;
+import kr.co.n3soft.n3com.model.requirement.RequirementModel;
+import kr.co.n3soft.n3com.model.sequence.EndPointModel;
+import kr.co.n3soft.n3com.model.sequence.FragmentModel;
+import kr.co.n3soft.n3com.model.sequence.LifeLineActorModel;
+import kr.co.n3soft.n3com.model.sequence.LifeLineModel;
+import kr.co.n3soft.n3com.model.sequence.MessageModel;
+import kr.co.n3soft.n3com.model.sequence.SelfMessageModel;
+import kr.co.n3soft.n3com.model.state.EntryPointModelNoPort;
+import kr.co.n3soft.n3com.model.state.HistoryModel;
+import kr.co.n3soft.n3com.model.state.StateModel;
+import kr.co.n3soft.n3com.model.state.StrcuturedStateModel;
+import kr.co.n3soft.n3com.model.state.StrcuturedStatePackageTreeModel;
+import kr.co.n3soft.n3com.model.state.TerminateModel;
+import kr.co.n3soft.n3com.model.state.TransitionLineModel;
+import kr.co.n3soft.n3com.model.timing.GroupModel;
+import kr.co.n3soft.n3com.model.timing.MessagePointModel;
+import kr.co.n3soft.n3com.model.timing.StateLifelineModel;
+import kr.co.n3soft.n3com.model.timing.TimingMessageLineModel;
+import kr.co.n3soft.n3com.model.umlclass.CompartmentModel;
+import kr.co.n3soft.n3com.model.umlclass.DependencyLineModel;
+import kr.co.n3soft.n3com.model.umlclass.EnumerationModel;
+import kr.co.n3soft.n3com.model.umlclass.FinalClassModel;
+import kr.co.n3soft.n3com.model.umlclass.ImportLineModel;
+import kr.co.n3soft.n3com.model.umlclass.InterfaceModel;
+import kr.co.n3soft.n3com.model.umlclass.MergeLineModel;
+import kr.co.n3soft.n3com.model.usecase.AssociateLineModel;
+import kr.co.n3soft.n3com.model.usecase.CollaborationModel;
+import kr.co.n3soft.n3com.model.usecase.ExtendLineModel;
+import kr.co.n3soft.n3com.model.usecase.FinalActorModel;
+import kr.co.n3soft.n3com.model.usecase.FinalBoundryModel;
+import kr.co.n3soft.n3com.model.usecase.GeneralizeLineModel;
+import kr.co.n3soft.n3com.model.usecase.IncludeLineModel;
+import kr.co.n3soft.n3com.model.usecase.NoteLineModel;
+import kr.co.n3soft.n3com.model.usecase.RealizeLineModel;
+import kr.co.n3soft.n3com.model.usecase.UseCaseModel;
+import kr.co.n3soft.n3com.parser.ModelManager;
+import kr.co.n3soft.n3com.parser.TeamProjectManager;
+import kr.co.n3soft.n3com.project.browser.ModelBrowser;
+import kr.co.n3soft.n3com.project.browser.PackageTreeModel;
+import kr.co.n3soft.n3com.project.browser.RootTreeModel;
+import kr.co.n3soft.n3com.project.browser.UMLTreeModel;
+import kr.co.n3soft.n3com.project.browser.UMLTreeParentModel;
+import kr.co.n3soft.n3com.rcp.actions.OpenProjectPopAction;
+
+import org.eclipse.core.runtime.Path;
+import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.gef.commands.CommandStack;
+import org.eclipse.gef.examples.shapes.LogicEditorInput;
+import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
+import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.viewers.IElementComparer;
+import org.eclipse.jface.viewers.TreeSelection;
+import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.ImageData;
+import org.eclipse.swt.graphics.ImageLoader;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IViewSite;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
+
+import uuu.ApplicationActionBarAdvisor;
+import uuu.views.AttributeView;
+import uuu.views.DescriptionView;
+import uuu.views.OperationView;
+import uuu.views.SampleView;
+
+public class ProjectManager {
+
+	MenuManager recentMenu;
+
+	public int copyNum = 0;
+	static public int tempDiagramType = -1;
+	public static int index = 0;
+	private static ProjectManager instance;
+	public IWorkbenchWindow window = null;
+	private UMLElementEditPart uMLElementEditPart = null;
+	private UMLEditor mUMLEditor = null;
+	private UMLModel dragUMLModel = null;
+	private UMLElementModel selectPropertyUMLElementModel = null;
+	private UMLTreeModel dragUMLTreeModel = null;
+	boolean isDoubleClick = false;
+	boolean isDrag = false;
+	private ModelBrowser modelBrowser = null;
+	private UMLDiagramModel openDiagramModel = null;
+	private UMLModel deleteModel = null;
+	private Point dragPoint = null;
+	private java.util.ArrayList selectLineModels = new java.util.ArrayList();
+	public Point copyTarget = new Point();
+	public Point copySource = new Point();
+	private Point mouseSelectPoint = new Point();
+	public HashMap tempCopyMap = new HashMap();
+	private java.util.ArrayList behaviorActivityList = new java.util.ArrayList();
+	private java.util.ArrayList modelList = new java.util.ArrayList();
+	private UMLModel selectContainModel = null;
+	private java.util.ArrayList childCopyList = new java.util.ArrayList();
+	private UMLTreeModel copyTreeModel = null;
+	private SampleView console;
+
+	private UMLTreeModel newMakeModel = null;			// V1.01 WJH E 080519 S 추가
+	public N3EditorDiagramModel tempDiagram = null;	// V1.03 WJH E 080526 S 추가
+
+	private DescriptionView descriptionView; //20080725 KDI s
+
+	private OperationView operationView;//PKY 08081801 S 오퍼레이션,어트리뷰트 창 추가
+
+	private AttributeView attributeView;//PKY 08081801 S 오퍼레이션,어트리뷰트 창 추가
+
+
+	private java.util.ArrayList searchText = new java.util.ArrayList();
+	private java.util.ArrayList searchModel = new java.util.ArrayList();
+	private java.util.ArrayList reqIdList = new java.util.ArrayList();//PKY 08080501 S RequirementID를 다이얼로그 리스트로 보여주도록
+	private java.util.ArrayList actorImageList = new java.util.ArrayList();//PKY 08080501 S Image Dialog 이미지 리스트 및 불러오기 편하도록 개선
+	private java.util.ArrayList typeModel = new java.util.ArrayList();
+	private boolean addLine = true;
+	private boolean isSearchModel = true;
+
+	private boolean isSearchDiagaramModel = true; //20080325 PKY S 검색
+	private java.util.ArrayList diagramsSub;  //2008040401PKY S "패키지 오른쪽 클릭 시 OpenDiagram 메뉴 추가    여러 다이어그램이있을경우 리스트 나오도록"
+	public UMLDataModel uMLDataModel = null; //20080325 PKY S 검색
+	public String oldName="";
+	private  List copyList=null;
+	private  List copyattList=null;//2008042401PKY S
+	private  List copyoperList=null;//2008042401PKY S
+	private boolean isOutlineAutoSize=false;//2008042401PKY S
+	HashMap imageMap = new  HashMap();
+	HashMap actorDialogPrevieweImgMap = new  HashMap();//PKY 08080501 S Image Dialog 이미지 리스트 및 불러오기 편하도록 개선
+	//ijs080429 config
+	private String currentProjectPath = "";
+	private String currentProjectName = "";
+	private java.util.ArrayList openProjects = new java.util.ArrayList();
+	private String sourceFolder = "";
+	private String teamProjectFolder = "";//PKY 08082201 S 팀 프로젝트 경로를 프로젝트에서 변경가능하도록
+
+	IWorkbenchWindowConfigurer configurer;
+	//ijs0507
+	private java.util.HashMap reverseModelMap = new java.util.HashMap();
+	private java.util.ArrayList reversePackage = new java.util.ArrayList();
+
+	private ApplicationActionBarAdvisor application=null;//PKY 08070301 S 툴바 추가작업
+	private Color defaultColor = new Color(null,   0,   0,   0); //PKY 08070901 S 모델 컬러 변경
+//	private java.util.ArrayList pkg = new java.util.ArrayList();
+//	private java.util.HashMap reverseModelMap = new java.util.HashMap();
+	IViewSite ivewSite = null;
+	private TreeViewer viewer;
+	private java.util.ArrayList recentReportPath = new java.util.ArrayList(); //KDI 20080619
+
+	public String defaultName = "";						// V1.02 WJH E 080822 추가
+	
+	RootTreeModel root;
+	
+	private HashMap reportWordTreeMap = new HashMap(); //20080812 KDI s
+	
+	private HashMap reportTempTreeBrowserMap = new HashMap(); //20080812 KDI s
+	
+	private int searchDialogModelType = -1; //20080813 KDI s
+	
+	private String reportOutPutPath = "";//20080902 KDI s
+
+	private String reportTemplatePath = "";//20080903 KDI s
+
+	//20080729IJS
+	boolean isTreeMove = false;
+
+	boolean isViewProperty = true;
+
+	public static final String[] SCOPE_SET = new String[] {
+		"public", "protected", "private"
+	};
+
+	public static final String[] SCOPEA_SET = new String[] {
+		"+", "#", "-"
+	};
+
+	public static String[] TYPE_SET = new String[] {
+		"void", "int", "boolean", "char", "double", "float", "long", "short", "String",""
+	};
+
+	public static String[] STATE_TYPE_SET = new String[] {
+		"do", "entry", "exit"
+	};
+	// ijs 080520
+	public void addReversePackage(PackageTreeModel ptm){
+		this.reversePackage.add(ptm);
+	}
+
+	public java.util.ArrayList getReversePackage(){
+		return this.reversePackage;
+	}
+	//ijs 080520
+	public N3EditorDiagramModel makeDiagram(UMLTreeParentModel up){
+
+//		UMLTreeModel to1 =new UMLTreeModel(name);
+		UMLTreeModel to1 =new UMLTreeModel("reverseDiagram");
+		to1.setParent(up);
+
+		if (to1 != null) {
+			up.addChild(to1);
+		}
+		N3EditorDiagramModel n3EditorDiagramModel = new N3EditorDiagramModel();
+		IEditorInput input = null;
+		//PKY 08080501 S 다이어그램 전체 부분에서 "쓰임새도"라고 나오는 문제 수정
+		input = new LogicEditorInput(new Path(N3Messages.PALETTE_TITLE_CLASS));
+		//PKY 08080501 E 다이어그램 전체 부분에서 "쓰임새도"라고 나오는 문제 수정
+		input = new LogicEditorInput(new Path("쓰임새도"));
+		to1.setRefModel(n3EditorDiagramModel);
+		n3EditorDiagramModel.setName("reverseDiagram");
+		n3EditorDiagramModel.setTreeModel(to1);
+//		n3EditorDiagramModel.getUMLDataModel().setId(id);
+		to1.setParent(up);
+		n3EditorDiagramModel.setIEditorInput(input);
+		n3EditorDiagramModel.setDiagramType(2);
+		return n3EditorDiagramModel;
+
+//		for(int i=0;)
+	}
+	//ijs 080520 
+
+
+	//ijs080429
+	//PKY 08072401 S OpenList 개선
+	public void removeOpenProject(String openProject){
+		if(openProject.trim().equals("")){
+			return;
+		}
+		for(int i=0;i<openProjects.size();i++){
+			String op = (String)openProjects.get(i);
+			if(op.equals(openProject)){
+				openProjects.remove(i);
+				i=0;
+			}
+		}
+		if(recentMenu!=null){
+			recentMenu.removeAll();
+			Object obj=ProjectManager.getInstance().getOpenProjects();
+			for(int i=0;i<ProjectManager.getInstance().getOpenProjects().size();i++){
+				OpenProjectPopAction oppA = new OpenProjectPopAction(ProjectManager.getInstance().window);
+				String str = (String)ProjectManager.getInstance().getOpenProjects().get(i);
+				oppA.setText(str);
+				oppA.setInit();
+				recentMenu.add(oppA);
+			}
+		}
+	}
+	public void addOpenProject(String openProject){
+
+		if(openProject.trim().equals("")){
+			return;
+		}
+		boolean isExist = false;
+		for(int i=0;i<openProjects.size();i++){
+			String op = (String)openProjects.get(i);
+			if(op.equals(openProject)){
+				//PKY 08072401 S OpenList 개선
+				openProjects.remove(i);
+				i=0;
+				//PKY 08072401 E OpenList 개선
+			}
+		}
+		if(!isExist){
+			this.openProjects.add(openProject);
+		}
+		if(openProjects.size()==6){
+			openProjects.remove(0);
+		}
+		if(recentMenu!=null){
+			recentMenu.removeAll();
+			Object obj=ProjectManager.getInstance().getOpenProjects();
+			for(int i=0;i<ProjectManager.getInstance().getOpenProjects().size();i++){
+				OpenProjectPopAction oppA = new OpenProjectPopAction(ProjectManager.getInstance().window);
+				String str = (String)ProjectManager.getInstance().getOpenProjects().get(i);
+				oppA.setText(str);
+				oppA.setInit();
+				recentMenu.add(oppA);
+			}
+		}
+
+	}
+	//PKY 08072401 E OpenList 개선
+	public void setDragPoint(Point p) {
+		this.dragPoint = p;
+	}
+
+	public Point getDragPoint() {
+		return this.dragPoint;
+	}
+
+	public void setCopyTreeModel(UMLTreeModel p) {
+		this.copyTreeModel = p;
+	}
+
+	public UMLTreeModel getCopyTreeModel() {
+		return this.copyTreeModel;
+	}
+
+	public void addchildCopyList(UMLModel p) {
+		this.childCopyList.add(p);
+	}
+
+	public void initChildCopyList() {
+		this.childCopyList.clear();
+	}
+
+	public java.util.ArrayList getChildCopyList() {
+		return this.childCopyList;
+	}
+
+	public java.util.ArrayList getBehaviorActivityList() {
+		return this.behaviorActivityList;
+	}
+
+	public void addSelectLineModel(LineModel p) {
+		System.out.println("");
+
+		if(this.isAddLine())
+			selectLineModels.add(p);
+	}
+
+	public void removeSelectLineModel(LineModel p) {
+		selectLineModels.remove(p);
+	}
+
+	public ArrayList getSelectLineModel() {
+		return selectLineModels;
+	}
+
+	public void initSelectLineModel() {
+		selectLineModels.clear();
+	}
+
+	public Dimension getDifference() {
+		return this.copySource.getDifference(copyTarget);
+	}
+
+	public void setCopyTarget(Point p) {
+		if (p == null)
+			this.copyTarget = mouseSelectPoint;
+		else
+			this.copyTarget = p;
+	}
+
+	public void setTempCopyMap(String sourceId, Object cloneValue) {
+		this.tempCopyMap.put(sourceId, cloneValue);
+	}
+
+	public Object getCloneValue(String sourceId) {
+		return this.tempCopyMap.get(sourceId);
+	}
+
+	public void initTempCopyMap() {
+		this.tempCopyMap.clear();
+		//		this.selectContainModel = null;
+	}
+
+	public Point getCopyTarget() {
+		return this.copyTarget;
+	}
+
+	public Point getCopySource() {
+		return this.copySource;
+	}
+
+	public void setCopySource(Point p) {
+		if (p == null)
+			this.copySource = mouseSelectPoint;
+		else
+			this.copySource = p;
+	}
+
+	public void setMouseSelectPoint(Point p) {
+		this.mouseSelectPoint = p;
+	}
+
+	public Point getMouseSelectPoint() {
+		return this.mouseSelectPoint;
+	}
+
+	public void setDeleteModel(UMLModel uMLModel) {
+		this.deleteModel = uMLModel;
+	}
+
+	public UMLModel getDeleteModel() {
+		return this.deleteModel;
+	}
+
+	public void setOpenDiagramModel(UMLDiagramModel p) {
+		this.openDiagramModel = p;
+	}
+
+	public UMLDiagramModel getOpenDiagramModel() {
+		return this.openDiagramModel;
+	}
+
+	//	ScrollingGraphicalViewer viewer
+	//tree
+	//diagram
+	//워크벤치윈도우
+	public static ProjectManager getInstance() {
+		if (instance == null) {
+			instance = new ProjectManager();
+			return instance;
+		}
+		else {
+			return instance;
+		}
+	}
+
+	public void init(){
+		copyNum = 0;
+		tempDiagramType = -1;
+		index = 0;
+
+
+		uMLElementEditPart = null;
+		mUMLEditor = null;
+		dragUMLModel = null;
+		selectPropertyUMLElementModel = null;
+		dragUMLTreeModel = null;
+		isDoubleClick = false;
+		isDrag = false;
+		//  private ModelBrowser modelBrowser = null;
+		openDiagramModel = null;
+		deleteModel = null;
+		dragPoint = null;
+		selectLineModels = new java.util.ArrayList();
+		copyTarget = new Point();
+		copySource = new Point();
+		mouseSelectPoint = new Point();
+		tempCopyMap = new HashMap();
+		behaviorActivityList = new java.util.ArrayList();
+		modelList = new java.util.ArrayList();
+		selectContainModel = null;
+		childCopyList = new java.util.ArrayList();
+		copyTreeModel = null;
+//		private SampleView console;
+
+
+		searchText = new java.util.ArrayList();
+		searchModel = new java.util.ArrayList();
+		typeModel = new java.util.ArrayList();
+		addLine = true;
+		isSearchModel = true;
+
+		oldName="";
+		modelBrowser.init();
+		RootTreeModel root  = modelBrowser.getRoot();
+//		ijs080429
+		currentProjectPath = "";
+		currentProjectName = "";
+		this.configurer.setTitle("N3COM Constructor V3.0");
+
+		ModelManager.getInstance().init();
+		//20080811IJS
+		TeamProjectManager.getInstance().init();
+
+	}
+
+	public void setModelBrowser(ModelBrowser p) {
+		modelBrowser = p;
+	}
+
+	public ModelBrowser getModelBrowser() {
+		return modelBrowser;
+	}
+
+	public void setConsole(SampleView p) {
+		this.console = p;
+	}
+
+	public SampleView getConsole() {
+		return console;
+	}
+
+	public UMLEditor getUMLEditor() {
+		return this.mUMLEditor;
+	}
+
+	public void setUMLEditor(UMLEditor pMLEditor) {
+		this.mUMLEditor = pMLEditor;
+	}
+
+	public void setIsDoubleClick(boolean p) {
+		this.isDoubleClick = p;
+	}
+
+	public boolean getIsDoubleClick() {
+		return this.isDoubleClick;
+	}
+
+	public void setUMLElementEditPart(UMLElementEditPart p) {
+		this.uMLElementEditPart = p;
+	}
+
+	public UMLElementEditPart getUMLElementEditPart() {
+		return this.uMLElementEditPart;
+	}
+
+	public void initIsDoubleClick() {
+		this.isDoubleClick = false;
+	}
+
+	public void setDragUMLModel(UMLModel p) {
+		this.dragUMLModel = p;
+	}
+
+	public void setDragUMLTreeModel(UMLTreeModel p) {
+		this.dragUMLTreeModel = p;
+	}
+
+	public UMLModel getDragUMLModel() {
+		if (isDrag) {
+			return this.dragUMLModel;
+		}
+		else {
+			return null;
+		}
+	}
+
+	public UMLTreeModel getDragUMLTreeModel() {
+		if (isDrag) {
+			return this.dragUMLTreeModel;
+		}
+		else {
+			return null;
+		}
+	}
+
+	public boolean isDrag() {
+		return this.isDrag;
+	}
+
+	public void InitDragUMLModel() {
+		this.isDrag = true;
+		TreeSelection umlTreeModels = (TreeSelection)this.getModelBrowser().getViewer().getSelection();
+		UMLTreeModel uMLTreeModel = this.modelBrowser.getUMLTreeModelSelected();
+		Object obj = uMLTreeModel.getRefModel();
+		if (obj instanceof UMLModel)
+			this.setDragUMLModel((UMLModel)obj);
+		this.setDragUMLTreeModel(uMLTreeModel);
+	}
+
+	public void successDragUMLModel() {
+		this.isDrag = false;
+		this.setDragUMLModel(null);
+		this.setDragUMLTreeModel(null);
+	}
+
+
+//	public int getHeightFinalClass(ClassModel cm){
+//	int height = 0;
+//	int opCount = cm.getOperations().size();
+//	int attrCount = cm.getAttributes().size();
+//	int opHeight = opCount*17;
+//	int attrHeight = attrCount*17;
+//	if(opHeight<70){
+//	opHeight = 70;
+//	}
+
+//	if(attrHeight<55){
+//	attrHeight = 55;
+//	}
+
+//	String stero = cm.getStereotype();
+//	if(stero!=null && !stero.trim().equals("")){
+//	height = opHeight + attrHeight+30;
+//	}
+//	else{
+//	height = opHeight + attrHeight+15;
+//	}
+
+//	return height;
+//	}
+
+//	public int getHeightU(ClassModel cm){
+//	int height = 0;
+//	int opCount = cm.getOperations().size();
+//	int attrCount = cm.getAttributes().size();
+//	int opHeight = opCount*17;
+//	int attrHeight = attrCount*17;
+//	if(opHeight<70){
+//	opHeight = 70;
+//	}
+
+//	if(attrHeight<55){
+//	attrHeight = 55;
+//	}
+
+//	String stero = cm.getStereotype();
+//	if(stero!=null && !stero.trim().equals("")){
+//	height = opHeight + attrHeight+30;
+//	}
+//	else{
+//	height = opHeight + attrHeight+15;
+//	}
+
+//	return height;
+//	}
+	public int  widthAutoSize(String s){
+		int width=0;
+		for(int j = 0; j < s.length(); j++){
+			char c = s.charAt(j);
+			if ( c  <  0xac00 || 0xd7a3 < c ){				
+				if(s.substring(j, j+1).equals("A")){
+					width=width+8;
+				}else if(s.substring(j, j+1).equals("B")){
+					width=width+8;
+				}else if(s.substring(j, j+1).equals("C")){
+					width=width+9;
+				}else if(s.substring(j, j+1).equals("D")){
+					width=width+8;
+				}else if(s.substring(j, j+1).equals("E")){
+					width=width+8;
+				}else if(s.substring(j, j+1).equals("F")){
+					width=width+8;
+				}else if(s.substring(j, j+1).equals("G")){
+					width=width+9;
+				}else if(s.substring(j, j+1).equals("H")){
+					width=width+8;
+				}else if(s.substring(j, j+1).equals("I")){
+					width=width+3;
+				}else if(s.substring(j, j+1).equals("J")){
+					width=width+6;
+				}else if(s.substring(j, j+1).equals("K")){
+					width=width+8;
+				}else if(s.substring(j, j+1).equals("L")){
+					width=width+7;
+				}else if(s.substring(j, j+1).equals("M")){
+					width=width+11;
+				}else if(s.substring(j, j+1).equals("N")){
+					width=width+9;
+				}else if(s.substring(j, j+1).equals("O")){
+					width=width+9;
+				}else if(s.substring(j, j+1).equals("P")){
+					width=width+8;
+				}else if(s.substring(j, j+1).equals("Q")){
+					width=width+9;
+				}else if(s.substring(j, j+1).equals("R")){
+					width=width+8;
+				}else if(s.substring(j, j+1).equals("S")){
+					width=width+8;
+				}else if(s.substring(j, j+1).equals("T")){
+					width=width+8;
+				}else if(s.substring(j, j+1).equals("U")){
+					width=width+8;
+				}else if(s.substring(j, j+1).equals("V")){
+					width=width+8;
+				}else if(s.substring(j, j+1).equals("W")){
+					width=width+10;
+				}else if(s.substring(j, j+1).equals("X")){
+					width=width+8;
+				}else if(s.substring(j, j+1).equals("Y")){
+					width=width+8;
+				}else if(s.substring(j, j+1).equals("Z")){
+					width=width+8;
+				}else if(s.substring(j, j+1).equals("a")){
+					width=width+7;
+				}else if(s.substring(j, j+1).equals("b")){
+					width=width+7;
+				}else if(s.substring(j, j+1).equals("c")){
+					width=width+7;
+				}else if(s.substring(j, j+1).equals("d")){
+					width=width+7;
+				}else if(s.substring(j, j+1).equals("e")){
+					width=width+7;
+				}else if(s.substring(j, j+1).equals("f")){
+					width=width+3;
+				}else if(s.substring(j, j+1).equals("g")){
+					width=width+7;
+				}else if(s.substring(j, j+1).equals("h")){
+					width=width+7;
+				}else if(s.substring(j, j+1).equals("i")){
+					width=width+3;
+				}else if(s.substring(j, j+1).equals("j")){
+					width=width+3;
+				}else if(s.substring(j, j+1).equals("k")){
+					width=width+6;
+				}else if(s.substring(j, j+1).equals("l")){
+					width=width+3;
+				}else if(s.substring(j, j+1).equals("m")){
+					width=width+11;
+				}else if(s.substring(j, j+1).equals("n")){
+					width=width+7;
+				}else if(s.substring(j, j+1).equals("o")){
+					width=width+7;
+				}else if(s.substring(j, j+1).equals("p")){
+					width=width+7;
+				}else if(s.substring(j, j+1).equals("q")){
+					width=width+7;
+				}else if(s.substring(j, j+1).equals("r")){
+					width=width+4;
+				}else if(s.substring(j, j+1).equals("s")){
+					width=width+7;
+				}else if(s.substring(j, j+1).equals("t")){
+					width=width+3;
+				}else if(s.substring(j, j+1).equals("u")){
+					width=width+7;
+				}else if(s.substring(j, j+1).equals("v")){
+					width=width+6;
+				}else if(s.substring(j, j+1).equals("w")){
+					width=width+10;
+				}else if(s.substring(j, j+1).equals("x")){
+					width=width+7;
+				}else if(s.substring(j, j+1).equals("y")){
+					width=width+7;
+				}else if(s.substring(j, j+1).equals("z")){
+					width=width+7;
+				}else if(s.substring(j, j+1).equals(",")){
+					width=width+6;//PKY 08071601 S State TransitionFlow 이름 넣은 후 저장 불러오기하면 타켓쪽으로 나오는 문제 수정
+				}else if(s.substring(j, j+1).equals("(")){
+					width=width+5;
+				}else if(s.substring(j, j+1).equals(")")){
+					width=width+5;
+				}else if(s.substring(j, j+1).equals("+")){
+					width=width+3;
+				}else if(s.substring(j, j+1).equals("<")){//PKY 08082201 S RoleName 삭제시 NullPoint 메시지 뜨는문제
+					width=width+10;
+				}
+				else if(s.substring(j, j+1).equals(">")){
+					width=width+10;
+				}//PKY 08082201 E RoleName 삭제시 NullPoint 메시지 뜨는문제
+
+				else{
+					width=width+8;
+				}
+
+
+			} else  
+				width=width+12;  //한글이다..
+		}
+
+		return width;
+	}
+	//PKY 08082201 S Link모델 오토사이즈로 늘어나지 않는문제
+	public void autoSize(ClassModel s){
+		//PKY 08081101 S AutoSize 개선 
+		UMLModel cm =null;
+		if(selectPropertyUMLElementModel !=null&& selectPropertyUMLElementModel instanceof UMLModel ){
+			cm = (UMLModel) selectPropertyUMLElementModel;
+		}else{
+			return;
+		}
+		
+		int operationSize = s.getOperations().size();
+		int attributeSize = s.getAttributes().size();
+		int aftHSize = 15;
+		int aftWSize = 30;
+		String longText="";
+		boolean steroType = false;
+		
+
+
+		//PKY 08081801 S 오퍼레이션 어트리뷰트 숨길수 있는 기능
+		if(cm.getUMLDataModel().getElementProperty(UMLModel.ID_ATTR_HIDDEN)!=null){
+			String attIs = (String) cm.getUMLDataModel().getElementProperty(UMLModel.ID_ATTR_HIDDEN);
+			if(attIs.equals("1"))
+				attributeSize=0;
+		}
+
+		if(cm.getUMLDataModel().getElementProperty(UMLModel.ID_OPER_HIDDEN)!=null){
+			String operIs = (String) cm.getUMLDataModel().getElementProperty(UMLModel.ID_OPER_HIDDEN);
+			if(operIs.equals("1"))
+				operationSize=0;
+		}
+		//PKY 08081801 E 오퍼레이션 어트리뷰트 숨길수 있는 기능
+
+
+		if(cm.getStereotype()!=null && !cm.getStereotype().equals("")){
+			aftHSize = aftHSize + 15;
+			steroType=true;
+		}
+		//PKY 08082201 S 팀 프로젝트 읽기전용일때 수정불가능하도록 작업
+		if(cm instanceof UseCaseModel||cm instanceof CollaborationModel){
+			aftHSize = aftHSize + 30;
+		}
+		//PKY 08082201 E 팀 프로젝트 읽기전용일때 수정불가능하도록 작업
+		/**
+		 *  어트리뷰트, 오퍼레이션 중 가장 글 길이가 긴것을 선정 
+		 */
+//		for(int i = 0 ; i < cm.getOperations().size(); i++){
+//		if(((OperationEditableTableItem)cm.getOperations().get(i)).name.length() > longText.length()){
+//		longText = ((OperationEditableTableItem)cm.getOperations().get(i)).name;
+//		}
+//		}
+
+//		for(int i = 0 ; i < cm.getAttributes().size(); i++){
+//		if(((AttributeEditableTableItem)cm.getAttributes().get(i)).name.length() > longText.length()){
+//		longText = ((OperationEditableTableItem)cm.getOperations().get(i)).name;
+//		}
+//		}
+//		if(steroType)
+//		if(cm.getStereotype().length() > longText.length()){
+//		longText = cm.getStereotype();
+//		}
+//		if(cm.getName().length() > longText.length()){
+//		longText = cm.getName();
+//		}
+
+		/**
+		 * 너비 사이즈 구하기 오퍼레이션 어트리뷰트 중 어떤것이 긴지 조사 
+		 */
+
+//		aftWSize = widthAutoSize(longText);
+
+
+
+
+		if(attributeSize==0){
+			attributeSize ++;
+		}
+		if(operationSize==0){
+			operationSize ++;
+		}
+
+		aftHSize = aftHSize + operationSize*17 + attributeSize*17;
+
+
+		if(cm.getSize().height < aftHSize)
+				cm.setSize(new Dimension(cm.getSize().width,aftHSize+4));
+
+
+//		if(cm.getParentModel().getSize().width < aftWSize)
+//		cm.getParentModel().setSize(new Dimension(aftWSize,cm.getParentModel().getSize().height));
+		//PKY 08081101 E AutoSize 개선 
+
+	}
+
+	/*
+	 * 다이어그램 열기
+	 */
+
+	public void openDiagram(UMLDiagramModel opendg) {
+		ProjectManager.getInstance().setOpenDiagramModel(opendg);
+		//				uMLEditor.get
+		//				showMessage("Double-click detected on "+obj.toString());
+		IWorkbenchWindow workbenchWindow = ProjectManager.getInstance().window;
+		//		IEditorInput input = null;
+		//		input = new LogicEditorInput(new Path("쓰임새도"));
+		try {
+			//PKY 08082201 S 프로젝트 저장 불러온 경우 팔레트창이 자동으로 오픈되지 않는 문제
+			if(opendg instanceof N3EditorDiagramModel){
+				N3EditorDiagramModel nd = (N3EditorDiagramModel)opendg;
+				tempDiagramType = nd.getDiagramType();
+//				N3Plugin.getDefault().open(nd.getDiagramType());
+			}
+			//PKY 08082201 E 프로젝트 저장 불러온 경우 팔레트창이 자동으로 오픈되지 않는 문제
+		
+			UMLEditor u = (UMLEditor)workbenchWindow.getActivePage().openEditor(opendg.getIEditorInput(), UMLEditor.ID);
+			u.setTitleName(opendg.getName());
+			ProjectManager.getInstance().setOpenDiagramModel(null);
+			//PKY 08082201 S 프로젝트 저장 불러온 경우 팔레트창이 자동으로 오픈되지 않는 문제
+//			if(opendg instanceof N3EditorDiagramModel){
+//				N3EditorDiagramModel nd = (N3EditorDiagramModel)opendg;
+//
+////				N3Plugin.getDefault().open(nd.getDiagramType());
+//			}
+			//PKY 08082201 E 프로젝트 저장 불러온 경우 팔레트창이 자동으로 오픈되지 않는 문제
+
+		} catch (PartInitException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void addBehaviorActivityList(UMLTreeModel child) {
+		if (child != null && child.getRefModel() != null) {
+			UMLModel um = (UMLModel)child.getRefModel();
+			if (child.getModelType() == 26 || child.getModelType() == 10) {
+				BehaviorActivityTableItem bati = new BehaviorActivityTableItem("", um.getName(), "Activity", "");
+				bati.setRef(um);
+				this.behaviorActivityList.add(bati);
+			}
+		}
+	}
+
+	public void removeBehaviorActivityList(UMLTreeModel child) {
+		if (child != null && child.getRefModel() != null) {
+			UMLModel um = (UMLModel)child.getRefModel();
+			if (child.getModelType() == 26 || child.getModelType() == 10) {
+				for (int i = 0; i < this.behaviorActivityList.size(); i++) {
+					BehaviorActivityTableItem bati = (BehaviorActivityTableItem)this.behaviorActivityList.get(i);
+					if (um.getID().equals(bati.getRefId())) {
+						this.behaviorActivityList.remove(i);
+					}
+				}
+				//          		BehaviorActivityTableItem bati = new BehaviorActivityTableItem("",um.getName(),"Activity","");
+				//          		bati.setRefId(um.getID());
+			}
+		}
+	}
+
+	/*
+	 * 모델 삭제
+	 */
+
+	public void deleteUMLModel(UMLTreeModel child) {
+		this.removeBehaviorActivityList(child);
+		if (child instanceof PackageTreeModel) {
+			PackageTreeModel ptm = (PackageTreeModel)child;
+			for (int i = 0; i < ptm.getChildren().length; i++) {
+				Object obj = ptm.getChildren() [i];
+				if (obj instanceof PackageTreeModel) {
+					this.deleteUMLModel((UMLTreeModel)obj);
+				}
+				UMLTreeModel ptm1 = (UMLTreeModel)obj;
+				if (ptm1.getRefModel() instanceof N3EditorDiagramModel) {
+					if (ptm1 != null) {
+						IWorkbenchWindow workbenchWindow = ProjectManager.getInstance().window;
+						IEditorInput input = null;
+						//						input = new LogicEditorInput(new Path("쓰임새도"));
+						N3EditorDiagramModel n3EditorDiagramModel = (N3EditorDiagramModel)ptm1.getRefModel();
+						workbenchWindow.getActivePage().closeEditor(n3EditorDiagramModel.getUMLEditor(), false);
+					}
+				}
+				else
+					ptm1.fireChildRemoved();
+				//				this.removeUMLNode(ptm1.getParent(), ptm1);
+			}
+		}
+		if (child.getRefModel() instanceof N3EditorDiagramModel) {
+			if (child != null) {
+				IWorkbenchWindow workbenchWindow = ProjectManager.getInstance().window;
+				IEditorInput input = null;
+				//				input = new LogicEditorInput(new Path("쓰임새도"));
+				N3EditorDiagramModel n3EditorDiagramModel = (N3EditorDiagramModel)child.getRefModel();
+				Object obj = child.getParent().getRefModel();
+				if (obj instanceof FinalPackageModel) {
+					FinalPackageModel finalPackageModel = (FinalPackageModel)obj;
+					finalPackageModel.getUMLDataModel().setN3EditorDiagramModel(null);
+				}
+				workbenchWindow.getActivePage().closeEditor(n3EditorDiagramModel.getUMLEditor(), false);
+			}
+		}
+		else
+			child.fireChildRemoved();
+		return;
+	}
+
+
+
+	/*
+	 * 모델 생성
+	 */
+
+	//등록
+	public void addUMLModel(String name, UMLTreeParentModel tp, UMLModel child, int modelType,int diagramType) {
+		//		UMLTreeModel treeModel = parent.getUMLTreeModel().getParent();
+		//default
+
+		System.out.println("dddddd:"+diagramType);
+		if (child != null) {
+			modelType = this.getModelType(child, modelType);
+
+			if (modelType == -1)
+				return;
+		}
+		if (tp != null && tp instanceof UMLTreeParentModel) {
+			UMLTreeParentModel uMLTreeParentModel = (UMLTreeParentModel)tp;
+			UMLTreeModel to1 = null;
+			if (name == null) {
+//				V1.02 WJH E 080822 S 객체 생성시 기본 이름이 숫자 0으로 시작하도록 수정 
+				defaultName = this.getDefaultName(modelType, uMLTreeParentModel);
+				name = defaultName+0;
+//				V1.02 WJH E 080822 E 객체 생성시 기본 이름이 숫자 0으로 시작하도록 수정 
+//				name = this.getDefaultName(modelType, uMLTreeParentModel);
+
+			}
+			int oldNum = this.copyNum;
+			this.oldName = name;
+			int num = this.getCopyName(tp, child, name,modelType);
+
+			//20080326 PKY S 복사 시에 뒤에 숫자 들어가는 문제 
+			if(modelType!=17&&!name.equals("")||modelType!=16&&!name.equals("")){
+//				V1.02 WJH E 080822 S 객체 생성시 기본 이름이 숫자 0으로 시작하도록 수정 
+				if(defaultName.equals("")){
+					if(num!=-1 && oldNum!=num){
+						name = name+num;
+					}
+				}
+				else{
+					name = defaultName+num;
+				}
+//				V1.02 WJH E 080822 E 객체 생성시 기본 이름이 숫자 0으로 시작하도록 수정 
+//				if(num!=-1 && oldNum!=num){
+//					name = name+num;       
+//				}
+			} 
+			//20080326 PKY E 복사 시에 뒤에 숫자 들어가는 문제 
+			this.copyNum = 0;
+			defaultName = "";//				V1.02 WJH E 080822 객체 생성시 기본 이름이 숫자 0으로 시작하도록 수정
+
+			if (modelType == 0) {
+				to1 = new PackageTreeModel(name);
+				UMLModel finalPackageModel = null;
+				if (child == null) {
+					finalPackageModel = new FinalPackageModel();
+				}
+				else {
+					finalPackageModel = child;
+					N3EditorDiagramModel n3EditorDiagramModel =
+						this.addUMLDiagram(name, (UMLTreeParentModel)to1, null, 1, false,diagramType);
+					((FinalPackageModel)finalPackageModel).setN3EditorDiagramModel(n3EditorDiagramModel);
+
+
+				}
+				to1.setRefModel(finalPackageModel);
+				finalPackageModel.setName(name);
+				finalPackageModel.setTreeModel(to1);
+				to1.setParent(uMLTreeParentModel);
+			}
+			if (modelType == 2) {
+				to1 = new StrcuturedPackageTreeModel(name);
+				UMLModel useCaseModel = null;
+				if (child == null) {
+					useCaseModel = new UseCaseModel();
+				}
+				else {
+					useCaseModel = child;
+				}
+				to1.setRefModel(useCaseModel);
+				useCaseModel.setName(name);
+				useCaseModel.setTreeModel(to1);
+				to1.setParent(uMLTreeParentModel);
+			}
+			else if (modelType == 3) {
+				to1 = new StrcuturedPackageTreeModel(name); //2008040203 PKY S 
+				UMLModel finalActorModel = null;
+				if (child == null) {
+					finalActorModel = new FinalActorModel();
+				}
+				else {
+					finalActorModel = child;
+				}
+				//				FinalActorModel finalActorModel = new FinalActorModel();
+				to1.setRefModel(finalActorModel);
+				finalActorModel.setName(name);
+				finalActorModel.setTreeModel(to1);
+				to1.setParent(uMLTreeParentModel);
+			}
+			else if (modelType == 4) {
+				//PKY 08071601 S 바운더리 트리추가안되도록 하는 부분 수정하였으나 통합하면서 누락된부분 추가
+//				to1 = new UMLTreeModel(name);
+				UMLModel finalBoundryModel = null;
+				if (child == null) {
+					finalBoundryModel = new FinalBoundryModel();
+				}
+				else {
+					finalBoundryModel = child;
+				}
+				//				FinalBoundryModel finalBoundryModel = new FinalBoundryModel();
+//				to1.setRefModel(finalBoundryModel);
+				finalBoundryModel.setName(name);
+//				finalBoundryModel.setTreeModel(to1);
+//				to1.setParent(uMLTreeParentModel);
+				//PKY 08071601 E 바운더리 트리추가안되도록 하는 부분 수정하였으나 통합하면서 누락된부분 추가
+			}
+			else if (modelType == 5) {
+				to1 = new StrcuturedPackageTreeModel(name);
+				UMLModel collaborationModel = null;
+				if (child == null) {
+					collaborationModel = new CollaborationModel();
+				}
+				else {
+					collaborationModel = child;
+				}
+				//				CollaborationModel collaborationModel = new CollaborationModel();
+				to1.setRefModel(collaborationModel);
+				collaborationModel.setName(name);
+				collaborationModel.setTreeModel(to1);
+				to1.setParent(uMLTreeParentModel);
+			}
+			else if (modelType == 6) {
+				//합성클래스
+				to1 = new StrcuturedPackageTreeModel(name);//2008040203 PKY S 
+				UMLModel classModel = null;
+				if (child == null) {
+					classModel = new FinalClassModel();
+				}
+				else {
+					classModel = child;
+				}
+				//				CollaborationModel collaborationModel = new CollaborationModel();
+				to1.setRefModel(classModel);
+				classModel.setName(name);
+				classModel.setTreeModel(to1);
+				to1.setParent(uMLTreeParentModel);
+			}
+			else if (modelType == 7) {
+				to1 = new StrcuturedPackageTreeModel(name);//2008040203 PKY S 
+				UMLModel classModel = null;
+				if (child == null) {
+					classModel = new InterfaceModel();
+				}
+				else {
+					classModel = child;
+				}
+				//				CollaborationModel collaborationModel = new CollaborationModel();
+				to1.setRefModel(classModel);
+				classModel.setName(name);
+				classModel.setTreeModel(to1);
+				to1.setParent(uMLTreeParentModel);
+			}
+			else if (modelType == 8) {
+				to1 = new UMLTreeModel(name);
+				UMLModel classModel = null;
+				if (child == null) {
+					classModel = new EnumerationModel();
+				}
+				else {
+					classModel = child;
+				}
+				//				CollaborationModel collaborationModel = new CollaborationModel();
+				to1.setRefModel(classModel);
+				classModel.setName(name);
+				classModel.setTreeModel(to1);
+				to1.setParent(uMLTreeParentModel);
+			}
+			else if (modelType == 9) {
+				to1 = new UMLTreeModel(name);
+				UMLModel exceptionModel = null;
+				if (child == null) {
+					exceptionModel = new ExceptionModel();
+				}
+				else {
+					exceptionModel = child;
+				}
+				//				CollaborationModel collaborationModel = new CollaborationModel();
+				to1.setRefModel(exceptionModel);
+				exceptionModel.setName(name);
+				exceptionModel.setTreeModel(to1);
+				to1.setParent(uMLTreeParentModel);
+			}
+			else if (modelType == 10) {
+				to1 = new StrcuturedPackageTreeModel(name);//2008040203 PKY S 
+				UMLModel finalActivityModel = null;
+				if (child == null) {
+					finalActivityModel = new FinalActivityModel();
+				}
+				else {
+					finalActivityModel = child;
+				}
+				//				this.behaviorActivityList.add(finalActivityModel);
+				//				CollaborationModel collaborationModel = new CollaborationModel();
+				to1.setRefModel(finalActivityModel);
+				finalActivityModel.setName(name);
+				finalActivityModel.setTreeModel(to1);
+				to1.setParent(uMLTreeParentModel);
+				this.addBehaviorActivityList(to1);
+			}
+			else if (modelType == 11) {
+				to1 = new UMLTreeModel(name);
+				UMLModel finalActiionModel = null;
+				if (child == null) {
+					finalActiionModel = new FinalActiionModel();
+				}
+				else {
+					finalActiionModel = child;
+				}
+				//				CollaborationModel collaborationModel = new CollaborationModel();
+				to1.setRefModel(finalActiionModel);
+				finalActiionModel.setName(name);
+				finalActiionModel.setTreeModel(to1);
+				to1.setParent(uMLTreeParentModel);
+			}
+			else if (modelType == 12) {
+				to1 = new UMLTreeModel(name);
+				UMLModel sendModel = null;
+				if (child == null) {
+					sendModel = new SendModel();
+				}
+				else {
+					sendModel = child;
+				}
+				//				CollaborationModel collaborationModel = new CollaborationModel();
+				to1.setRefModel(sendModel);
+				sendModel.setName(name);
+				sendModel.setTreeModel(to1);
+				to1.setParent(uMLTreeParentModel);
+			}
+			else if (modelType == 13) {
+				to1 = new UMLTreeModel(name);
+				UMLModel receiveModel = null;
+				if (child == null) {
+					receiveModel = new ReceiveModel();
+				}
+				else {
+					receiveModel = child;
+				}
+				//				CollaborationModel collaborationModel = new CollaborationModel();
+				to1.setRefModel(receiveModel);
+				receiveModel.setName(name);
+				receiveModel.setTreeModel(to1);
+				to1.setParent(uMLTreeParentModel);
+			}
+			else if (modelType == 14) {
+//				to1 = new UMLTreeModel(name);//PKY 08072201 S 일부 모델 모델 브라우져에 생성되지 않도록 Initial,Final,FlowFinal,Juction,Exit,EntryPoint 
+				UMLModel initialModel = null;
+				if (child == null) {
+					initialModel = new InitialModel();
+				}
+				else {
+					initialModel = child;
+				}
+				//				CollaborationModel collaborationModel = new CollaborationModel();
+//				to1.setRefModel(initialModel);//PKY 08072201 S 일부 모델 모델 브라우져에 생성되지 않도록 Initial,Final,FlowFinal,Juction,Exit,EntryPoint 
+				initialModel.setName(name);
+//				initialModel.setTreeModel(to1);//PKY 08072201 S 일부 모델 모델 브라우져에 생성되지 않도록 Initial,Final,FlowFinal,Juction,Exit,EntryPoint 
+//				to1.setParent(uMLTreeParentModel);//PKY 08072201 S 일부 모델 모델 브라우져에 생성되지 않도록 Initial,Final,FlowFinal,Juction,Exit,EntryPoint 
+			}
+			else if (modelType == 15) {
+//				to1 = new UMLTreeModel(name);//PKY 08072201 S 일부 모델 모델 브라우져에 생성되지 않도록 Initial,Final,FlowFinal,Juction,Exit,EntryPoint 
+				UMLModel finalModel = null;
+				if (child == null) {
+					finalModel = new FinalModel();
+				}
+				else {
+					finalModel = child;
+				}
+				//				CollaborationModel collaborationModel = new CollaborationModel();
+//				to1.setRefModel(finalModel);//PKY 08072201 S 일부 모델 모델 브라우져에 생성되지 않도록 Initial,Final,FlowFinal,Juction,Exit,EntryPoint 
+				finalModel.setName(name);
+//				finalModel.setTreeModel(to1);//PKY 08072201 S 일부 모델 모델 브라우져에 생성되지 않도록 Initial,Final,FlowFinal,Juction,Exit,EntryPoint 
+//				to1.setParent(uMLTreeParentModel);//PKY 08072201 S 일부 모델 모델 브라우져에 생성되지 않도록 Initial,Final,FlowFinal,Juction,Exit,EntryPoint 
+			}
+			else if (modelType == 16) {
+//				to1 = new UMLTreeModel(name);//PKY 08072201 S 일부 모델 모델 브라우져에 생성되지 않도록 Initial,Final,FlowFinal,Juction,Exit,EntryPoint 
+				UMLModel flowFinalModel = null;
+				if (child == null) {
+					flowFinalModel = new FlowFinalModel();
+				}
+				else {
+					flowFinalModel = child;
+				}
+				//				CollaborationModel collaborationModel = new CollaborationModel();
+//				to1.setRefModel(flowFinalModel);//PKY 08072201 S 일부 모델 모델 브라우져에 생성되지 않도록 Initial,Final,FlowFinal,Juction,Exit,EntryPoint
+				flowFinalModel.setName(name);
+//				flowFinalModel.setTreeModel(to1);//PKY 08072201 S 일부 모델 모델 브라우져에 생성되지 않도록 Initial,Final,FlowFinal,Juction,Exit,EntryPoint 
+//				to1.setParent(uMLTreeParentModel);//PKY 08072201 S 일부 모델 모델 브라우져에 생성되지 않도록 Initial,Final,FlowFinal,Juction,Exit,EntryPoint 
+			}
+			else if (modelType == 17) {
+//				to1 = new UMLTreeModel(name);//PKY 08072201 S 일부 모델 모델 브라우져에 생성되지 않도록 Initial,Final,FlowFinal,Juction,Exit,EntryPoint 
+				UMLModel synchModel = null;
+				if (child == null) {
+					synchModel = new SynchModel();
+				}
+				else {
+					synchModel = child;
+				}
+				//				CollaborationModel collaborationModel = new CollaborationModel();
+//				to1.setRefModel(synchModel);//PKY 08072201 S 일부 모델 모델 브라우져에 생성되지 않도록 Initial,Final,FlowFinal,Juction,Exit,EntryPoint 
+				synchModel.setName(name);
+//				synchModel.setTreeModel(to1);//PKY 08072201 S 일부 모델 모델 브라우져에 생성되지 않도록 Initial,Final,FlowFinal,Juction,Exit,EntryPoint 
+//				to1.setParent(uMLTreeParentModel);//PKY 08072201 S 일부 모델 모델 브라우져에 생성되지 않도록 Initial,Final,FlowFinal,Juction,Exit,EntryPoint 
+			}
+			else if (modelType == 18) {
+//				to1 = new UMLTreeModel(name);//PKY 08072201 S 일부 모델 모델 브라우져에 생성되지 않도록 Initial,Final,FlowFinal,Juction,Exit,EntryPoint 
+				UMLModel decisionModel = null;
+				if (child == null) {
+					decisionModel = new DecisionModel();
+				}
+				else {
+					decisionModel = child;
+				}
+				//				CollaborationModel collaborationModel = new CollaborationModel();
+//				to1.setRefModel(decisionModel);//PKY 08072201 S 일부 모델 모델 브라우져에 생성되지 않도록 Initial,Final,FlowFinal,Juction,Exit,EntryPoint 
+				decisionModel.setName(name);
+//				decisionModel.setTreeModel(to1);//PKY 08072201 S 일부 모델 모델 브라우져에 생성되지 않도록 Initial,Final,FlowFinal,Juction,Exit,EntryPoint 
+//				to1.setParent(uMLTreeParentModel);//PKY 08072201 S 일부 모델 모델 브라우져에 생성되지 않도록 Initial,Final,FlowFinal,Juction,Exit,EntryPoint 
+			}
+			else if (modelType == 19) {
+				to1 = new UMLTreeModel(name);
+				UMLModel finalObjectNodeModel = null;
+				if (child == null) {
+					finalObjectNodeModel = new FinalObjectNodeModel();
+				}
+				else {
+					finalObjectNodeModel = child;
+				}
+				//				CollaborationModel collaborationModel = new CollaborationModel();
+				to1.setRefModel(finalObjectNodeModel);
+				finalObjectNodeModel.setName(name);
+				finalObjectNodeModel.setTreeModel(to1);
+				to1.setParent(uMLTreeParentModel);
+			}
+			else if (modelType == 20) {
+				to1 = new UMLTreeModel(name);
+				UMLModel centralBufferNodeModel = null;
+				if (child == null) {
+					centralBufferNodeModel = new CentralBufferNodeModel();
+				}
+				else {
+					centralBufferNodeModel = child;
+				}
+				//				CollaborationModel collaborationModel = new CollaborationModel();
+				to1.setRefModel(centralBufferNodeModel);
+				centralBufferNodeModel.setName(name);
+				centralBufferNodeModel.setTreeModel(to1);
+				to1.setParent(uMLTreeParentModel);
+			}
+			else if (modelType == 21) {
+				to1 = new UMLTreeModel(name);
+				UMLModel dataStoreModel = null;
+				if (child == null) {
+					dataStoreModel = new DataStoreModel();
+				}
+				else {
+					dataStoreModel = child;
+				}
+				//				CollaborationModel collaborationModel = new CollaborationModel();
+				to1.setRefModel(dataStoreModel);
+				dataStoreModel.setName(name);
+				dataStoreModel.setTreeModel(to1);
+				to1.setParent(uMLTreeParentModel);
+			}
+			else if (modelType == 22) {
+				//PKY 08071601 S 바운더리 트리추가안되도록 하는 부분 수정하였으나 통합하면서 누락된부분 추가
+//				to1 = new UMLTreeModel(name);//PKY 08070904 S 바운더리 swimlane 모델 브라우져에 추가안되도록 수정
+				UMLModel hPartitionModel = null;
+				if (child == null) {
+					hPartitionModel = new HPartitionModel();
+				}
+				else {
+					hPartitionModel = child;
+				}
+				//				CollaborationModel collaborationModel = new CollaborationModel();
+//				to1.setRefModel(hPartitionModel);//PKY 08070904 S 바운더리 swimlane 모델 브라우져에 추가안되도록 수정
+				hPartitionModel.setName(name);
+//				hPartitionModel.setTreeModel(to1);//PKY 08070904 S 바운더리 swimlane 모델 브라우져에 추가안되도록 수정
+//				to1.setParent(uMLTreeParentModel);//PKY 08070904 S 바운더리 swimlane 모델 브라우져에 추가안되도록 수정
+				//PKY 08071601 E 바운더리 트리추가안되도록 하는 부분 수정하였으나 통합하면서 누락된부분 추가
+
+			}
+			else if (modelType == 23) {
+				to1 = new UMLTreeModel(name);
+				UMLModel vPartitionModel = null;
+				if (child == null) {
+					vPartitionModel = new VPartitionModel();
+				}
+				else {
+					vPartitionModel = child;
+				}
+				//				CollaborationModel collaborationModel = new CollaborationModel();
+				to1.setRefModel(vPartitionModel);
+				vPartitionModel.setName(name);
+				vPartitionModel.setTreeModel(to1);
+				to1.setParent(uMLTreeParentModel);
+			}
+			else if (modelType == 24) {
+//				to1 = new UMLTreeModel(name);//PKY 08072201 S 일부 모델 모델 브라우져에 생성되지 않도록 Initial,Final,FlowFinal,Juction,Exit,EntryPoint 
+				UMLModel hForkJoinModel = null;
+				if (child == null) {
+					hForkJoinModel = new HForkJoinModel();
+				}
+				else {
+					hForkJoinModel = child;
+				}
+				//				CollaborationModel collaborationModel = new CollaborationModel();
+//				to1.setRefModel(hForkJoinModel);//PKY 08072201 S 일부 모델 모델 브라우져에 생성되지 않도록 Initial,Final,FlowFinal,Juction,Exit,EntryPoint 
+				hForkJoinModel.setName(name);
+//				hForkJoinModel.setTreeModel(to1);//PKY 08072201 S 일부 모델 모델 브라우져에 생성되지 않도록 Initial,Final,FlowFinal,Juction,Exit,EntryPoint 
+//				to1.setParent(uMLTreeParentModel);//PKY 08072201 S 일부 모델 모델 브라우져에 생성되지 않도록 Initial,Final,FlowFinal,Juction,Exit,EntryPoint 
+			}
+			else if (modelType == 25) {
+//				to1 = new UMLTreeModel(name);//PKY 08072201 S 일부 모델 모델 브라우져에 생성되지 않도록 Initial,Final,FlowFinal,Juction,Exit,EntryPoint 
+				UMLModel vForkJoinModel = null;
+				if (child == null) {
+					vForkJoinModel = new VForkJoinModel();
+				}
+				else {
+					vForkJoinModel = child;
+				}
+				//				CollaborationModel collaborationModel = new CollaborationModel();
+//				to1.setRefModel(vForkJoinModel);//PKY 08072201 S 일부 모델 모델 브라우져에 생성되지 않도록 Initial,Final,FlowFinal,Juction,Exit,EntryPoint 
+				vForkJoinModel.setName(name);
+//				vForkJoinModel.setTreeModel(to1);//PKY 08072201 S 일부 모델 모델 브라우져에 생성되지 않도록 Initial,Final,FlowFinal,Juction,Exit,EntryPoint 
+//				to1.setParent(uMLTreeParentModel);//PKY 08072201 S 일부 모델 모델 브라우져에 생성되지 않도록 Initial,Final,FlowFinal,Juction,Exit,EntryPoint 
+			}
+			else if (modelType == 26) {
+				to1 = new StrcuturedActivityPackageTreeModel(name);
+				UMLModel finalStrcuturedActivityModel = null;
+				if (child == null) {
+					finalStrcuturedActivityModel = new FinalStrcuturedActivityModel();
+				}
+				else {
+					N3EditorDiagramModel n3EditorDiagramModel =
+						this.addUMLDiagram(name, (UMLTreeParentModel)to1, null, 1, false,-1);
+					((FinalStrcuturedActivityModel)child).setN3EditorDiagramModel(n3EditorDiagramModel);
+					n3EditorDiagramModel.setDiagramType(9);//PKY 08061801 S StrcuturedActivity 생성 시 다이어그램 하위 타입 지정하도록 수정
+					finalStrcuturedActivityModel = child;
+				}
+				//				this.addBehaviorActivityList(finalStrcuturedActivityModel);
+				//				CollaborationModel collaborationModel = new CollaborationModel();
+				to1.setRefModel(finalStrcuturedActivityModel);
+				finalStrcuturedActivityModel.setName(name);
+				finalStrcuturedActivityModel.setTreeModel(to1);
+				to1.setParent(uMLTreeParentModel);
+				this.addBehaviorActivityList(to1);
+			}
+			else if (modelType == 27) {
+				to1 = new UMLTreeModel(name);
+				UMLModel partModel = null;
+				if (child == null) {
+					partModel = new PartModel();
+				}
+				else {
+					partModel = child;
+				}
+				//				CollaborationModel collaborationModel = new CollaborationModel();
+				to1.setRefModel(partModel);
+				partModel.setName(name);
+				partModel.setTreeModel(to1);
+				to1.setParent(uMLTreeParentModel);
+			}
+			else if (modelType == 50) {
+				to1 = new UMLTreeModel(name);
+				UMLModel lifeLineModel = null;
+				if (child == null) {
+					lifeLineModel = new LifeLineActorModel();//PKY 08071601 S 트리에서 시퀀스 액터 생성시 오브젝트로 트리에 생성됨
+				}
+				else {
+					lifeLineModel = child;
+				}
+				//				CollaborationModel collaborationModel = new CollaborationModel();
+				to1.setRefModel(lifeLineModel);
+				lifeLineModel.setName(name);
+				lifeLineModel.setTreeModel(to1);
+				to1.setParent(uMLTreeParentModel);
+			}
+			else if (modelType == 28) {
+				to1 = new UMLTreeModel(name);
+				UMLModel lifeLineModel = null;
+				if (child == null) {
+					lifeLineModel = new LifeLineModel();
+				}
+				else {
+					lifeLineModel = child;
+				}
+				//				CollaborationModel collaborationModel = new CollaborationModel();
+				to1.setRefModel(lifeLineModel);
+				if(((LifeLineModel)lifeLineModel).getTypeRef()==null)//PKY 08081801 S 시퀀스 다이어그램, 참조 시 Object 들어가지 않도록
+					lifeLineModel.setName(name);
+				lifeLineModel.setTreeModel(to1);
+				to1.setParent(uMLTreeParentModel);
+			}
+			else if (modelType == 29) {
+				to1 = new StrcuturedPackageTreeModel(name);//2008040203 PKY S 
+				UMLModel componentModel = null;
+				if (child == null) {
+					componentModel = new ComponentModel();
+				}
+				else {
+					componentModel = child;
+				}
+				//				CollaborationModel collaborationModel = new CollaborationModel();
+				to1.setRefModel(componentModel);
+				componentModel.setName(name);
+				componentModel.setTreeModel(to1);
+				to1.setParent(uMLTreeParentModel);
+			}
+			else if (modelType == 30) {
+				to1 = new UMLTreeModel(name);
+				UMLModel artfifactModel = null;
+				if (child == null) {
+					artfifactModel = new ArtfifactModel();
+				}
+				else {
+					artfifactModel = child;
+				}
+				//				CollaborationModel collaborationModel = new CollaborationModel();
+				to1.setRefModel(artfifactModel);
+				artfifactModel.setName(name);
+				artfifactModel.setTreeModel(to1);
+				to1.setParent(uMLTreeParentModel);
+			}
+			else if (modelType == 31) {
+				to1 = new StrcuturedPackageTreeModel(name);//2008040203 PKY S 
+				UMLModel stateModel = null;
+				if (child == null) {
+					stateModel = new StateModel();
+				}
+				else {
+					stateModel = child;
+				}
+				//				CollaborationModel collaborationModel = new CollaborationModel();
+				to1.setRefModel(stateModel);
+				stateModel.setName(name);
+				stateModel.setTreeModel(to1);
+				to1.setParent(uMLTreeParentModel);
+			}
+			else if (modelType == 32) {
+				to1 = new StrcuturedStatePackageTreeModel(name);
+				UMLModel strcuturedStateModel = null;
+				if (child == null) {
+					strcuturedStateModel = new StrcuturedStateModel();
+				}
+				else {
+					N3EditorDiagramModel n3EditorDiagramModel =
+						this.addUMLDiagram(name, (UMLTreeParentModel)to1, null, 1, false,-1);
+					((IStructured)child).setN3EditorDiagramModel(n3EditorDiagramModel);
+					n3EditorDiagramModel.setDiagramType(10);//PKY 08061801 S StrcuturedActivity 생성 시 다이어그램 하위 타입 지정하도록 수정
+					strcuturedStateModel = child;
+				}
+				//				this.addBehaviorActivityList(finalStrcuturedActivityModel);
+				//				CollaborationModel collaborationModel = new CollaborationModel();
+				to1.setRefModel(strcuturedStateModel);
+				strcuturedStateModel.setName(name);
+				strcuturedStateModel.setTreeModel(to1);
+				to1.setParent(uMLTreeParentModel);
+				//				this.addBehaviorActivityList(to1);
+			}
+			else if (modelType == 33) {
+//				to1 = new UMLTreeModel(name);//PKY 08072201 S 일부 모델 모델 브라우져에 생성되지 않도록 Initial,Final,FlowFinal,Juction,Exit,EntryPoint 
+				UMLModel historyModel = null;
+				if (child == null) {
+					historyModel = new HistoryModel();
+				}
+				else {
+					historyModel = child;
+				}
+				//				this.addBehaviorActivityList(finalStrcuturedActivityModel);
+				//				CollaborationModel collaborationModel = new CollaborationModel();
+//				to1.setRefModel(historyModel);//PKY 08072201 S 일부 모델 모델 브라우져에 생성되지 않도록 Initial,Final,FlowFinal,Juction,Exit,EntryPoint 
+				historyModel.setName(name);
+//				historyModel.setTreeModel(to1);//PKY 08072201 S 일부 모델 모델 브라우져에 생성되지 않도록 Initial,Final,FlowFinal,Juction,Exit,EntryPoint 
+//				to1.setParent(uMLTreeParentModel);//PKY 08072201 S 일부 모델 모델 브라우져에 생성되지 않도록 Initial,Final,FlowFinal,Juction,Exit,EntryPoint 
+				//				this.addBehaviorActivityList(to1);
+			}
+			else if (modelType == 34) {
+//				to1 = new UMLTreeModel(name);//PKY 08072201 S 일부 모델 모델 브라우져에 생성되지 않도록 Initial,Final,FlowFinal,Juction,Exit,EntryPoint 
+				UMLModel terminateModel = null;
+				if (child == null) {
+					terminateModel = new TerminateModel();
+				}
+				else {
+					terminateModel = child;
+				}
+				//				this.addBehaviorActivityList(finalStrcuturedActivityModel);
+				//				CollaborationModel collaborationModel = new CollaborationModel();
+//				to1.setRefModel(terminateModel);//PKY 08072201 S 일부 모델 모델 브라우져에 생성되지 않도록 Initial,Final,FlowFinal,Juction,Exit,EntryPoint 
+				terminateModel.setName(name);
+//				terminateModel.setTreeModel(to1);//PKY 08072201 S 일부 모델 모델 브라우져에 생성되지 않도록 Initial,Final,FlowFinal,Juction,Exit,EntryPoint 
+//				to1.setParent(uMLTreeParentModel);//PKY 08072201 S 일부 모델 모델 브라우져에 생성되지 않도록 Initial,Final,FlowFinal,Juction,Exit,EntryPoint 
+				//				this.addBehaviorActivityList(to1);
+			}
+			else if (modelType == 36) {
+//				to1 = new UMLTreeModel(name);//PKY 08072201 S 일부 모델 모델 브라우져에 생성되지 않도록 Initial,Final,FlowFinal,Juction,Exit,EntryPoint 
+				UMLModel entryPointModelNoPort = null;
+				if (child == null) {
+					entryPointModelNoPort = new EntryPointModelNoPort();
+				}
+				else {
+					entryPointModelNoPort = child;
+				}
+				//				this.addBehaviorActivityList(finalStrcuturedActivityModel);
+				//				CollaborationModel collaborationModel = new CollaborationModel();
+//				to1.setRefModel(entryPointModelNoPort);//PKY 08072201 S 일부 모델 모델 브라우져에 생성되지 않도록 Initial,Final,FlowFinal,Juction,Exit,EntryPoint 
+				entryPointModelNoPort.setName(name);
+//				entryPointModelNoPort.setTreeModel(to1);//PKY 08072201 S 일부 모델 모델 브라우져에 생성되지 않도록 Initial,Final,FlowFinal,Juction,Exit,EntryPoint 
+//				to1.setParent(uMLTreeParentModel);//PKY 08072201 S 일부 모델 모델 브라우져에 생성되지 않도록 Initial,Final,FlowFinal,Juction,Exit,EntryPoint 
+
+				//				this.addBehaviorActivityList(to1);
+			}
+			else if (modelType == 35) {
+				to1 = new StrcuturedPackageTreeModel(name);//2008040203 PKY S 
+				UMLModel nodeModel = null;
+				if (child == null) {
+					nodeModel = new NodeModel();
+				}
+				else {
+					nodeModel = child;
+				}
+				//				this.addBehaviorActivityList(finalStrcuturedActivityModel);
+				//				CollaborationModel collaborationModel = new CollaborationModel();
+				to1.setRefModel(nodeModel);
+				nodeModel.setName(name);
+				nodeModel.setTreeModel(to1);
+				to1.setParent(uMLTreeParentModel);
+				//				this.addBehaviorActivityList(to1);
+			}
+			else if (modelType == 37) {
+				to1 = new UMLTreeModel(name);
+				UMLModel deviceModel = null;
+				if (child == null) {
+					deviceModel = new DeviceModel();
+				}
+				else {
+					deviceModel = child;
+				}
+				//				this.addBehaviorActivityList(finalStrcuturedActivityModel);
+				//				CollaborationModel collaborationModel = new CollaborationModel();
+				to1.setRefModel(deviceModel);
+				deviceModel.setName(name);
+				deviceModel.setTreeModel(to1);
+				to1.setParent(uMLTreeParentModel);
+				//				this.addBehaviorActivityList(to1);
+			}
+			else if (modelType == 38) {
+				to1 = new UMLTreeModel(name);
+				UMLModel executionEnvironmentModel = null;
+				if (child == null) {
+					executionEnvironmentModel = new ExecutionEnvironmentModel();
+				}
+				else {
+					executionEnvironmentModel = child;
+				}
+				//				this.addBehaviorActivityList(finalStrcuturedActivityModel);
+				//				CollaborationModel collaborationModel = new CollaborationModel();
+				to1.setRefModel(executionEnvironmentModel);
+				executionEnvironmentModel.setName(name);
+				executionEnvironmentModel.setTreeModel(to1);
+				to1.setParent(uMLTreeParentModel);
+				//				this.addBehaviorActivityList(to1);
+			}
+			else if (modelType == 39) {
+				to1 = new UMLTreeModel(name);
+				UMLModel deploymentSpecificationModel = null;
+				if (child == null) {
+					deploymentSpecificationModel = new DeploymentSpecificationModel();
+				}
+				else {
+					deploymentSpecificationModel = child;
+				}
+				//				this.addBehaviorActivityList(finalStrcuturedActivityModel);
+				//				CollaborationModel collaborationModel = new CollaborationModel();
+				to1.setRefModel(deploymentSpecificationModel);
+				deploymentSpecificationModel.setName(name);
+				deploymentSpecificationModel.setTreeModel(to1);
+				to1.setParent(uMLTreeParentModel);
+				//				this.addBehaviorActivityList(to1);
+			}
+			else if (modelType == 40) {
+				to1 = new UMLTreeModel(name);
+				UMLModel stateLifelineModel = null;
+				if (child == null) {
+					stateLifelineModel = new StateLifelineModel();
+				}
+				else {
+					stateLifelineModel = child;
+				}
+				//				this.addBehaviorActivityList(finalStrcuturedActivityModel);
+				//				CollaborationModel collaborationModel = new CollaborationModel();
+				to1.setRefModel(stateLifelineModel);
+				stateLifelineModel.setName(name);
+				stateLifelineModel.setTreeModel(to1);
+				to1.setParent(uMLTreeParentModel);
+				//				this.addBehaviorActivityList(to1);
+			}
+			//20080721IJS
+			else if (modelType == 600) {
+				to1 = new UMLTreeModel(name);
+				UMLModel requirementModel = null;
+				if (child == null) {
+					requirementModel = new RequirementModel();
+				}
+				else {
+					requirementModel = child;
+				}
+				//				this.addBehaviorActivityList(finalStrcuturedActivityModel);
+				//				CollaborationModel collaborationModel = new CollaborationModel();
+				to1.setRefModel(requirementModel);
+				requirementModel.setName(name);
+				requirementModel.setTreeModel(to1);
+				to1.setParent(uMLTreeParentModel);
+				//				this.addBehaviorActivityList(to1);
+			}
+			//			else if(modelType==27){
+			//				to1 = new UMLTreeModel(name);
+			//				UMLModel vForkJoinModel = null;
+			//				if(child==null){
+			//					vForkJoinModel = new VForkJoinModel();
+			//				}
+			//				else{
+			//					vForkJoinModel = child;
+			//				}
+			////				CollaborationModel collaborationModel = new CollaborationModel();
+			//				to1.setRefModel(vForkJoinModel);
+			//				vForkJoinModel.setName(name);
+			//				vForkJoinModel.setTreeModel(to1);
+			//				
+			//				to1.setParent(uMLTreeParentModel);
+			//
+			//			}
+			if (to1 != null) {
+				uMLTreeParentModel.addChild(to1);
+			}
+			//			UMLTreeModel to1 = null;
+			//			if(modelType!=0){
+			//				 to1 = new UMLTreeModel(name);
+			//				
+			//			}
+			//			else{
+			//				to1 = new PackageTreeModel(name);
+			////				child.setTreeModel((UMLTreeModel)to1);
+			//			}
+			//			if(child!=null){
+			//				child.setTreeModel(to1);
+			//				child.setName(name);
+			//			}
+//			ProjectManager.getInstance().getCopyName(uMLTreeParentModel, child);
+			//PKY 08071601 S 바운더리 트리추가안되도록 하는 부분 수정하였으나 통합하면서 누락된부분 추가
+			ProjectManager.getInstance().getModelBrowser().refresh(uMLTreeParentModel);
+			ProjectManager.getInstance().getModelBrowser().expend(tp);
+			//PKY 08082201 S 선을 선택한다음 객체를 생성하면 에러메세지 발생
+//			if(to1!=null)//PKY 08070904 S 바운더리 swimlane 모델 브라우져에 추가안되도록 수정
+//				ProjectManager.getInstance().getModelBrowser().select(to1);
+			//PKY 08082201 E 선을 선택한다음 객체를 생성하면 에러메세지 발생
+
+			if (modelType != 0 && modelType != 40 && modelType != 50 && modelType != 28) {
+				this.getTypeModel().add(to1);
+			}
+			//PKY 08071601 E 바운더리 트리추가안되도록 하는 부분 수정하였으나 통합하면서 누락된부분 추가
+			this.newMakeModel = to1;			// V1.01 WJH E 080519 추가
+		}
+	}
+
+//	V1.01 WJH E 080519 S 함수 추가
+	public UMLTreeModel addUMLModel(String name, UMLTreeParentModel tp, UMLModel child, int modelType,int diagramType, String id) {
+
+		addUMLModel(name,  tp,  child,  modelType, diagramType);
+
+		if(newMakeModel != null)
+			((UMLModel)newMakeModel.getRefModel()).getUMLDataModel().setId(id);
+
+//		newMakeModel = null;
+		return newMakeModel;
+	}
+//	V1.01 WJH E 080519 E 함수 추가  
+
+	/*
+	 * 다이어그램  생성
+	 */
+
+	public N3EditorDiagramModel addUMLDiagram(String name, UMLTreeParentModel tp, UMLEditor child,
+			int modelType, boolean isOpen,int diagramType) {
+
+		//		UMLTreeModel treeModel = parent.getUMLTreeModel().getParent();
+		//default
+		try{
+			if (tp != null && tp instanceof UMLTreeParentModel) {
+				UMLTreeParentModel uMLTreeParentModel = (UMLTreeParentModel)tp;
+				UMLTreeModel to1 = null;
+				if (modelType == 1) {
+					if (name == null) {
+						name = this.getDefaultName(1, uMLTreeParentModel);
+					}
+					to1 = new UMLTreeModel(name);
+					uMLTreeParentModel.addChild(to1);
+
+				}
+				if (child == null && isOpen) {
+					IWorkbenchWindow workbenchWindow = ProjectManager.getInstance().window;
+					IEditorInput input = null;
+					//PKY 08080501 S 다이어그램 전체 부분에서 "쓰임새도"라고 나오는 문제 수정
+					if(diagramType==1)
+						input = new LogicEditorInput(new Path(N3Messages.DIALOG_PACKAGE));
+					else if(diagramType==2)
+						input = new LogicEditorInput(new Path(N3Messages.PALETTE_TITLE_CLASS));
+					else if(diagramType==3)
+						input = new LogicEditorInput(new Path(N3Messages.DIALOG_OBJECT));
+					else if(diagramType==4)
+						input = new LogicEditorInput(new Path(N3Messages.PALETTE_TITLE_COMPOSITE));
+					else if(diagramType==5)
+						input = new LogicEditorInput(new Path(N3Messages.PALETTE_TITLE_COMPONENT));
+					else if(diagramType==6)
+						input = new LogicEditorInput(new Path(N3Messages.PALETTE_TITLE_DEPLOYMENT));
+					else if(diagramType==7)
+						input = new LogicEditorInput(new Path(N3Messages.DIALOG_STRUCTURAL));
+					else if(diagramType==8)
+						input = new LogicEditorInput(new Path(N3Messages.PALETTE_TITLE_USECASE));
+					else if(diagramType==9)
+						input = new LogicEditorInput(new Path(N3Messages.PALETTE_TITLE_ACTIVITY));
+					else if(diagramType==10)
+						input = new LogicEditorInput(new Path(N3Messages.PALETTE_TITLE_STATE));
+					else if(diagramType==11)
+						input = new LogicEditorInput(new Path(N3Messages.PALETTE_TITLE_COMMUNICATION));
+					else if(diagramType==12)
+						input = new LogicEditorInput(new Path(N3Messages.PALETTE_TITLE_INTERACTION));
+					else if(diagramType==13)
+						input = new LogicEditorInput(new Path(N3Messages.PALETTE_TITLE_TIMING));
+					else if(diagramType==14)
+						input = new LogicEditorInput(new Path(N3Messages.DIALOG_INTERACTION_OVERVIEW));
+					else if(diagramType==15)
+						input = new LogicEditorInput(new Path(N3Messages.DIALOG_BEHAVIORAL));
+					else if(diagramType==17)
+						input = new LogicEditorInput(new Path(N3Messages.PALETTE_REQUIRMENT));
+					else  
+						input = new LogicEditorInput(new Path("Diagram"));
+					//PKY 08080501 E 다이어그램 전체 부분에서 "쓰임새도"라고 나오는 문제 수정
+					try {
+
+						tempDiagramType = diagramType;
+						UMLEditor u = (UMLEditor)workbenchWindow.getActivePage().openEditor(input, UMLEditor.ID, true);
+						u.setTitleName(name);
+						if(u.getDiagram().getDiagramType()==-1){
+							u.getDiagram().setDiagramType(diagramType);
+//							N3Plugin.getDefault().open(diagramType);
+						}
+						to1.setRefModel(u.getDiagram());
+						u.getDiagram().setName(name);
+						u.getDiagram().setTreeModel(to1);
+						to1.setParent(uMLTreeParentModel);
+						u.getDiagram().setIEditorInput(input);
+						ProjectManager.getInstance().getModelBrowser().refresh(uMLTreeParentModel);
+						ProjectManager.getInstance().getModelBrowser().expend(tp);
+						ProjectManager.getInstance().getModelBrowser().select(to1);
+						this.tempDiagram = u.getDiagram();				// V1.03 WJH E 080526 추가
+
+						//PKY 08061101 S 패키지 하위에 다이어그램을 삭제 후 다이어그램을 재 생성하여 더블클릭하면 오픈되지 않던 문제 수정
+						if(uMLTreeParentModel instanceof PackageTreeModel){
+							if(uMLTreeParentModel.getRefModel()!=null)
+								if(uMLTreeParentModel.getRefModel() instanceof FinalPackageModel){
+									FinalPackageModel model=(FinalPackageModel)uMLTreeParentModel.getRefModel();
+									if(to1 instanceof UMLTreeModel){
+										if(to1.getRefModel()!=null){
+											if(to1.getRefModel() instanceof N3EditorDiagramModel)
+												model.setN3EditorDiagramModel((N3EditorDiagramModel)to1.getRefModel());		
+										}
+									}
+
+								}
+						}
+						//PKY 08061101 E 패키지 하위에 다이어그램을 삭제 후 다이어그램을 재 생성하여 더블클릭하면 오픈되지 않던 문제 수정
+
+
+						return null;
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+				else {
+					N3EditorDiagramModel n3EditorDiagramModel = new N3EditorDiagramModel();
+					IEditorInput input = null;
+					//PKY 08080501 S 다이어그램 전체 부분에서 "쓰임새도"라고 나오는 문제 수정
+					if(diagramType==1)
+						input = new LogicEditorInput(new Path(N3Messages.DIALOG_PACKAGE));
+					else if(diagramType==2)
+						input = new LogicEditorInput(new Path(N3Messages.PALETTE_TITLE_CLASS));
+					else if(diagramType==3)
+						input = new LogicEditorInput(new Path(N3Messages.DIALOG_OBJECT));
+					else if(diagramType==4)
+						input = new LogicEditorInput(new Path(N3Messages.PALETTE_TITLE_COMPOSITE));
+					else if(diagramType==5)
+						input = new LogicEditorInput(new Path(N3Messages.PALETTE_TITLE_COMPONENT));
+					else if(diagramType==6)
+						input = new LogicEditorInput(new Path(N3Messages.PALETTE_TITLE_DEPLOYMENT));
+					else if(diagramType==7)
+						input = new LogicEditorInput(new Path(N3Messages.DIALOG_STRUCTURAL));
+					else if(diagramType==8)
+						input = new LogicEditorInput(new Path(N3Messages.PALETTE_TITLE_USECASE));
+					else if(diagramType==9)
+						input = new LogicEditorInput(new Path(N3Messages.PALETTE_TITLE_ACTIVITY));
+					else if(diagramType==10)
+						input = new LogicEditorInput(new Path(N3Messages.PALETTE_TITLE_STATE));
+					else if(diagramType==11)
+						input = new LogicEditorInput(new Path(N3Messages.PALETTE_TITLE_COMMUNICATION));
+					else if(diagramType==12)
+						input = new LogicEditorInput(new Path(N3Messages.PALETTE_TITLE_INTERACTION));
+					else if(diagramType==13)
+						input = new LogicEditorInput(new Path(N3Messages.PALETTE_TITLE_TIMING));
+					else if(diagramType==14)
+						input = new LogicEditorInput(new Path(N3Messages.DIALOG_INTERACTION_OVERVIEW));
+					else if(diagramType==15)
+						input = new LogicEditorInput(new Path(N3Messages.DIALOG_BEHAVIORAL));
+					else if(diagramType==17)
+						input = new LogicEditorInput(new Path(N3Messages.PALETTE_REQUIRMENT));
+					else  
+						input = new LogicEditorInput(new Path("Diagram"));
+					//PKY 08080501 E 다이어그램 전체 부분에서 "쓰임새도"라고 나오는 문제 수정
+					to1.setRefModel(n3EditorDiagramModel);
+					n3EditorDiagramModel.setName(name);
+					n3EditorDiagramModel.setTreeModel(to1);
+					to1.setParent(uMLTreeParentModel);
+					n3EditorDiagramModel.setIEditorInput(input);
+					n3EditorDiagramModel.setDiagramType(diagramType);
+					return n3EditorDiagramModel;
+				}
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public int getDeleteModelType(UMLModel child){
+		int modelType = -1;
+		if (child instanceof FinalPackageModel) {
+			modelType = 0;
+		}
+		if (child instanceof N3EditorDiagramModel) {
+			modelType = 1;
+		}
+		else if (child instanceof UseCaseModel) {
+			return 2;
+		}
+		else if (child instanceof FinalActorModel) {
+			return 3;
+		}
+		else if (child instanceof FinalBoundryModel) {
+			return 4;
+		}
+		else if (child instanceof CollaborationModel) {
+			return 5;
+		}
+		else if (child instanceof FinalClassModel) {
+			return 6;
+		}
+		else if (child instanceof InterfaceModel) {
+			return 7;
+		}
+		else if (child instanceof EnumerationModel) {
+			return 8;
+		}
+		else if (child instanceof ExceptionModel) {
+			return 9;
+		}
+		else if (child instanceof FinalStrcuturedActivityModel) {
+			return 26;
+		}
+		else if (child instanceof FinalActivityModel) {
+			return 10;
+		}
+		else if (child instanceof FinalActiionModel) {
+			return 11;
+		}
+		else if (child instanceof SendModel) {
+			return 12;
+		}
+		else if (child instanceof ReceiveModel) {
+			return 13;
+		}
+		else if (child instanceof InitialModel) {
+			return 14;
+		}
+		else if (child instanceof FinalModel) {
+			return 15;
+		}
+		else if (child instanceof FlowFinalModel) {
+			return 16;
+		}
+		else if (child instanceof SynchModel) {
+			return 17;
+		}
+		else if (child instanceof DecisionModel) {
+			return 18;
+		}
+		else if (child instanceof FinalObjectNodeModel) {
+			return 19;
+		}
+		else if (child instanceof CentralBufferNodeModel) {
+			return 20;
+		}
+		else if (child instanceof DataStoreModel) {
+			return 21;
+		}
+		else if (child instanceof HPartitionModel) {
+			return 22;
+		}
+		else if (child instanceof VPartitionModel) {
+			return 23;
+		}
+		else if (child instanceof HForkJoinModel) {
+			return 24;
+		}
+		else if (child instanceof VForkJoinModel) {
+			return 25;
+		}
+		else if (child instanceof PartModel) {
+			return 27;
+		}
+
+		else if (child instanceof LifeLineActorModel) {
+			return 50;
+		}
+		else if (child instanceof LifeLineModel) {
+			return 28;
+		}
+		else if (child instanceof ComponentModel) {
+			return 29;
+		}
+		else if (child instanceof ArtfifactModel) {
+			return 30;
+		}
+		else if (child instanceof StrcuturedStateModel) {
+			return 32;
+		}
+		else if (child instanceof StateModel) {
+			return 31;
+		}
+		else if (child instanceof HistoryModel) {
+			return 33;
+		}
+		else if (child instanceof TerminateModel) {
+			return 34;
+		}
+		else if (child instanceof NodeModel) {
+			return 35;
+		}
+		else if (child instanceof EntryPointModelNoPort) {
+			return 36;
+		}
+		else if (child instanceof DeviceModel) {
+			return 37;
+		}
+		else if (child instanceof ExecutionEnvironmentModel) {
+			return 38;
+		}
+		else if (child instanceof DeploymentSpecificationModel) {
+			return 39;
+		}
+		else if (child instanceof StateLifelineModel) {
+			return 40;
+		}
+
+//		else if (child instanceof FrameModel) {
+//		return 39;
+//		}
+//		else if (child instanceof StateLifelineModel) {
+//		return 40;
+//		}
+
+		else if (child instanceof UMLNoteModel) {
+			return 500;
+		}
+		else if (child instanceof GroupModel) {
+			return 501;
+		}
+		else if (child instanceof FrameModel) {
+			return 502;
+		}
+		//20080325 PKY S PORT 삭제 문제
+		else if (child instanceof PortModel) {
+			return 503;
+		}
+		//20080325 PKY E PORT 삭제 문제
+		//20080327 PKY S Partiton 삭제 문제
+		else if(child instanceof SubPartitonModel){
+			return 504;
+		}
+		//2008041601PKY S
+		else if(child instanceof FragmentModel){
+			return 505;
+		}
+		//2008041601PKY E
+		//2008041602PKY S
+
+		else if(child instanceof SelfMessageModel){
+			return 506;
+		}
+		//2008041602PKY E
+		//2008043001 PKY S EndPoint 삭제안되는 문제 
+
+		else if(child instanceof EndPointModel){
+			return 507;
+		}
+		//2008043001 PKY E EndPoint 삭제안되는 문제
+		//20080721IJS
+		else if(child instanceof RequirementModel){
+			return 600;
+		}
+		return modelType;
+	}
+
+	public int getCopyModelType(UMLModel child) {
+		if (child == null)
+			return -1;
+		return this.getModelType(child, -1);
+	}
+
+	public String getDiagramPath(int type){
+		StringBuffer path = new StringBuffer("");
+		if(type==1){//패키지 다이어그램
+			path.append("package diagram");
+		}//클래스 다이어그램
+		else if(type==2){
+			path.append("class diagram");
+		}//객체 다이어그램
+		else if(type==3){
+			path.append("object diagram");
+		}//합성 다이어그램
+		else if(type==4){
+			path.append("composite diagram");
+		}//컴포넌트 다이어그램
+		else if(type==5){
+			path.append("component diagram");
+		}//배치 다이어그램
+		else if(type==6){
+			path.append("deployment diagram");
+		}//구조 다이어그램
+		else if(type==7){
+			path.append("composite diagram");
+		}//유즈케이스  다이어그램
+		else if(type==8){
+			path.append("usecase diagram");
+		}//액티비티 다이어그램
+		else if(type==9){
+			path.append("activity diagram");
+		}//상태 다이어그램
+		else if(type==10){
+			path.append("state diagram");
+		}//커뮤니케이션 다이어그램
+		else if(type==11){
+			path.append("communication diagram");
+		}//시퀀스 다이어그램
+		else if(type==12){
+			path.append("interaction diagram");
+		}//다이밍 다이어그램
+		else if(type==13){
+			path.append("timing diagram");
+		}//인터렉션 오버뷰 다이어그램
+		else if(type==14){
+			path.append("interactionoverview diagram");//KDI 20080710 path.append("interaction diagram");
+		}//행위 다이어그램
+		else if(type==15){
+			path.append("interaction diagram");
+		}//Initial
+		return path.toString();
+	}
+
+	public String getModelTypeName(int type) {
+
+		StringBuffer path = new StringBuffer("");
+		if(type==0){//유즈케이스
+			path.append("Package");
+		}//액터
+		if(type==1){//유즈케이스
+			path.append("Diagram");
+		}//액터
+		if(type==2){//유즈케이스
+			path.append("Usecase");
+		}//액터
+		else if(type==3){
+			path.append("Actor");
+		}//바운더
+		else if(type==4){
+			path.append("Boundary");
+		}//컬레보레이션
+		else if(type==5){
+			path.append("Collaboration");
+		}//클래스
+		else if(type==6){
+			path.append("Class");
+		}//인터페이스
+		else if(type==7){
+			path.append("Interface");
+		}//Enumeration
+		else if(type==8){
+			path.append("Enumeration");
+		}//Exception
+		else if(type==9){
+			path.append("Exception");
+		}//액티비티
+		else if(type==10){
+			path.append("Activity");
+		}//액션
+		else if(type==11){
+			path.append("Action");
+		}//Send
+		else if(type==12){
+			path.append("Send");
+		}//Receive
+		else if(type==13){
+			path.append("Receive");
+		}//Initial
+		else if(type==14){
+			path.append("Initial");
+		}//Final
+		else if(type==15){
+			path.append("Final");
+		}//FlowFinal
+		else if(type==16){
+			path.append("Flow_final");
+		}//Synch
+		else if(type==17){
+			path.append("Synch");
+		}//Decision
+		else if(type==18){
+			path.append("Decision");
+		}//Object
+		else if(type==19){
+			path.append("Object");
+		}//CentralBufferNode
+		else if(type==20){
+			path.append("Centralbuffernode");
+		}//DataStore
+		else if(type==21){
+			path.append("Datastore");
+		}//Swimlaine
+		else if(type==22){
+			path.append("Partition");
+		}
+		else if(type==23){
+			path.append("Usecase");
+		}//Fork/Join
+		else if(type==24){
+			path.append("Forkjoin");
+		}//Fork/Join
+		else if(type==25){
+			path.append("Forkjoin");
+		}//StrcuturedActivity
+		else if(type==26){
+			path.append("Structured_activity");
+		}//Part
+		else if(type==27){
+			path.append("Part");
+		}//LifeLine
+		else if(type==50){
+			path.append("LifeLine");
+		}//Component
+		else if(type==28){
+			path.append("LifeLine");
+		}//Component
+		else if(type==29){
+			path.append("Component");
+		}//Artfifact
+		else if(type==30){
+			path.append("Artifact");
+		}//State
+		else if(type==31){
+			path.append("State");
+		}//StrcuturedState
+		else if(type==32){
+			path.append("Submachinestate");
+		}//History
+		else if(type==33){
+			path.append("History");
+		}//Terminate
+		else if(type==34){
+			path.append("Terminate");
+		}//Node
+		else if(type==35){
+			path.append("Node");
+		}//EntryPoint
+		else if(type==36){
+			path.append("Entity");
+		}//Device
+		else if(type==37){
+			path.append("Device");
+		}//ExecutionEnvironment
+		else if(type==38){
+			path.append("Executionenvironment");
+		}//DeploymentSpecification
+		else if(type==39){
+			path.append("Deployment_spec");
+		}//StateLifeline
+		else if(type==40){
+			path.append("Statelifeline");
+		}
+		else if(type==41){
+			path.append("Usecase");
+		}
+		else if(type==42){
+			path.append("tank");
+		}
+
+		else if(type==200){
+			path.append("basic");
+		}
+		else if(type==201){
+			path.append("alternative");
+		}
+		else if(type==202){
+			path.append("exception");
+		}
+		else if(type==502){//PKY 08052101 S 컨테이너에서 그룹으로 변경
+			path.append("partiton");
+		}//PKY 08052101 E 컨테이너에서 그룹으로 변경
+		else if(type==600){//PKY 08052101 S 컨테이너에서 그룹으로 변경
+			path.append("requirement");
+		}
+
+
+//		else if(type==600){
+//		path.append("selfMsg");
+//		}
+		return path.toString();
+	}
+
+	public int getModelTypeName(String type) {
+
+		if(type.equals("Package")){//유즈케이스
+			return 0;
+		}
+		else if(type.equals("Usecase")){//유즈케이스
+			return 2;
+		}//액터
+		else if(type.equals("Actor")){
+			return 3;
+		}//바운더
+		else if(type.equals("Boundary")){
+			return 4;
+		}//컬레보레이션
+		else if(type.equals("Collaboration")){
+
+			return 5;
+		}//클래스
+		else if(type.equals("Class")){
+
+			return 6;
+		}//인터페이스
+		else if(type.equals("Interface")){
+
+			return 7;
+		}//Enumeration
+		else if(type.equals("Enumeration")){
+
+			return 8;
+		}//Exception
+		else if(type.equals("Exception")){
+
+			return 9;
+		}//액티비티
+		else if(type.equals("Activity")){
+
+			return 10;
+		}//액션
+		else if(type.equals("Action")){
+
+			return 11;
+		}//Send
+		else if(type.equals("Send")){
+
+			return 12;
+		}//Receive
+		else if(type.equals("Receive")){
+
+			return 13;
+		}//Initial
+		else if(type.equals("Initial")){
+
+			return 14;
+		}//Final
+		else if(type.equals("Final")){
+
+			return 15;
+		}//FlowFinal
+		else if(type.equals("Flow_final")){
+
+			return 16;
+		}//Synch
+		else if(type.equals("Synch")){
+
+			return 17;
+		}//Decision
+		else if(type.equals("Decision")){
+
+			return 18;
+		}//Object
+		else if(type.equals("Object")){
+
+			return 19;
+		}//CentralBufferNode
+		else if(type.equals("Centralbuffernode")){
+
+			return 20;
+		}//DataStore
+		else if(type.equals("Datastore")){
+
+			return 21;
+		}//Swimlaine
+		else if(type.equals("Partition")){
+
+			return 22;
+		}
+		else if(type.equals("Usecase")){
+
+			return 23;
+		}//Fork/Join
+		//PKY 08072201 S 일부 모델 모델 브라우져에 생성되지 않도록 Initial,Final,FlowFinal,Juction,Exit,EntryPoint 
+		else if(type.equals("HForkJoin")){
+
+			return 24;
+		}//Fork/Join
+		else if(type.equals("VForkJoin")){
+
+			return 25;
+		}//StrcuturedActivity
+		//PKY 08072201 E 일부 모델 모델 브라우져에 생성되지 않도록 Initial,Final,FlowFinal,Juction,Exit,EntryPoint
+		else if(type.equals("Structured_activity")){
+
+			return 26;
+		}//Part
+		else if(type.equals("Part")){
+
+			return 27;
+		}//LifeLine
+		else if(type.equals("LifeLine")){
+
+			return 28;
+		}//Component
+		else if(type.equals("Component")){
+
+			return 29;
+		}//Artfifact
+		else if(type.equals("Artifact")){
+
+			return 30;
+		}//State
+		else if(type.equals("State")){
+
+			return 31;
+		}//StrcuturedState
+		else if(type.equals("Submachinestate")){
+
+			return 32;
+		}//History
+		else if(type.equals("History")){
+
+			return 33;
+		}//Terminate
+		else if(type.equals("Terminate")){
+
+			return 34;
+		}//Node
+		else if(type.equals("Node")){
+
+			return 35;
+		}//EntryPoint
+		else if(type.equals("Entity")){
+
+			return 36;
+		}//Device
+		else if(type.equals("Device")){
+
+			return 37;
+		}//ExecutionEnvironment
+		else if(type.equals("Executionenvironment")){
+
+			return 38;
+		}//DeploymentSpecification
+		else if(type.equals("Deployment_spec")){
+
+			return 39;
+		}//StateLifeline
+		else if(type.equals("Statelifeline")){
+
+			return 40;
+		}
+		else if(type.equals("Note")){
+
+			return 41;
+		}
+		else if(type.equals("Group")){//PKY 08050701 S Initial 생성 후 저장 불러오기 할경우 노트로 변경되어있는문제
+
+			return 42;
+		}
+		//PKY 08050701 E Initial 생성 후 저장 불러오기 할경우 노트로 변경되어있는문제
+		else if(type.equals("Fragment")){//PKY 08051401 S 시퀀스 FragmentModel저장안되는것 
+
+			return 43;
+		}
+		//PKY 08051401 E 시퀀스 FragmentModel저장안되는것 
+
+		//PKY 08052101 S 컨테이너에서 그룹으로 변경
+		else if(type.equals("partiton")){
+
+			return 44;
+		}
+		//PKY 08052101 E 컨테이너에서 그룹으로 변경
+
+		//PKY 08052601 S endPoint저장안됨
+		else if (type.equals("EndPoint")){
+
+			return 45;
+		}
+		//PKY 08052601 E endPoint저장안됨
+		//PKY 08071601 S 바운더리 트리추가안되도록 하는 부분 수정하였으나 통합하면서 누락된부분 추가
+		//PKY 08070904 S 바운더리 swimlane 모델 브라우져에 추가안되도록 수정
+		else if (type.equals("Swimlane")){
+			return 46;
+		}
+		//PKY 08070904 E 바운더리 swimlane 모델 브라우져에 추가안되도록 수정
+		//PKY 08071601 E 바운더리 트리추가안되도록 하는 부분 수정하였으나 통합하면서 누락된부분 추가
+		//20080721IJS
+		//PKY 08080501 S Frame 저장이 안되는 문제 
+		else if(type.equals("frame")){
+			return 47;
+		}
+		//PKY 08080501 E Frame 저장이 안되는 문제
+		//PKY 08081101 S Timing 구조 변경
+		else if(type.equals("MessagePoint")){
+			return 48;
+		}
+		//PKY 08081101 E Timing 구조 변경
+
+		else if (type.equals("requirement")){
+
+			return 600;
+		}
+
+		return -1;
+	}
+
+	public int getLineModelType(String type) {
+		if (type.equals("ExtendLine")){
+			return 1000;
+		}
+		else if (type.equals("IncludeLine")){
+			return 1001;
+		}
+		else if (type.equals("ConnectorLine")){
+			return  1002;
+		}
+		else if (type.equals("MessageAssoicateLine")){
+			return  1003;
+		}
+		else if (type.equals("AssociateLine")){
+			return  1004;
+		}
+		else if (type.equals("GeneralizeLine")){
+			return  1005;
+		}
+		else if (type.equals("RealizeLine")){
+			return  1006;
+		}
+		else if (type.equals("NoteLineModel")||type.equals("NoteLine")){//2008043001 PKY S Note
+			return  1007;
+		}
+		else if (type.equals("DependencyLine")){
+			return  1008;
+		}
+		else if (type.equals("ControlFlowLine")){
+			return  1009;
+		}
+		else if (type.equals("RequiredInterfaceLine")){
+			return  1010;
+		}
+		else if (type.equals("ProvidedInterfaceLine")){
+			return  1011;
+		}
+		else if (type.equals("RoleBindingLine")){
+			return  1012;
+		}
+		else if (type.equals("DelegateLine")){
+			return  1013;
+		}
+		else if (type.equals("OccurrenceLine")){
+			return  1014;
+		}
+		else if (type.equals("RepresentsLine")){
+			return  1015;
+		}
+		else if (type.equals("ManifestLine")){
+			return  1016;
+		}
+		else if (type.equals("DeployLine")){
+			return  1017;
+		}
+		else if (type.equals("TimingMessageLine")){
+			return  1018;
+		}
+		else if (type.equals("CommunicationPathLine")){
+			return  1019;
+		}
+		else if (type.equals("Message")){
+			return  1020;
+		}
+		else if (type.equals("TransitionLine")){
+			return  1021;
+		}
+
+		else if (type.equals("ImportLine")){
+			return  1022;
+		}
+		else if (type.equals("MergeLine")){
+			return  1023;
+		}
+		else if (type.equals("SelfMessage")){
+			return  1024;
+		}
+
+		//PKY 08052601 S EditMessage저장안됨
+		else if(type.equals("Condition")){
+			return 1020;
+		}
+		//PKY 08052601 E EditMessage저장안됨
+		//PKY 08072401 S ObjectFlow모델 추가
+		else if(type.equals("ObjectFlowLine")){
+			return 1026;
+		}
+		else {
+			return  1025;
+		}
+
+
+	}
+
+	public String getLineModelName(LineModel type) {
+		if (type instanceof ExtendLineModel) {
+			return "ExtendLine";
+		}
+		else if (type instanceof IncludeLineModel) {
+			return "IncludeLine";
+		}
+		else if (type instanceof ConnectorLineModel) {
+			return "ConnectorLine";
+		}
+		else if (type instanceof MessageAssoicateLineModel) {
+			return "MessageAssoicateLine";
+		}
+		else if (type instanceof AssociateLineModel) {
+			return "AssociateLine";
+		}
+		else if (type instanceof GeneralizeLineModel) {
+			return "GeneralizeLine";
+		}
+		else if (type instanceof RealizeLineModel) {
+			return "RealizeLine";
+		}
+		else if (type instanceof NoteLineModel) {
+			return "NoteLine";
+		}
+		else if (type instanceof DependencyLineModel) {
+			return "DependencyLine";
+		}
+		//PKY 08072401 S ObjectFlow모델 추가
+		else if (type instanceof ObjectFlowLineModel) {
+			return "ObjectFlowLine";
+		}
+		else if (type instanceof ControlFlowLineModel) {
+			return "ControlFlowLine";
+		}
+		else if (type instanceof RequiredInterfaceLineModel) {
+			return "RequiredInterfaceLine";
+		}
+		else if (type instanceof ProvidedInterfaceLineModel) {
+			return "ProvidedInterfaceLine";
+		}
+		else if (type instanceof RoleBindingLineModel) {
+			return "RoleBindingLine";
+		}
+		else if (type instanceof DelegateLineModel) {
+			return "DelegateLine";
+		}
+		else if (type instanceof OccurrenceLineModel) {
+			return "OccurrenceLine";
+		}
+		else if (type instanceof RepresentsLineModel) {
+			return "RepresentsLine";
+		}
+		else if (type instanceof ManifestLineModel) {
+			return "ManifestLine";
+		}
+		else if (type instanceof DeployLineModel) {
+			return "DeployLine";
+		}
+		else if (type instanceof TimingMessageLineModel) {
+			return "TimingMessageLine";
+		}
+		else if (type instanceof CommunicationPathLineModel) {
+			return "CommunicationPathLine";
+		}
+		else if (type instanceof MessageModel) {
+			return "Message";
+		}
+		else if (type instanceof TransitionLineModel) {
+			return "TransitionLine";
+		}
+
+		else if (type instanceof ImportLineModel) {
+			return "ImportLine";
+		}
+		else if (type instanceof MergeLineModel) {
+			return "MergeLine";
+		}
+
+		else {
+			return "Line";
+		}
+
+
+	}
+
+	public int getWriteViewModelType(UMLModel child, int modelType) {
+		modelType =  this.getModelType(child, modelType);
+		if(modelType==-1){
+			if(child instanceof SelfMessageModel){
+				return 600;
+			}
+		}
+
+		return modelType;
+	}
+
+	//등록
+	public int getModelType(UMLModel child, int modelType) {
+		if (child instanceof FinalPackageModel) {
+			modelType = 0;
+		}
+		if (child instanceof N3EditorDiagramModel) {
+			modelType = 1;
+		}
+		else if (child instanceof UseCaseModel) {
+			return 2;
+		}
+		else if (child instanceof FinalActorModel) {
+			return 3;
+		}
+		else if (child instanceof FinalBoundryModel) {
+			return 4;
+		}
+		else if (child instanceof CollaborationModel) {
+			return 5;
+		}
+		else if (child instanceof EnumerationModel) {
+			return 8;
+		}
+		else if (child instanceof FinalClassModel) {
+			return 6;
+		}
+		else if (child instanceof InterfaceModel) {
+			return 7;
+		}
+		else if (child instanceof ExceptionModel) {
+			return 9;
+		}
+		else if (child instanceof FinalStrcuturedActivityModel) {
+			return 26;
+		}
+		else if (child instanceof FinalActivityModel) {
+			return 10;
+		}
+		else if (child instanceof FinalActiionModel) {
+			return 11;
+		}
+		else if (child instanceof SendModel) {
+			return 12;
+		}
+		else if (child instanceof ReceiveModel) {
+			return 13;
+		}
+		else if (child instanceof InitialModel) {
+			return 14;
+		}
+		else if (child instanceof FinalModel) {
+			return 15;
+		}
+		else if (child instanceof FlowFinalModel) {
+			return 16;
+		}
+		else if (child instanceof SynchModel) {
+			return 17;
+		}
+		else if (child instanceof DecisionModel) {
+			return 18;
+		}
+		else if (child instanceof FinalObjectNodeModel) {
+			return 19;
+		}
+		else if (child instanceof CentralBufferNodeModel) {
+			return 20;
+		}
+		else if (child instanceof DataStoreModel) {
+			return 21;
+		}
+		else if (child instanceof HPartitionModel) {
+			return 22;
+		}
+		else if (child instanceof VPartitionModel) {
+			return 23;
+		}
+		else if (child instanceof HForkJoinModel) {
+			return 24;
+		}
+		else if (child instanceof VForkJoinModel) {
+			return 25;
+		}
+		else if (child instanceof PartModel) {
+			return 27;
+		}
+
+		else if (child instanceof LifeLineActorModel) {
+			return 50;
+		}
+		else if (child instanceof LifeLineModel) {
+			return 28;
+		}
+		else if (child instanceof ComponentModel) {
+			return 29;
+		}
+		else if (child instanceof ArtfifactModel) {
+			return 30;
+		}
+		else if (child instanceof StrcuturedStateModel) {
+			return 32;
+		}
+		else if (child instanceof StateModel) {
+			return 31;
+		}
+		else if (child instanceof HistoryModel) {
+			return 33;
+		}
+		else if (child instanceof TerminateModel) {
+			return 34;
+		}
+		else if (child instanceof NodeModel) {
+			return 35;
+		}
+		else if (child instanceof EntryPointModelNoPort) {
+			return 36;
+		}
+		else if (child instanceof DeviceModel) {
+			return 37;
+		}
+		else if (child instanceof ExecutionEnvironmentModel) {
+			return 38;
+		}
+		else if (child instanceof DeploymentSpecificationModel) {
+			return 39;
+		}
+		else if (child instanceof StateLifelineModel) {
+			return 40;
+		}
+		else if (child instanceof UMLNoteModel) {
+			return 500;
+		}
+		else if (child instanceof GroupModel) {
+			return 501;
+		}
+
+		else if (child instanceof SubPartitonModel){//PKY 08052101 S 컨테이너에서 그룹으로 변경
+			return 502;
+		}
+		//20080721IJS
+		else if (child instanceof RequirementModel){//PKY 08052101 S 컨테이너에서 그룹으로 변경
+			return 600;
+		}
+		//PKY 08052101 E 컨테이너에서 그룹으로 변경
+		//PKY 08080501 S Frame Zoder 안나오는 문제 수정
+		else if (child instanceof FrameModel){
+			return 235;
+		}
+		//PKY 08080501 E Frame Zoder 안나오는 문제 수정
+
+		return modelType;
+	}
+
+
+	public int getElementType(UMLModel child, int modelType) {
+		if (child instanceof FinalPackageModel) {
+			modelType = 0;
+		}
+		if (child instanceof N3EditorDiagramModel) {
+			modelType = 1;
+		}
+		else if (child instanceof UseCaseModel) {
+			return 2;
+		}
+		else if (child instanceof FinalActorModel) {
+			return 3;
+		}
+		else if (child instanceof FinalBoundryModel) {
+			return 4;
+		}
+		else if (child instanceof CollaborationModel) {
+			return 5;
+		}
+		else if (child instanceof FinalClassModel) {
+			return 6;
+		}
+		else if (child instanceof InterfaceModel) {
+			return 7;
+		}
+		else if (child instanceof EnumerationModel) {
+			return 8;
+		}
+		else if (child instanceof ExceptionModel) {
+			return 9;
+		}
+		else if (child instanceof FinalStrcuturedActivityModel) {
+			return 26;
+		}
+		else if (child instanceof FinalActivityModel) {
+			return 10;
+		}
+		else if (child instanceof FinalActiionModel) {
+			return 11;
+		}
+		else if (child instanceof SendModel) {
+			return 12;
+		}
+		else if (child instanceof ReceiveModel) {
+			return 13;
+		}
+		else if (child instanceof InitialModel||child instanceof EndPointModel) {//PKY 08061801 S EndPoint 이미지안나오는 문제 수정
+			return 14;
+		}
+		else if (child instanceof FinalModel) {
+			return 15;
+		}
+		else if (child instanceof FlowFinalModel) {
+			return 16;
+		}
+		else if (child instanceof SynchModel) {
+			return 17;
+		}
+		else if (child instanceof DecisionModel) {
+			return 18;
+		}
+		else if (child instanceof FinalObjectNodeModel) {
+			return 19;
+		}
+		else if (child instanceof CentralBufferNodeModel) {
+			return 20;
+		}
+		else if (child instanceof DataStoreModel) {
+			return 21;
+		}
+		else if (child instanceof HPartitionModel) {
+			return 22;
+		}
+		else if (child instanceof VPartitionModel) {
+			return 23;
+		}
+		else if (child instanceof HForkJoinModel) {
+			return 24;
+		}
+		else if (child instanceof VForkJoinModel) {
+			return 25;
+		}
+		else if (child instanceof PartModel) {
+			return 27;
+		}
+
+		else if (child instanceof LifeLineActorModel) {
+			return 50;
+		}
+		else if (child instanceof LifeLineModel) {
+			return 28;
+		}
+		else if (child instanceof ComponentModel) {
+			return 29;
+		}
+		else if (child instanceof ArtfifactModel) {
+			return 30;
+		}
+		else if (child instanceof StrcuturedStateModel) {
+			return 32;
+		}
+		else if (child instanceof StateModel) {
+			return 31;
+		}
+		else if (child instanceof HistoryModel) {
+			return 33;
+		}
+		else if (child instanceof TerminateModel) {
+			return 34;
+		}
+		else if (child instanceof NodeModel) {
+			return 35;
+		}
+		else if (child instanceof EntryPointModelNoPort) {
+			return 36;
+		}
+		else if (child instanceof DeviceModel) {
+			return 37;
+		}
+		else if (child instanceof ExecutionEnvironmentModel) {
+			return 38;
+		}
+		else if (child instanceof DeploymentSpecificationModel) {
+			return 39;
+		}
+		else if (child instanceof StateLifelineModel) {
+			return 40;
+		}
+		else if (child instanceof AttributeElementModel) {
+			return 100;
+		}
+		else if (child instanceof OperationElementModel) {
+			return 101;
+		}
+		else if (child instanceof CompartmentModel) {
+			CompartmentModel cm = (CompartmentModel)child;
+			if("ATTR".equals(cm.getCompartmentModelType())){
+				return 102;
+			}
+			else if("OPER".equals(cm.getCompartmentModelType())){
+				return 103;
+			}
+			else if("-1".equals(cm.getCompartmentModelType())){
+				return 106;
+			}
+//			else{
+//			return 106;
+//			}
+
+		}
+		else if (child instanceof ElementLabelModel) {
+			ElementLabelModel cm = (ElementLabelModel)child;
+			if("NAME".equals(cm.getType())){
+				return 104;
+			}
+			else if("STREOTYPE".equals(cm.getType())){
+				return 105;
+			} 
+
+		}
+		else if (child instanceof ClassModel) {
+			return 106;
+		}
+		else if (child instanceof SelfMessageModel) {
+			return 107;
+		}
+		else if (child instanceof NodeContainerModel) {
+			return 108;
+		}
+		//PKY 08061801 S 파티션 이미지 삽입
+		else if (child instanceof SubPartitonModel) {
+			return 109;
+		}
+		else if (child instanceof GroupModel) {
+			return 233;
+		}
+		else if (child instanceof FragmentModel) {
+			return 234;
+		}
+		//PKY 08071501 S FrameModel 이미지 추가
+		else if( child instanceof FrameModel){
+			return 235;
+		}
+		//PKY 08071501 E FrameModel 이미지 추가
+		//PKY 08081101 S Timing, MessagePoint 이미지 추가
+		else if ( child instanceof MessagePointModel){
+			return 236;
+		}
+		//PKY 08081101 E Timing, MessagePoint 이미지 추가
+
+		else if( child instanceof RequirementModel){
+			return 600;
+		}
+
+		//PKY 08061801 E 파티션 이미지 삽입
+		return modelType;
+	}
+
+	//등록
+	public String getDefaultName(int modelType, UMLTreeParentModel parent) {
+		String name = "";
+		//패키지
+//		if (modelType == 0) {
+//		name = UMLTreeParentModel.PackageName + parent.getNewPackageCount();
+//		} //다이어그램
+//		else if (modelType == 1) {
+//		name = UMLTreeParentModel.UseCaseDiagramDefaultName + parent.getNewUseCaseDiagramCount();
+//		//			parent.addUseCaseCount();
+//		} //유즈케이스
+//		else if (modelType == 2) {
+//		name = UMLTreeParentModel.UseCaseName + parent.getNewUseCaseCount();
+//		} //액터
+//		else if (modelType == 3) {
+//		name = UMLTreeParentModel.ActorName + parent.getNewActorCountCount();
+//		} //바운더리
+//		else if (modelType == 4) {
+//		name = UMLTreeParentModel.BoundaryName + parent.getNewBoundaryCountCount();
+//		} //컬레보레이션
+//		else if (modelType == 5) {
+//		name = UMLTreeParentModel.CollaborationName + parent.getNewCollaborationCountCount();
+//		}
+//		//클래스
+//		else if (modelType == 6) {
+//		name = UMLTreeParentModel.ClassName + parent.getNewClassCountCount();
+//		}
+//		//인터페이스
+//		else if (modelType == 7) {
+//		name = UMLTreeParentModel.InterfaceName + parent.getNewInterfaceCount();
+//		} //Enumeration
+//		else if (modelType == 8) {
+//		name = UMLTreeParentModel.EnumerationName + parent.getNewEnumerationCount();
+//		}
+//		//ExceptionHandler
+//		else if (modelType == 9) {
+//		name = UMLTreeParentModel.ExceptionHandlerName + parent.getNewExceptionHandlerCount();
+//		}
+//		//액티비티
+//		else if (modelType == 10) {
+//		name = UMLTreeParentModel.FinalActivityModelName + parent.getNewFinalActivityCount();
+//		}
+//		//액션
+//		else if (modelType == 11) {
+//		name = UMLTreeParentModel.FinalActiionModelName + parent.getNewFinalActivityCount();
+//		}
+//		//send
+//		else if (modelType == 12) {
+//		name = UMLTreeParentModel.SendModelName + parent.getNewSendModelCount();
+//		}
+//		//Receive
+//		else if (modelType == 13) {
+//		name = UMLTreeParentModel.ReceiveModelName + parent.getNewReceiveModelCount();
+//		}
+//		//ObjectNodeModel
+//		else if (modelType == 19) {
+//		name = UMLTreeParentModel.FinalObjectNodeModelName + parent.getNewFinalObjectNodeModelCount();
+//		}
+//		//CentralBufferNodeModel
+//		else if (modelType == 20) {
+//		name = UMLTreeParentModel.CentralBufferNodeModelName + parent.getNewCentralBufferNodeModelCount();
+//		}
+//		//DataStoreModel
+//		else if (modelType == 21) {
+//		name = UMLTreeParentModel.DataStoreModelName + parent.getNewDataStoreModelCount();
+//		}
+//		//HSwinlane
+//		else if (modelType == 22) {
+//		name = UMLTreeParentModel.PartitionModelName + parent.getNewPackageCount();
+//		}
+//		//VSwinlane
+//		else if (modelType == 23) {
+//		name = UMLTreeParentModel.PartitionModelName + parent.getNewPackageCount();
+//		} //StrcuturedActivity
+//		else if (modelType == 26) {
+//		name = UMLTreeParentModel.StrcuturedActivityModelName + parent.getNewStrcuturedActivityModelNameCount();
+//		} //PartModel
+//		else if (modelType == 27) {
+//		name = UMLTreeParentModel.PartModellName + parent.getNewPartModellNameCount();
+//		} //LifeLine
+//		else if (modelType == 50) {
+//		name = UMLTreeParentModel.ActorName + parent.getNewActorCountCount();
+//		} //Component
+//		else if (modelType == 28) {
+//		name = UMLTreeParentModel.LifeLineModelName + parent.getNewLifeLineModelNameCount();
+//		} //Component
+//		else if (modelType == 29) {
+//		name = UMLTreeParentModel.ComponentModelName + parent.getNewComponentModelNameCount();
+//		} //Artfifact
+//		else if (modelType == 30) {
+//		name = UMLTreeParentModel.ArtfifactModelName + parent.getNewArtfifactModelNameCount();
+//		} //State
+//		else if (modelType == 31) {
+//		name = UMLTreeParentModel.StateModelName + parent.getNewStateModelNameCount();
+//		} //StrcuturedStateModel
+//		else if (modelType == 32) {
+//		name = UMLTreeParentModel.StrcuturedStateModelName + parent.getNewStrcuturedStateModelNameCount();
+//		}
+////		else if (modelType == 33) {
+////		name = UMLTreeParentModel.StrcuturedStateModelName + parent.getNewStrcuturedStateModelNameCount();
+////		}//NodeModel
+//		else if (modelType == 35) {
+//		name = UMLTreeParentModel.NodeModelName + parent.getNewNodeModelNameCount();
+//		}
+//		else if (modelType == 37) {
+//		name = UMLTreeParentModel.DeviceModelName + parent.getNewDeviceModelNameCount();
+//		}
+//		else if (modelType == 38) {
+//		name = UMLTreeParentModel.ExecutionEnvironmentModelName + parent.getNewExecutionEnvironmentModelNameCount();
+//		}
+//		else if (modelType == 39) {
+//		name = UMLTreeParentModel.DeploymentSpecificationModelName + parent.getNewDeploymentSpecificationModelNameCount();
+//		}
+//		else if (modelType == 40) {
+//		name = UMLTreeParentModel.StateLifelineModelName + parent.getNewStateLifelineModelNameCount();
+//		}
+
+
+
+		if (modelType == 0) {
+			name = UMLTreeParentModel.PackageName ;
+		} //다이어그램
+		else if (modelType == 1) {
+			name = UMLTreeParentModel.UseCaseDiagramDefaultName ;
+			//			parent.addUseCaseCount();
+		} //유즈케이스
+		else if (modelType == 2) {
+			name = N3Messages.PALETTE_USECASE;
+		} //액터
+		else if (modelType == 3) {
+			name = UMLTreeParentModel.ActorName ;
+		} //바운더리
+		else if (modelType == 4) {
+			name = UMLTreeParentModel.BoundaryName ;
+		} //컬레보레이션
+		else if (modelType == 5) {
+			name = UMLTreeParentModel.CollaborationName ;
+		}
+		//클래스
+		else if (modelType == 6) {
+			name = UMLTreeParentModel.ClassName;
+		}
+		//인터페이스
+		else if (modelType == 7) {
+			name = UMLTreeParentModel.InterfaceName ;
+		} //Enumeration
+		else if (modelType == 8) {
+			name = UMLTreeParentModel.EnumerationName ;
+		}
+		//ExceptionHandler
+		else if (modelType == 9) {
+			name = UMLTreeParentModel.ExceptionHandlerName;
+		}
+		//액티비티
+		else if (modelType == 10) {
+			name = UMLTreeParentModel.FinalActivityModelName ;
+		}
+		//액션
+		else if (modelType == 11) {
+			name = UMLTreeParentModel.FinalActiionModelName ;
+		}
+		//send
+		else if (modelType == 12) {
+			name = UMLTreeParentModel.SendModelName ;
+		}
+		//Receive
+		else if (modelType == 13) {
+			name = UMLTreeParentModel.ReceiveModelName ;
+		}
+		//ObjectNodeModel
+		else if (modelType == 19) {
+			name = UMLTreeParentModel.FinalObjectNodeModelName ;
+		}
+		//CentralBufferNodeModel
+		else if (modelType == 20) {
+			name = UMLTreeParentModel.CentralBufferNodeModelName ;
+		}
+		//DataStoreModel
+		else if (modelType == 21) {
+			name = UMLTreeParentModel.DataStoreModelName ;
+		}
+		//HSwinlane
+		else if (modelType == 22) {
+			name = UMLTreeParentModel.PartitionModelName ;
+		}
+		//VSwinlane
+		else if (modelType == 23) {
+			name = UMLTreeParentModel.PartitionModelName ;
+		} //StrcuturedActivity
+		else if (modelType == 26) {
+			name = UMLTreeParentModel.StrcuturedActivityModelName ;
+		} //PartModel
+		else if (modelType == 27) {
+			name = UMLTreeParentModel.PartModellName ;
+		} //LifeLine
+		else if (modelType == 50) {
+			name = UMLTreeParentModel.ActorName ;
+		} //Component
+		else if (modelType == 28) {
+			name = UMLTreeParentModel.LifeLineModelName ;
+		} //Component
+		else if (modelType == 29) {
+			name = UMLTreeParentModel.ComponentModelName ;
+		} //Artfifact
+		else if (modelType == 30) {
+			name = UMLTreeParentModel.ArtfifactModelName ;
+		} //State
+		else if (modelType == 31) {
+			name = UMLTreeParentModel.StateModelName ;
+		} //StrcuturedStateModel
+		else if (modelType == 32) {
+			name = UMLTreeParentModel.StrcuturedStateModelName ;
+		}
+//		else if (modelType == 33) {
+//		name = UMLTreeParentModel.StrcuturedStateModelName + parent.getNewStrcuturedStateModelNameCount();
+//		}//NodeModel
+		else if (modelType == 35) {
+			name = UMLTreeParentModel.NodeModelName ;
+		}
+		else if (modelType == 37) {
+			name = UMLTreeParentModel.DeviceModelName ;
+		}
+		else if (modelType == 38) {
+			name = UMLTreeParentModel.ExecutionEnvironmentModelName ;
+		}
+		else if (modelType == 39) {
+			name = UMLTreeParentModel.DeploymentSpecificationModelName ;
+		}
+		else if (modelType == 40) {
+			name = UMLTreeParentModel.StateLifelineModelName ;
+		}
+		//20080721IJS
+		else if (modelType == 600) {
+			name = UMLTreeParentModel.RequirementModelName ;
+		}
+		return name;
+	}
+
+	/*
+	 * 노드 추가
+	 */
+
+	public void addUMLNode(UMLTreeParentModel parent, UMLTreeModel child) {
+		//		UMLTreeModel treeModel = parent.getUMLTreeModel().getParent();
+		//default
+		try {
+			child.setParent(parent);
+			parent.addChild(child);
+			ProjectManager.getInstance().getModelBrowser().refresh(parent);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	/*
+	 * 노드 삭제
+	 */
+
+	public void removeUMLNode(UMLTreeParentModel parent, UMLTreeModel child) {
+		//		UMLTreeModel treeModel = parent.getUMLTreeModel().getParent();
+		//default
+		if (child != null) {
+			UpdateEvent e = new UpdateEvent(IUpdateType.REMOVE_NAME, null);
+			if(child.getRefModel() instanceof UMLModel){
+				UMLModel um = (UMLModel)child.getRefModel();
+				if (um instanceof ClassifierModel) {
+					try {
+						ClassifierModel um1 = (ClassifierModel)um;
+						//PKY 08081801 S 엑티비티 파티션 움직임이 비정상적인 문제
+						if(um.getAcceptParentModel()!=null && um.getAcceptParentModel() instanceof N3EditorDiagramModel){
+							N3EditorDiagramModel n3 = (N3EditorDiagramModel)um.getAcceptParentModel();
+							removeSubPartitonModel(um,n3);//PKY 08082201 S Activity파티션 한 개만 삭제되고 나머지는 삭제안되는 문제
+						}
+						//PKY 08081801 E 엑티비티 파티션 움직임이 비정상적인 문제
+
+						um1.getClassModel().getElementLabelModelName().fireChildUpdate(e);
+						um1.getClassModel().removeUpdateListener((UMLModel)um);
+					}
+					catch (Exception e1) {
+						e1.printStackTrace();
+					}
+				}
+//				child.fireChildUpdate(e);
+			}
+
+
+			this.getTypeModel().remove(child);
+			this.removeBehaviorActivityList(child);
+			parent.removeChild(child);
+			ProjectManager.getInstance().getModelBrowser().refresh(parent);
+		}
+	}
+	//PKY 08082201 S Activity파티션 한 개만 삭제되고 나머지는 삭제안되는 문제
+	public void removeSubPartitonModel(UMLModel um,N3EditorDiagramModel n3 ){
+		for( int i = 0 ; i < n3.getChildren().size(); i ++ ){
+			if(n3.getChildren().get(i) instanceof SubPartitonModel){
+				SubPartitonModel sub = (SubPartitonModel) n3.getChildren().get(i);
+				if(sub.getParentModel() == um){
+					n3.removeChild(sub);
+					removeSubPartitonModel(um,n3);
+				}
+				
+			}
+		}
+	}
+	/*
+	 * 노드 생성
+	 */
+
+	//	public void addUMLNode(String name,UMLTreeParentModel parent,UMLModel child,int modelType){
+	////		UMLTreeModel treeModel = parent.getUMLTreeModel().getParent();
+	//		//default
+	//		try{
+	//			if(parent!=null && parent instanceof UMLTreeParentModel && !this.isDrag()){
+	//				UMLTreeParentModel uMLTreeParentModel =(UMLTreeParentModel)parent;
+	//				modelType = this.getModelType(child, modelType);
+	//				if(modelType==0){
+	//					if(name==null){
+	//						name =this.getDefaultName(0, uMLTreeParentModel);
+	//					}
+	//					if(child ==null){
+	////						UseCaseModel childp = new UseCaseModel();
+	////						childp.setName(name);
+	////						child = childp;
+	//					}
+	//
+	//				}
+	//				else if(modelType==2){
+	//					if(name==null){
+	//						name =this.getDefaultName(2, uMLTreeParentModel);
+	//					}
+	//					if(child ==null){
+	//						UseCaseModel childp = new UseCaseModel();
+	////						childp.setName(name);
+	//						child = childp;
+	//					}
+	////					else{
+	////					child.setName(name);
+	////					}
+	//				}
+	//				else if(modelType==3){
+	//					if(name==null){
+	//						name =this.getDefaultName(3, uMLTreeParentModel);
+	//					}
+	//					if(child ==null){
+	//						FinalActorModel childp = new FinalActorModel();
+	////						childp.setName(name);
+	//						child = childp;
+	//					}
+	////					else{
+	////					child.setName(name);
+	////					}
+	//				}
+	//				else if(modelType==4){
+	//					if(name==null){
+	//						name =this.getDefaultName(4, uMLTreeParentModel);
+	//					}
+	//					if(child ==null){
+	//						FinalBoundryModel childp = new FinalBoundryModel();
+	//
+	//						child = childp;
+	//					}
+	////					else{
+	////					child.setName(name);
+	////					}
+	//				}
+	//				else if(modelType==5){
+	//					if(name==null){
+	//						name =this.getDefaultName(5, uMLTreeParentModel);
+	//					}
+	//					if(child ==null){
+	//						CollaborationModel childp = new CollaborationModel();
+	////						childp.setName(name);
+	//						child = childp;
+	//					}
+	////					else{
+	////					child.setName(name);
+	////					}
+	//				}
+	//				UMLTreeModel to1 = null;
+	//				if(modelType!=0){
+	//					to1 = new UMLTreeModel(name);
+	//
+	//				}
+	//				else{
+	//					to1 = new PackageTreeModel(name);
+	////					child.setTreeModel((UMLTreeModel)to1);
+	//				}
+	//				if(child!=null){
+	//					child.setTreeModel(to1);
+	//					child.setName(name);
+	//				}
+	//
+	//				uMLTreeParentModel.addChild(to1);
+	//				to1.setRefModel(child);
+	//				to1.setParent(uMLTreeParentModel);
+	//				ProjectManager.getInstance().getModelBrowser().refresh(uMLTreeParentModel);
+	////				ProjectManager.getInstance().getModelBrowser().expend(tp);
+	////				ProjectManager.getInstance().getModelBrowser().select(to1);
+	//
+	//			}
+	//		}
+	//		catch(Exception e){
+	//			e.printStackTrace();
+	//		}
+	//	}
+
+	/*
+	 * 노드 삭제
+	 */
+
+	public void removeUMLNode(UMLModel child) {
+		//		UMLTreeModel treeModel = parent.getUMLTreeModel().getParent();
+		//default
+		//		if(child!=null){
+		//		UMLTreeModel uMLTreeModel = child.getUMLTreeModel();
+		//		if(uMLTreeModel!=null){
+		//		UMLTreeParentModel uMLTreeParentModel =(UMLTreeParentModel)uMLTreeModel.getParent();
+		//		uMLTreeParentModel.removeChild(uMLTreeModel);
+		//		ProjectManager.getInstance().getModelBrowser().refresh(uMLTreeParentModel);
+		//		}
+		//		}
+	}
+
+//	public LogicDiagram getDiagram() {
+//	if (index == 0) {
+//	LogicDiagram logicDiagram = new LogicDiagram();
+//	this.diagrams.add(logicDiagram);
+//	this.index++;
+//	return logicDiagram;
+//	}
+//	if (index == 1) {
+//	LogicDiagram logicDiagram = new LogicDiagram();
+//	this.diagrams.add(logicDiagram);
+//	this.index++;
+//	return logicDiagram;
+//	}
+//	if (index > 1) {
+//	//			LogicDiagram logicDiagram = new LogicDiagram();
+//	//			this.diagrams.add(logicDiagram);
+//	this.index++;
+//	return (LogicDiagram)this.diagrams.get(0);
+//	}
+//	return null;
+//	}
+
+	public List getSelectNodes() {
+		if(ProjectManager.getInstance().getUMLEditor()!=null)//PKY 08052101 S 컨테이너에서 그룹으로 변경
+			//2008043001 PKY S NullPoint 에러
+			if(ProjectManager.getInstance().getUMLEditor().getScrollingGraphicalViewer()!=null){
+				ScrollingGraphicalViewer viewer = ProjectManager.getInstance().getUMLEditor().getScrollingGraphicalViewer();
+
+				List list = viewer.getSelectedEditParts();
+				return list;
+			}
+		return null;
+		//2008043001 PKY E NullPoint 에러
+		//		Tool tool = ProjectManager.getInstance().getUMLEditor().getUMLDefaultEditDomain().getActiveTool();
+		//		if(!(tool instanceof MarqueeSelectionTool) && !ProjectManager.getInstance().getIsDoubleClick()){
+		//		if(value==2){
+		//		ProjectManager.getInstance().setUMLElementEditPart(this);
+		//		viewer.select(this.getParent());
+		//		}
+		//		else{
+		//		super.setSelected(value);	
+		//		}
+		//		}
+		//		else{
+		//		super.setSelected(value);
+		//		ProjectManager.getInstance().initIsDoubleClick();
+		//		}
+		//		this.window.getSelectionService().getSelection()
+	}
+
+	public Vector diagrams = new Vector();
+
+	public static String getID(Object obj, String prefix) {
+		String hashcode = Integer.toHexString(obj.hashCode());
+		String time = Long.toHexString(new Date().getTime());
+		String second = Long.toHexString(new Date().getSeconds());
+		String random = Integer.toHexString((int)(Math.random() * 10000));
+		return prefix + "@" + hashcode + time + second + ":" + random;
+	}
+	public static String getViewId(Object obj){
+		return getID(obj, "");
+	}
+	public static String getID(Object obj) {
+		return getID(obj, obj.toString());
+	}
+	public String getIconDiagramPath(int type){
+		StringBuffer path = new StringBuffer("icons/");
+		if(type==1){//패키지 다이어그램
+			path.append("package_titel.gif");
+		}//클래스 다이어그램
+		else if(type==2){
+			path.append("class_title.gif");
+		}//객체 다이어그램
+		else if(type==3){
+			path.append("object_titel.gif");
+		}//합성 다이어그램
+		else if(type==4){
+			path.append("composite_titel.gif");
+		}//컴포넌트 다이어그램
+		else if(type==5){
+			path.append("component_title.gif");
+		}//배치 다이어그램
+		else if(type==6){
+			path.append("deployment_titel.gif");
+		}//구조 다이어그램
+		else if(type==7){
+			path.append("composite_titel.gif");
+		}//유즈케이스  다이어그램
+		else if(type==8){
+			path.append("usecase_title.gif");
+		}//액티비티 다이어그램
+		else if(type==9){
+			path.append("activity_title.gif");
+		}//상태 다이어그램
+		else if(type==10){
+			path.append("state_title.gif");
+		}//커뮤니케이션 다이어그램
+		else if(type==11){
+			path.append("communication_titel.gif");
+		}//시퀀스 다이어그램
+		else if(type==12){
+			path.append("interaction_title.gif");
+		}//다이밍 다이어그램
+		else if(type==13){
+			path.append("timing_title.gif");
+		}//인터렉션 오버뷰 다이어그램
+		else if(type==14){
+			path.append("interaction_overview.gif");
+		}//행위 다이어그램
+		else if(type==15){
+			path.append("interaction_title.gif");
+		}//Initial
+		//20080721IJS
+		else if(type==16){
+			path.append("extends_title.gif");
+		}//행위 다이어그램
+		else if(type==17){
+			path.append("requirements_title.gif");
+		}
+		return path.toString();
+	}
+
+	public String getFrameType(int type){
+		StringBuffer path = new StringBuffer("");
+		if(type==1){//패키지 다이어그램
+			path.append("pkg");
+		}//클래스 다이어그램
+		else if(type==2){
+			path.append("class");
+		}//객체 다이어그램
+		else if(type==3){
+			path.append("object");
+		}//합성 다이어그램
+		else if(type==4){
+			path.append("composite structure");
+		}//컴포넌트 다이어그램
+		else if(type==5){
+			path.append("cop");
+		}//배치 다이어그램
+		else if(type==6){
+			path.append("deployment");
+		}//구조 다이어그램
+		else if(type==7){
+			path.append("");
+		}//유즈케이스  다이어그램
+		else if(type==8){
+			path.append("usecase");
+		}//액티비티 다이어그램
+		else if(type==9){
+			path.append("act");
+		}//상태 다이어그램
+		else if(type==10){
+			path.append("stm");
+		}//커뮤니케이션 다이어그램
+		else if(type==11){
+			path.append("sd");
+		}//시퀀스 다이어그램
+		else if(type==12){
+			path.append("sd");
+		}//다이밍 다이어그램
+		else if(type==13){
+			path.append("sd");
+		}//인터렉션 오버뷰 다이어그램
+		else if(type==14){
+			path.append("sd");
+		}//행위 다이어그램
+		else if(type==15){
+			path.append("");
+		}//Initial
+		return path.toString();
+	}
+
+
+	public String getIconPath(int type){
+		StringBuffer path = new StringBuffer("icons/");
+		if(type==0){//패키지
+			path.append("package.gif");
+		}//액터
+		if(type==2){//유즈케이스
+			path.append("usecase.gif");
+		}//액터
+		else if(type==3){
+			path.append("actor.gif");
+		}//바운더
+		else if(type==4){
+			path.append("boundary.gif");
+		}//컬레보레이션
+		else if(type==5){
+			path.append("collaboration.gif");
+		}//클래스
+		else if(type==6){
+			path.append("class.gif");
+		}//인터페이스
+		else if(type==7){
+			//20080822IJS
+		     path.append("interface.gif");
+		}//Enumeration
+		else if(type==8){
+			path.append("enumeration.gif");
+		}//Exception
+		else if(type==9){
+			path.append("exception.gif");
+		}//액티비티
+		else if(type==10){
+			path.append("activity.gif");
+		}//액션
+		else if(type==11){
+			path.append("action.gif");
+		}//Send
+		else if(type==12){
+			path.append("send.gif");
+		}//Receive
+		else if(type==13){
+			path.append("receive.gif");
+		}//Initial
+		else if(type==14){
+			path.append("initial.gif");
+		}//Final
+		else if(type==15){
+			path.append("final.gif");
+		}//FlowFinal
+		else if(type==16){
+			path.append("flow_final.gif");
+		}//Synch
+		else if(type==17){
+			path.append("synch.gif");
+		}//Decision
+		else if(type==18){
+			path.append("decision.gif");
+		}//Object
+		else if(type==19){
+			path.append("object.gif");
+		}//CentralBufferNode
+		else if(type==20){
+			path.append("centralbuffernode.gif");
+		}//DataStore
+		else if(type==21){
+			path.append("datastore.gif");
+		}//Swimlaine
+		else if(type==22){
+			path.append("partition.gif");
+		}
+		else if(type==23){
+			path.append("usecase.gif");
+		}//Fork/Join
+		else if(type==24){
+			path.append("forkjoin_h.gif");
+		}//Fork/Join
+		else if(type==25){
+			path.append("forkjoin_v.gif");
+		}//StrcuturedActivity
+		else if(type==26){
+			path.append("structured_activity.gif");
+		}//Part
+		else if(type==27){
+			path.append("part.gif");
+		}//LifeLine
+		else if(type==28){
+			path.append("lifeLine.gif");
+		}//Component
+		else if(type==29){
+			path.append("component.gif");
+		}//Artfifact
+		else if(type==30){
+			path.append("artifact.gif");
+		}//State
+		else if(type==31){
+			path.append("state.gif");
+		}//StrcuturedState
+		else if(type==32){
+			path.append("submachinestate.gif");
+		}//History
+		else if(type==33){
+			path.append("history.gif");
+		}//Terminate
+		else if(type==34){
+			path.append("terminate.gif");
+		}//Node
+		else if(type==35){
+			path.append("node.gif");
+		}//EntryPoint
+		else if(type==36){
+			path.append("entity.gif");
+		}//Device
+		else if(type==37){
+			path.append("device.gif");
+		}//ExecutionEnvironment
+		else if(type==38){
+			path.append("executionenvironment.gif");
+		}//DeploymentSpecification
+		else if(type==39){
+			path.append("deployment_spec.gif");
+		}//StateLifeline
+		else if(type==40){
+			path.append("statelifeline.gif");
+		}
+		else if(type==41){
+			path.append("usecase.gif");
+		}
+		else if(type==42){
+			path.append("tank.gif");
+		}
+		else if(type==50){
+			path.append("actor.gif");
+		}
+		else if(type==100){
+			path.append("attribute.gif");
+		}
+		else if(type==101){
+			path.append("operation.gif");
+		}
+		else if(type==102){
+			path.append("attributes.gif");
+		}
+		else if(type==103){
+			path.append("operations.gif");
+		}
+		else if(type==104){
+			path.append("object_name.gif");
+		}
+		else if(type==105){
+			path.append("stereotype.gif");
+		}
+		else if(type==106){
+			path.append("compartment.gif");
+		}
+		else if(type==107){
+			path.append("selfMessage.gif");
+		}
+		else if(type==108){
+			path.append("container.gif");
+		}
+		else if(type==109){
+			path.append("Partiton.gif");
+		}
+		else if(type==200){
+			path.append("basic.gif");
+		}
+		else if(type==201){
+			path.append("alternative.gif");
+		}
+		else if(type==202){
+			path.append("exception.gif");
+		}
+		else if(type==203){
+			path.append("add.gif");
+		}
+		else if(type==204){
+			path.append("delete.gif");
+		}
+		else if(type==205||type==229){
+			path.append("model.gif");
+		}
+		else if(type>=206&&type<=232){
+			path.append("pattion.gif");
+		} 
+		else if(type==233){
+			path.append("group.gif");
+		} 
+		else if(type==234){
+			path.append("fragment.gif");
+		} 
+		//PKY 08071501 S FrameModel 이미지 추가
+		else if(type==235){
+			path.append("diagram.gif");
+		}
+		//PKY 08081101 S Timing, MessagePoint 이미지 추가
+		else if(type==236){
+			path.append("timing_point.gif");
+		}
+		else if( type==300){
+			path.append("find.gif");
+		}
+		else if( type==301){
+			path.append("save.gif");
+		}
+		else if( type==302){
+			path.append("property.gif");
+		}
+		else if( type==303){
+			path.append("pro_open.gif");
+		}
+		else if( type==304){
+			path.append("print.gif");
+		}
+		else if( type==305){
+			path.append("paste.gif");
+		}
+		else if( type==306){
+			path.append("newproject.gif");
+		}
+		else if( type==307){
+			path.append("java_reverse.gif");
+		}
+		else if( type==308){
+			path.append("java_generate_code.gif");
+		}
+		else if( type==309){
+			path.append("excel.gif");
+		}
+		else if( type==310){
+			path.append("delete_popup.gif");
+		}
+		else if( type==311){
+			path.append("copy.gif");
+		}
+		else if( type==312){
+			path.append("close_all.gif");
+		}
+		else if( type==313){
+			path.append("c_reverse.gif");
+		}
+		else if( type==314){
+			path.append("c_generate_code.gif");
+		}
+		else if( type==315){
+			path.append("add_package.gif");
+		}
+		else if( type==316){
+			path.append("add_model.gif");
+		}
+		else if( type==317){
+			path.append("add_diagram.gif");
+		}
+		else if( type==318){
+			path.append("z_oder_forward.gif");
+		}
+		else if( type==319){
+			path.append("z_oder_back.gif");
+		}
+		//PKY 08070301 S 다이얼로그 이름 및 아이콘 넣기
+		else if( type==320){
+			path.append("port.gif");
+		}
+		else if( type==321){
+			path.append("exit_popup.gif");
+		}
+		else if( type==322){
+			path.append("expansion_node.gif");
+		}
+		else if( type==323){
+			path.append("entry.gif");
+		}
+		else if( type==324){
+			path.append("port_popup.gif");
+		}
+		//PKY 08070904 S 창 관련 Outline 아이콘 추가
+		else if(type==325){
+			path.append("propertie.gif");
+		}
+		else if(type==326){
+			path.append("outline.gif");
+		}
+		else if(type==327){
+			path.append("report_doc.gif");
+		}
+
+		else if(type==329){
+			path.append("console.gif");
+		}
+
+		//PKY 08072201 S 모든 오퍼레이션및 어트리뷰트등 정보 입력한 값에 대한 위치변경할 수있도록 수정
+		else if(type==330){
+			path.append("up.gif");
+		}
+		else if(type==331){
+			path.append("down.gif");
+		}
+		//20080724 KDI s
+		else if(type==332){
+			path.append("associate.gif");
+		}
+		else if(type==333){
+			path.append("control_flow.gif");
+		}
+		else if(type==334){
+			path.append("transition.gif");
+		}
+		//20080724 KDI e
+		//20080728 KDI s 디스크립션 뷰 아이콘
+		else if(type==335){
+			path.append("circuit16.gif");
+		}
+		//20080728 KDI e
+		//20080721IJS
+		else if(type==600){
+			path.append("change.gif");
+		}
+		//PKY 08072201 E 모든 오퍼레이션및 어트리뷰트등 정보 입력한 값에 대한 위치변경할 수있도록 수정
+		//20080811IJS
+		else if(type==1000){
+			path.append("link_n_load.gif");
+		}
+		else if(type==1001){
+			path.append("link_y_load.gif");
+		}
+		else if(type==1002){
+			path.append("link_r_load.gif");
+		}
+
+		//PKY 08070904 E 창 관련 Outline 아이콘 추가
+		return path.toString();
+		//PKY 08070301 E 다이얼로그 이름 및 아이콘 넣기
+
+	}
+
+	public Image getDiagramImage(int type){
+		try{
+			if(this.imageMap.get(this.getIconDiagramPath(type))==null){
+				Image img = ImageDescriptor.createFromFile(UseCaseModel.class, this.getIconDiagramPath(type)).createImage();
+				this.imageMap.put(this.getIconDiagramPath(type), img);
+				return img;
+			}
+			else{
+				Image img = (Image)this.imageMap.get(this.getIconDiagramPath(type));
+				return img;
+			}
+		}
+		catch(Exception e){
+
+		}
+		return null;
+//		return ImageDescriptor.createFromFile(UseCaseModel.class, this.getIconDiagramPath(type)).createImage();
+
+
+	}
+
+	public Image getImage(int type){
+		try{
+			if(this.imageMap.get(this.getIconPath(type))==null){
+				Image img = ImageDescriptor.createFromFile(UseCaseModel.class, this.getIconPath(type)).createImage();
+				this.imageMap.put(this.getIconPath(type), img);
+				return img;
+			}
+			else{
+				Image img = (Image)this.imageMap.get(this.getIconPath(type));
+				return img;
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+		return null;
+
+	}
+	//PKY 08080501 S Image Dialog 이미지 리스트 및 불러오기 편하도록 개선
+	public Image getActorImage(String p){
+		//20080822IJS 전체 수정
+		try{
+			System.out.println("p123============>"+p);
+			ImageLoader loader = new ImageLoader();
+			if(!p.trim().equals("")){
+				if(this.imageMap.get(p)==null){
+					File file = new File(p);
+					if(file.canRead()){
+						ImageData[] imageData =loader.load(p);
+						if(imageData.length>0){
+//							ImageData miniViewImageData=imageData[0].scaledTo(288,389);
+//							ImageDescriptor miniViewImage = ImageDescriptor.createFromImageData(miniViewImageData);
+//							Image miniViewImg =miniViewImage.createImage();
+
+							ImageData ViewImageData=imageData[0];
+							ImageDescriptor ViewImage = ImageDescriptor.createFromImageData(ViewImageData);
+							Image ViewImg =ViewImage.createImage();
+
+							this.imageMap.put(p, ViewImg);
+							return ViewImg;
+						}
+						else 
+							return null;
+					}else{
+//						MessageBox dialog = new MessageBox(ProjectManager.getInstance().window.getShell(),SWT.ICON_WARNING);
+//						dialog.setText("Message");
+//						dialog.setMessage(N3Messages.DIALOG_FILE_NOT_LOADING);
+//						dialog.open();
+						return null;
+					}
+				}
+				else{
+					Image img = (Image)this.imageMap.get(p);
+					return img;
+				}
+			}
+
+
+		}catch(Exception e){			
+			e.printStackTrace();
+			
+		}
+		return null;
+
+	}
+	public Image getActorImageDialog(String p){
+		try{
+			ImageLoader loader = new ImageLoader();
+
+			if(this.actorDialogPrevieweImgMap.get(p)==null){
+				File file = new File(p);
+				if(file.canRead()){
+					ImageData[] imageData =loader.load(p);
+					if(imageData.length>0){
+						ImageData miniViewImageData=imageData[0].scaledTo(288,389);
+						ImageDescriptor miniViewImage = ImageDescriptor.createFromImageData(miniViewImageData);
+						Image miniViewImg =miniViewImage.createImage();
+
+//						ImageData ViewImageData=imageData[0];
+//						ImageDescriptor ViewImage = ImageDescriptor.createFromImageData(ViewImageData);
+//						Image ViewImg =ViewImage.createImage();
+						this.actorDialogPrevieweImgMap.put(p, miniViewImg);
+						return miniViewImg;
+					}
+					else 
+						return null;
+				}else{
+//					MessageBox dialog = new MessageBox(ProjectManager.getInstance().window.getShell(),SWT.ICON_WARNING);
+//					dialog.setText("Message");
+//					dialog.setMessage(N3Messages.DIALOG_FILE_NOT_LOADING);
+//					dialog.open();
+					return null;
+				}
+			}
+			else{
+				Image img = (Image)this.actorDialogPrevieweImgMap.get(p);
+				return img;
+			}
+		}catch(Exception e){			
+			e.printStackTrace();
+			Image img = ImageDescriptor.createFromFile(UseCaseModel.class,  "icons/"+p).createImage();
+			return img;
+		}
+
+	}
+	//PKY 08080501 E Image Dialog 이미지 리스트 및 불러오기 편하도록 개선
+	//ijs080429
+	public Image getImage(String p){
+		if(this.imageMap.get(p)==null){
+
+			Image img = ImageDescriptor.createFromFile(UseCaseModel.class,  "icons/"+p).createImage();
+			if(img.getImageData().width>-1){
+				System.out.print("");
+			}
+			this.imageMap.put(p, img);
+			return img;
+		}
+		else{
+			Image img = (Image)this.imageMap.get(p);
+			return img;
+		}
+
+	}
+	public java.util.ArrayList getSearchModel() {
+		return searchModel;
+	}
+
+	public void setSearchModel(java.util.ArrayList searchModel) {
+		this.searchModel = searchModel;
+	}
+
+	public java.util.ArrayList getSearchText() {
+		return searchText;
+	}
+
+	public void setSearchText(java.util.ArrayList searchText) {
+		this.searchText = searchText;
+	}
+
+	public boolean isAddLine() {
+		return addLine;
+	}
+
+	public void setAddLine(boolean addLine) {
+		this.addLine = addLine;
+	}
+
+	public java.util.ArrayList getModelList() {
+		return modelList;
+	}
+
+	public void setModelList(java.util.ArrayList modelList) {
+		this.modelList = modelList;
+	}
+
+	public boolean isSearchModel() {
+		return isSearchModel;
+	}
+
+	public void setSearchModel(boolean isSearchModel) {
+		this.isSearchModel = isSearchModel;
+	}
+
+	public UMLElementModel getSelectPropertyUMLElementModel() {
+		return selectPropertyUMLElementModel;
+	}
+
+	public void setSelectPropertyUMLElementModel(UMLElementModel p) {
+		this.selectPropertyUMLElementModel = p;
+	}
+
+	public java.util.ArrayList getTypeModel() {
+		return typeModel;
+	}
+
+	public void setTypeModel(java.util.ArrayList typeModel) {
+		this.typeModel = typeModel;
+	}
+	//PKY 08052901 S 저장 불러오기할경우 참조타입정보가 없다 참조타입정보를 넣어 줄수 있도록 수정
+
+	public void addTypeModel(Object obj) {
+		this.typeModel.add(obj);
+		//20080811IJS 시작
+		UMLTreeModel ut = (UMLTreeModel)obj; 
+//		TeamProjectManager.getInstance().setModel((UMLModel)ut.getRefModel());
+		//20080811IJS 끝
+	}
+	//PKY 08052901 E 저장 불러오기할경우 참조타입정보가 없다 참조타입정보를 넣어 줄수 있도록 수정
+	public int getCopyName(UMLTreeParentModel packages ,UMLModel copyChild,String name,int mType){
+		if(packages!=null){
+			for(int i=0;i<packages.getChildren().length;i++){
+				UMLTreeModel ut = (UMLTreeModel)packages.getChildren()[i];
+				Object obj = ut.getRefModel();
+				if(obj instanceof UMLModel){
+					UMLModel um = (UMLModel)obj;
+					if(um.getName().equals(name) && mType==ut.getModelType()){
+						++this.copyNum;
+						String pname = this.oldName+this.copyNum;
+//						this.copyNum++;
+						return this.getCopyName(packages, copyChild,pname,mType);
+					}
+					if(um instanceof N3EditorDiagramModel){
+						N3EditorDiagramModel n3Diagram = (N3EditorDiagramModel)um;
+						for( int j = 0 ; j < n3Diagram.getChildren().size(); j ++){
+							if(n3Diagram.getChildren().get(j) instanceof UMLModel){
+								UMLModel model = (UMLModel)n3Diagram.getChildren().get(j);
+								if(model.getName().equals(name)){
+									++this.copyNum;
+//									V1.02 WJH E 080822 S 객체 생성시 기본 이름이 숫자 0으로 시작하도록 수정 
+									String pname = "";
+									if(name.startsWith(defaultName)){
+										pname = name.substring(0, defaultName.length())+this.copyNum;										
+									}
+									else{
+									 pname = this.oldName+this.copyNum;
+									}
+//									V1.02 WJH E 080822 E 객체 생성시 기본 이름이 숫자 0으로 시작하도록 수정
+//									String pname = this.oldName+this.copyNum;
+//									this.copyNum++;
+									return this.getCopyName(packages, copyChild,pname,mType);
+								}
+							}
+						}
+					}
+				}
+
+			}
+			return this.copyNum;
+
+		}
+		return -1;
+	}
+
+	public boolean isOverlapping(UMLTreeParentModel packages ,int type,String name){
+		if(packages!=null){
+			for(int i=0;i<packages.getChildren().length;i++){
+				UMLTreeModel ut = (UMLTreeModel)packages.getChildren()[i];
+				Object obj = ut.getRefModel();
+				if(obj instanceof UMLModel){
+					UMLModel um = (UMLModel)obj;
+					if(um.getName().equals(name) && type==ut.getModelType()){
+						return true;
+					}
+				}
+
+			}
+			return false;
+
+		}
+		return false;
+	}
+	//20080811IJS
+	public boolean isOverlapping(UMLTreeParentModel packages ,int type,String name,UMLTreeModel ud){
+		if(packages!=null){
+			for(int i=0;i<packages.getChildren().length;i++){
+				UMLTreeModel ut = (UMLTreeModel)packages.getChildren()[i];
+				Object obj = ut.getRefModel();
+				if(obj instanceof UMLModel && ud!=ut){
+					UMLModel um = (UMLModel)obj;
+					if(um.getName().equals(name) && type==ut.getModelType()){
+						return true;
+					}
+				}
+
+			}
+			return false;
+
+		}
+		return false;
+	}
+	//20080325 PKY S 검색
+	public boolean isSearchDiagaramModel() {
+		return isSearchDiagaramModel;
+	}
+
+	public void setisSearchDiagaramModel(boolean isSearchDiagaramModel) {
+		this.isSearchDiagaramModel = isSearchDiagaramModel;
+	}
+
+	public  List getCopyList() {
+		return copyList;
+	}
+
+	public  void setCopyList(List p) {
+		copyList = p;
+	}
+	//2008040401PKY S "패키지 오른쪽 클릭 시 OpenDiagram 메뉴 추가    여러 다이어그램이있을경우 리스트 나오도록"
+
+	public java.util.ArrayList getDiagramsSub() {
+		return diagramsSub;
+	}
+
+	public void setDiagramsSub(java.util.ArrayList diagramsUsb) {
+		this.diagramsSub = diagramsUsb;
+	}
+	//2008040401PKY E "패키지 오른쪽 클릭 시 OpenDiagram 메뉴 추가    여러 다이어그램이있을경우 리스트 나오도록"
+
+	public List getCopyattList() {
+		return copyattList;
+	}
+
+	public void setCopyattList(List copyattList) {
+		this.copyattList = copyattList;
+	}
+
+	public List getCopyoperList() {
+		return copyoperList;
+	}
+
+	public void setCopyoperList(List copyoperList) {
+		this.copyoperList = copyoperList;
+	}
+
+	public boolean isOutlineAutoSize() {
+		return isOutlineAutoSize;
+	}
+
+	public void setOutlineAutoSize(boolean isOutlineAutoSize) {
+		this.isOutlineAutoSize = isOutlineAutoSize;
+	}
+
+	public String getCurrentProjectPath() {
+		return currentProjectPath;
+	}
+
+	public void setCurrentProjectPath(String currentProjectPath) {
+		this.currentProjectPath = currentProjectPath;
+	}
+
+	public String getCurrentProjectName() {
+		return currentProjectName;
+	}
+
+	public void setCurrentProjectName(String currentProjectName) {
+		this.currentProjectName = currentProjectName;
+	}
+	//PKY 08072401 S O 일부상황에서 OpenList에서 오픈 시 에러 발생문제 수정
+	public String getCurrentProject(){
+		if(this.currentProjectPath.lastIndexOf("\\")==this.currentProjectPath.length()-1){
+			return this.currentProjectPath+this.currentProjectName;//PKY 08070701 S 파일 오픈 시 java.io.FileNotFoundException 문제 수정
+		}else{
+			return this.currentProjectPath+"\\"+this.currentProjectName;//PKY 08070701 S 파일 오픈 시 java.io.FileNotFoundException 문제 수정		}
+		}
+	}
+	//PKY 08072401 E O 일부상황에서 OpenList에서 오픈 시 에러 발생문제 수정
+
+	public IWorkbenchWindowConfigurer getConfigurer() {
+		return configurer;
+	}
+
+	public void setConfigurer(IWorkbenchWindowConfigurer configurer) {
+		this.configurer = configurer;
+	}
+	public void loadConfig(){
+		try{
+			FileReader fw = new FileReader(new File("c:\\config.txt"));
+
+			BufferedReader bf = new BufferedReader(fw);
+			String line = null;
+			while((line=bf.readLine())!=null){
+				int indexOpen = line.indexOf("PEN=");
+				int indexSourceFolder = line.indexOf("OURCE_FOLDER=");
+				int indexColorFill = line.indexOf("COLOR_FILL=");//PKY 08080501 S 사용자가 컬러색상을 수정 할 수있도록 수정
+				int indexActorImg = line.indexOf("OPEN_ACTOR_IMG=");
+				int indexTeamProjetFolder = line.indexOf("TEAM_PROJECT_FOLDER=");//PKY 08082201 S 팀 프로젝트 경로를 프로젝트에서 변경가능하도록
+
+				int indexReportTemplate = line.indexOf("REPORT_TEMPLATE_FILE="); //20080904 KDI s
+
+				if(indexOpen==1){
+					String openPath = line.substring(5);
+					this.addOpenProject(openPath);
+				}
+
+				if(indexSourceFolder==1){
+					String sourceFolder = line.substring(14);
+					this.setSourceFolder(sourceFolder);
+				}
+				//PKY 08082201 S 팀 프로젝트 경로를 프로젝트에서 변경가능하도록
+				if(indexTeamProjetFolder==0){
+					String sourceFolder = line.substring(20);
+					this.setTeamProjectFolder(sourceFolder);
+				}
+				//PKY 08082201 E 팀 프로젝트 경로를 프로젝트에서 변경가능하도록
+
+				//PKY 08080501 S 사용자가 컬러색상을 수정 할 수있도록 수정
+				if(indexColorFill==0){
+					String [] colorFill  = line.substring(11).split(",");
+
+					this.setDefaultColor(new Color(null,Integer.parseInt(colorFill[0]),Integer.parseInt(colorFill[1]),Integer.parseInt(colorFill[2])));					
+				}
+				if(indexActorImg==0){
+					String actorImg = line.substring(15);
+					this.addActorImageList(actorImg);
+				}
+				//PKY 08080501 E 사용자가 컬러색상을 수정 할 수있도록 수정
+
+				//20080904 KDI s
+				if(indexReportTemplate==0){
+					String path = line.substring(21);
+					this.setReportTemplatePath(path);
+				}
+				//20080904 KDI e
+
+
+			}
+			bf.close();
+
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+
+	public void writeConfig(){
+		try{
+			//PKY 08080501 S 사용자가 컬러색상을 수정 할 수있도록 수정
+			FileWriter fw = new FileWriter(new File("c://config.txt"),false);
+			PrintWriter bw=new PrintWriter(fw);
+			for(int i=0;i<this.openProjects.size();i++){
+				String op = (String)this.openProjects.get(i);
+				bw.println("OPEN="+op);
+			}
+			if(this.sourceFolder!=null){
+				bw.println("SOURCE_FOLDER="+sourceFolder);
+			}
+
+			if(this.defaultColor!=null){
+				bw.println("COLOR_FILL="+defaultColor.getRed()+","+defaultColor.getGreen()+","+defaultColor.getBlue()+"\n");//PKY 08081101 S N3Com 프로퍼티를 오픈 후 OK버튼을 누루면 내용이 저장되도록 기존에는 정상적인 종료를 했을때만 프로그램 내용이 저장되도록 되어있었음
+			}
+			for(int i=0;i<this.actorImageList.size();i++){
+				bw.println("OPEN_ACTOR_IMG="+actorImageList.get(i));
+			}
+			//PKY 08080501 E 사용자가 컬러색상을 수정 할 수있도록 수정
+			//PKY 08082201 S 팀 프로젝트 경로를 프로젝트에서 변경가능하도록
+			if(this.teamProjectFolder!=null){
+				bw.println("TEAM_PROJECT_FOLDER="+teamProjectFolder);
+			}
+			//PKY 08082201 E 팀 프로젝트 경로를 프로젝트에서 변경가능하도록
+
+			//			bw.write(sb.toString());
+			//20080904 KDI s
+			if(this.reportTemplatePath != null){
+				bw.println("REPORT_TEMPLATE_FILE="+reportTemplatePath);
+			}
+			//20080904 KDI e
+			bw.close();
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+
+	}
+
+	public java.util.ArrayList getOpenProjects() {
+		return openProjects;
+	}
+
+	public void setOpenProjects(java.util.ArrayList openProjects) {
+		this.openProjects = openProjects;
+	}
+
+	public MenuManager getRecentMenu() {
+		return recentMenu;
+	}
+
+	public void setRecentMenu(MenuManager recentMenu) {
+		this.recentMenu = recentMenu;
+	}
+
+//	public java.util.HashMap getReverseModelMap() {
+//	return reverseModelMap;
+//	}
+
+//	public void setReverseModelMap(java.util.HashMap reverseModelMap) {
+//	this.reverseModelMap = reverseModelMap;
+//	}
+	//ijs0507
+	public java.util.HashMap getReverseModelMap() {
+		return reverseModelMap;
+	}
+	//ijs0507
+	public void setReverseModelMap(java.util.HashMap reverseModelMap) {
+		this.reverseModelMap = reverseModelMap;
+	}
+
+	public String getSourceFolder() {
+		return sourceFolder;
+	}
+
+	public void setSourceFolder(String sourceFolder) {
+		this.sourceFolder = sourceFolder;
+	}
+	//ijs08619
+	public CommandStack getCommandStack() {
+		return (CommandStack)this.getUMLEditor().getAdapter(CommandStack.class);
+	}
+	//PKY 08070301 S 툴바 추가작업
+	public ApplicationActionBarAdvisor getApplication() {
+		return application;
+	}
+
+	public void setApplication(ApplicationActionBarAdvisor application) {
+		this.application = application;
+	}
+	//PKY 08070301 E 툴바 추가작업
+
+	public IViewSite getIvewSite() {
+		return ivewSite;
+	}
+
+	public void setIvewSite(IViewSite ivewSite) {
+		this.ivewSite = ivewSite;
+	}
+
+	public TreeViewer getViewer() {
+		return viewer;
+	}
+
+	public void setViewer(TreeViewer viewer) {
+		this.viewer = viewer;
+	}
+
+	public RootTreeModel getRoot() {
+		return root;
+	}
+
+	public void setRoot(RootTreeModel root) {
+		this.root = root;
+	}
+
+	public boolean isViewProperty() {
+		return isViewProperty;
+	}
+
+	public void setViewProperty(boolean isViewProperty) {
+		this.isViewProperty = isViewProperty;
+	}
+	//PKY 08070901 S 모델 컬러 변경
+	public Color getDefaultColor() {
+		return defaultColor;
+	}
+
+	public void setDefaultColor(Color defaultColor) {
+		this.defaultColor = defaultColor;
+	}
+	//PKY 08070901 E 모델 컬러 변경
+
+	//20080619 KDI s
+	public java.util.ArrayList getRecentReportPath(){
+		return this.recentReportPath;
+	}
+
+	public void setRecentReportPath(java.util.ArrayList list){
+		this.recentReportPath = list;
+	}
+	//20080619 KDI e
+
+	//20080725 KDI s
+	public DescriptionView getDescriptionView(){
+		return descriptionView;
+	}
+	public void setDescriptionView(DescriptionView p) {
+		this.descriptionView = p;
+	}
+	//20080725 KDI e
+
+	//PKY 08081801 S 오퍼레이션,어트리뷰트 창 추가
+	public OperationView getOperationView(){
+		return operationView;
+	}
+	public void setOperationView(OperationView p) {
+		this.operationView = p;
+	}
+	public AttributeView getAttributeView(){
+		return attributeView;
+	}
+	public void setAttributeView(AttributeView p) {
+		this.attributeView = p;
+	}
+	//PKY 08081801 E 오퍼레이션,어트리뷰트 창 추가
+
+	//PKY 08080501 S RequirementID를 다이얼로그 리스트로 보여주도록 
+	public java.util.ArrayList getReqIdList() {
+		return reqIdList;
+	}
+
+	public void setReqIdList(java.util.ArrayList reqIdList) {
+		this.reqIdList = reqIdList;
+	}
+	public void addActorImageList(String s) {
+		for(int i = 0 ; i < this.actorImageList.size(); i++){
+			if(((String)this.actorImageList.get(i)).trim().equals(s)){
+				this.actorImageList.remove(i);
+				i=this.actorImageList.size();
+			}
+		}
+		//PKY 08081101 S 프로젝트 전체의 객체 테두리 색상 설정 할  수있도록 수정
+		if(this.actorImageList.size()==21){
+			this.actorImageList.remove(0);
+		}
+		//PKY 08081101 E 프로젝트 전체의 객체 테두리 색상 설정 할  수있도록 수정
+
+		this.actorImageList.add(s);
+	}
+	public java.util.ArrayList getActorImageList() {
+		return actorImageList;
+	}
+
+	public void setActorImageList(java.util.ArrayList actorImageList) {
+		this.actorImageList = actorImageList;
+	}
+	//PKY 08080501 E RequirementID를 다이얼로그 리스트로 보여주도록 
+	public boolean isTreeMove() {
+		return isTreeMove;
+	}
+
+	public void setTreeMove(boolean isTreeMove) {
+		this.isTreeMove = isTreeMove;
+	}
+	//PKY 08082201 S ClassModel가져오는 오퍼레이션 추가
+	public ClassModel getClassModel(UMLModel umlModel){
+
+		if(umlModel instanceof ClassifierModel){
+			return ((ClassifierModel)umlModel).getClassModel();
+		}else if(umlModel instanceof ClassifierModelTextAttach){
+			return ((ClassifierModelTextAttach)umlModel).getClassModel();
+		}
+		return null;
+	}
+
+
+	public boolean isItemEnable(Object model){
+
+		if(model instanceof UMLModel){
+			ClassModel classModel=getClassModel((UMLModel)model);
+			if(classModel!=null){
+			if((classModel.isReadOnlyModel()||!classModel.isExistModel())||((UMLModel)model).isReadOnlyModel()||!((UMLModel)model).isExistModel()){
+				return false;
+			}
+		}else {
+				UMLModel umlModel = (UMLModel)model;
+				if( umlModel.getUMLTreeModel()==null&&( umlModel.isReadOnlyModel()||! umlModel.isExistModel())){
+					return false;
+				}
+			}
+				
+		}else if(model instanceof LineModel){
+			if(((LineModel)model).getDiagram()!=null){
+				if(((LineModel)model).getDiagram().isReadOnlyModel()||!((LineModel)model).getDiagram().isExistModel()){
+					return false;
+				}
+			}
+		}else if(model instanceof UMLTreeEditPart){
+			UMLTreeEditPart editPart = (UMLTreeEditPart)model; 
+
+			ClassModel classModel=getClassModel((UMLModel)editPart.getModel());
+			if(classModel!=null){
+			if(((UMLModel)editPart.getModel()).getUMLTreeModel()==null||classModel.isReadOnlyModel()||!classModel.isExistModel()){
+				return false;
+			}
+		}else {
+				UMLModel umlModel = (UMLModel)model;
+				if( umlModel.getUMLTreeModel()==null|| umlModel.isReadOnlyModel()||! umlModel.isExistModel()){
+					return false;
+				}
+			}
+				
+		
+		}
+		return true;
+	}
+	//PKY 08082201 E ClassModel가져오는 오퍼레이션 추가
+	//PKY 08082201 S 팀 프로젝트 경로를 프로젝트에서 변경가능하도록
+	public String getTeamProjectFolder() {
+		return teamProjectFolder;
+	}
+
+	public void setTeamProjectFolder(String teamProjectFolder) {
+		this.teamProjectFolder = teamProjectFolder;
+	}
+	//PKY 08082201 E 팀 프로젝트 경로를 프로젝트에서 변경가능하도록
+	//PKY 08090201 S 링크파일 하위로 트리를이동하려고할경우 안되도록 막도록 수정
+	public boolean isTreeModelLink(UMLTreeModel umlTreeModel){
+		boolean isLink = false;
+		if(umlTreeModel!=null)
+		if(umlTreeModel instanceof PackageTreeModel){
+			PackageTreeModel treModel = (PackageTreeModel)umlTreeModel;
+			if(treModel.isLink()){
+				isLink = true;
+				return true;
+				
+			}
+			else if(treModel.getParent()!=null && treModel.getParent() instanceof PackageTreeModel ){
+				isLink = isTreeModelLink(treModel.getParent());
+			}
+		}
+		return isLink;
+	}
+	//PKY 08090201 E 링크파일 하위로 트리를이동하려고할경우 안되도록 막도록 수정
+
+	
+	//20080812 KDI s
+	public HashMap getWordTreeMap(){
+		return reportWordTreeMap;
+	}
+	
+	public void addWordTreeMap(Object key, Object obj){
+		reportWordTreeMap.put(key, obj); 
+	}
+	
+	public void clearWordTreeMap(){
+		reportWordTreeMap.clear();
+	}
+	public boolean containKeyWordTreeMap(Object key){
+		return reportWordTreeMap.containsKey(key);
+	}
+	//20080812 KDI e
+	
+	//20080813 KDI s
+	public void setSearchDialogModelType(int idx){
+		searchDialogModelType = idx;
+	}
+	
+	public int getSearchDialogModelType(){
+		return searchDialogModelType;
+	}
+	
+	public HashMap getTempTreeBrowserMap(){
+		return reportTempTreeBrowserMap;
+	}
+	
+	public void addTempTreeBrowserMap(Object key, Object obj){
+		reportTempTreeBrowserMap.put(key, obj); 
+	}
+	
+	public void clearTempTreeBrowserMap(){
+		reportTempTreeBrowserMap.clear();
+	}
+	
+	public boolean containKeyTempTreeBrowserMap(Object key){
+		return reportTempTreeBrowserMap.containsKey(key);
+	}
+	//20080813 KDI e
+
+	//20080902 KDI s
+	public String getReportOutPutPath(){
+		return reportOutPutPath;
+	}
+	
+	public void setReportOutPutPath(String str){
+		reportOutPutPath = str;
+	}//20080902 KDI e
+
+		//20080903 KDI s
+	public String getReportTemplatePath(){
+		return reportTemplatePath;
+	}
+	
+	public void setReportTemplatePath(String str){
+		reportTemplatePath = str;
+	}
+	//20080903 KDI e
+	
+}

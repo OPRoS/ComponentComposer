@@ -1,0 +1,1557 @@
+package kr.co.n3soft.n3com.model.comm;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Enumeration;
+import java.util.Vector;
+
+import kr.co.n3soft.n3com.edit.UMLGraphicalPartFactory;
+import kr.co.n3soft.n3com.lang.N3Messages;
+import kr.co.n3soft.n3com.model.activity.CentralBufferNodeModel;
+import kr.co.n3soft.n3com.model.activity.DataStoreModel;
+import kr.co.n3soft.n3com.model.activity.DecisionModel;
+import kr.co.n3soft.n3com.model.activity.ExceptionModel;
+import kr.co.n3soft.n3com.model.activity.FinalActiionModel;
+import kr.co.n3soft.n3com.model.activity.FinalActivityModel;
+import kr.co.n3soft.n3com.model.activity.FinalModel;
+import kr.co.n3soft.n3com.model.activity.FinalObjectNodeModel;
+import kr.co.n3soft.n3com.model.activity.FinalStrcuturedActivityModel;
+import kr.co.n3soft.n3com.model.activity.FlowFinalModel;
+import kr.co.n3soft.n3com.model.activity.HForkJoinModel;
+import kr.co.n3soft.n3com.model.activity.HPartitionModel;
+import kr.co.n3soft.n3com.model.activity.InitialModel;
+import kr.co.n3soft.n3com.model.activity.ReceiveModel;
+import kr.co.n3soft.n3com.model.activity.SendModel;
+import kr.co.n3soft.n3com.model.activity.SynchModel;
+import kr.co.n3soft.n3com.model.activity.VForkJoinModel;
+import kr.co.n3soft.n3com.model.comm.descriptor.AttrPropertyDescriptor;
+import kr.co.n3soft.n3com.model.comm.descriptor.ConfigureTimeLinePropertyDescriptor;
+import kr.co.n3soft.n3com.model.comm.descriptor.DetailPropertyDescriptor;
+import kr.co.n3soft.n3com.model.comm.descriptor.FileDialogPropertyDescriptor;
+import kr.co.n3soft.n3com.model.comm.descriptor.FontPropertyDescriptor;
+import kr.co.n3soft.n3com.model.comm.descriptor.FragmentPropertyDescriptor;
+import kr.co.n3soft.n3com.model.comm.descriptor.MessagePropertiestPropertyDescriptor;
+import kr.co.n3soft.n3com.model.comm.descriptor.OperPropertyDescriptor;
+import kr.co.n3soft.n3com.model.comm.descriptor.TypePropertyDescriptor;
+import kr.co.n3soft.n3com.model.communication.MessageCommunicationModel;
+import kr.co.n3soft.n3com.model.component.ArtfifactModel;
+import kr.co.n3soft.n3com.model.component.ComponentModel;
+import kr.co.n3soft.n3com.model.composite.PartModel;
+import kr.co.n3soft.n3com.model.deployment.DeploymentSpecificationModel;
+import kr.co.n3soft.n3com.model.deployment.DeviceModel;
+import kr.co.n3soft.n3com.model.deployment.ExecutionEnvironmentModel;
+import kr.co.n3soft.n3com.model.deployment.NodeModel;
+import kr.co.n3soft.n3com.model.diagram.N3EditorDiagramModel;
+import kr.co.n3soft.n3com.model.sequence.FragmentModel;
+import kr.co.n3soft.n3com.model.sequence.LifeLineModel;
+import kr.co.n3soft.n3com.model.sequence.SelfMessageModel;
+import kr.co.n3soft.n3com.model.state.HistoryModel;
+import kr.co.n3soft.n3com.model.state.StateModel;
+import kr.co.n3soft.n3com.model.state.StrcuturedStateModel;
+import kr.co.n3soft.n3com.model.state.TerminateModel;
+import kr.co.n3soft.n3com.model.timing.GroupModel;
+import kr.co.n3soft.n3com.model.timing.StateLifelineModel;
+import kr.co.n3soft.n3com.model.umlclass.EnumerationModel;
+import kr.co.n3soft.n3com.model.umlclass.FinalClassModel;
+import kr.co.n3soft.n3com.model.umlclass.InterfaceModel;
+import kr.co.n3soft.n3com.model.usecase.CollaborationModel;
+import kr.co.n3soft.n3com.model.usecase.FinalActorModel;
+import kr.co.n3soft.n3com.model.usecase.FinalBoundryModel;
+import kr.co.n3soft.n3com.model.usecase.UseCaseModel;
+import kr.co.n3soft.n3com.project.browser.UMLTreeModel;
+import kr.co.n3soft.n3com.projectmanager.ProjectManager;
+
+import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.gef.EditPart;
+import org.eclipse.gef.examples.logicdesigner.figures.LogicColorConstants;
+import org.eclipse.gef.examples.logicdesigner.model.DimensionPropertySource;
+import org.eclipse.gef.examples.logicdesigner.model.LocationPropertySource;
+import org.eclipse.gef.examples.logicdesigner.model.Wire;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.RGB;
+import org.eclipse.ui.views.properties.ColorPropertyDescriptor;
+import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
+import org.eclipse.ui.views.properties.IPropertyDescriptor;
+import org.eclipse.ui.views.properties.PropertyDescriptor;
+import org.eclipse.ui.views.properties.TextPropertyDescriptor;
+
+
+
+abstract public class UMLModel extends UMLElementModel implements IUMLModelUpdateListener {
+	private int attributeCount = 0;
+	private int operationCount = 0;
+	private boolean isAddLine = true;
+	private boolean isPartition = false; //20080327 PKY S 해당 객체에 파티션이 먼져 들어가있는지 없는지 확인
+	private NodeContainerModel saveContainer=null;//2008042106PKY S
+	private boolean isStero=false;//2008041401PKY S
+	private String id;
+	private UMLModelGuide verticalGuide, horizontalGuide;
+	//	protected Hashtable inputs = new Hashtable (7);
+	protected Vector inputs = new Vector();
+	protected Point location = new Point(0, 0);
+	protected Vector outputs = new Vector();
+	static final long serialVersionUID = 1;
+	protected Dimension size = new Dimension(-1, -1);
+	//	protected String name = "";
+	private UMLTreeModel treeModel = null;
+	//	private Text tempText = new Text(SWT);
+	public UMLDataModel uMLDataModel = null;
+	private UMLModel parentModel = null;
+	public UMLModel sourceModel = null;
+	protected Integer layout = null;
+	protected int parentLayout = 0;
+	protected IPropertyDescriptor[] descriptors = null;
+	public static String ID = "ID"; //$NON-NLS-1$
+	public static String ID_PACKAGE = "ID_PACKAGE"; //$NON-NLS-1$
+	public static String ID_ANGLE = "angle"; //$NON-NLS-1$
+	public static String ID_SIZE = "ID_SIZE"; //$NON-NLS-1$
+	public static String ID_LOCATION = "ID_SIZE"; //$NON-NLS-1$
+	public static String ID_NAME = "ID_NAME"; //$NON-NLS-1$
+	public static String ID_COLOR = "ID_COLOR"; //$NON-NLS-1$
+	public static String ID_DESCRIPTION = "ID_DESCRIPTION"; //$NON-NLS-1$
+	public static String ID_FONT = "ID_FONT"; //$NON-NLS-1$
+
+	public static String ID_REFRESH = "ID_REFRESH"; //$NON-NLS-1$
+	//	uMLDataModel = new UMLDataModel();
+	protected String stereotype = "";
+	protected String name = "";
+	protected String description = "";
+	protected Integer scope =new Integer(0);
+	protected Integer active =new Integer(0);
+	protected Integer reference =new Integer(0);
+	protected String multiplicity;
+	protected Color backGroundColor = LogicColorConstants.defaultFillColor;
+	protected Font font = null;
+	public static String ID_W = "ID_W";
+	public static String ID_H = "ID_H";
+	public static String ID_PARENTS = "ID_PARENTS";
+	public static String ID_INTERFACES = "ID_INTERFACES";
+	public static String ID_ATTRIBUTE = "ID_ATTRIBUTE";
+	public static String ID_OPERATION = "ID_OPERATION";
+	public static String ID_STEREOTYPE = "ID_STEREOTYPE";
+	public static String ID_CONFIGURE_TIMELINE = "ID_CONFIGURE_TIMELINE";
+
+	public static String ID_DETAIL = "ID_DETAIL";
+
+	public static String ID_EXTENSIONPOINT = "ID_EXTENSIONPOINT";
+
+	public static String ID_MULTI = "ID_MULTI";
+
+	public static String ID_SCOPE = "ID_SCOPE";
+
+	public static String ID_CHANGE_DRAG = "ID_CHANGE_DRAG";
+	public static String ID_CHANGE_PROPERTY = "ID_CHANGE_PROPERTY";
+
+	public static String ID_CHANGE_GROUP = "ID_CHANGE_GROUP";
+	public static String ID_CONFIGURE_NUM = "ID_CONFIGURE_NUM";
+
+	public static String ID_ACTIVE= "ID_ACTIVE";
+	public static String ID_REFERENCE= "ID_REFERENCE";
+
+	public static String ID_READONLY= "ID_READONLY";
+	public static String ID_PRECONDITION= "ID_PRECONDITION";
+	public static String ID_POSTCONDITION= "ID_POSTCONDITION";
+	public static String ID_SINGLEEXECUTION= "ID_SINGLEEXECUTION";
+	public static String ID_PARAMETERNAME= "ID_PARAMETERNAME";
+
+	public static String ID_OBJECT_STATE= "ID_OBJECT_STATE";
+
+	public static String ID_EFFECT= "ID_EFFECT";
+
+	public static String ID_CONTEXT= "ID_CONTEXT";
+
+	public static String ID_TAG= "ID_TAG";
+
+
+	public static String ID_SIMPLE= "ID_SIMPLE";
+
+	public static String ID_SUBMACHINESTATE= "ID_SUBMACHINESTATE";
+
+
+	public static String ID_ORTHOGONAL= "ID_ORTHOGONAL";
+
+	public static String ID_COMPOSITE= "ID_COMPOSITE";
+
+	public static String ID_INDIRECTLYINSTANTIATED = "ID_INDIRECTLYINSTANTIATED";
+
+	public static String ID_FILENAME = "ID_FILENAME";
+
+	public static String ID_ACTORIMAGE = "ID_ACTORIMAGE";
+	public static String ID_IMAGEDATA = "ID_IMAGEDATA";
+
+	public static String ID_MESSAGE_PROPERTIES = "ID_MESSAGE_PROPERTIES";
+
+	public static String ID_TYPE = "ID_TYPE";
+	
+	public static String ID_SELECT = "ID_SELECT";
+	
+	public static String ID_REF_TYPE = "ID_REF_TYPE";
+	public static String ID_UPDATE_LISTENER = "ID_UPDATE_LISTENER";
+	public static String ID_FRAGMENT = "ID_FRAGMENT";
+
+//	public static String ID_CONFIGURE_NUM = "configureNum";
+
+	private java.util.ArrayList updateListener = new java.util.ArrayList();
+	//	static{
+	public static PropertyDescriptor actorProp = new FileDialogPropertyDescriptor(ID_ACTORIMAGE, N3Messages.DIALOG_IMAGE);//2008043001 PKY S
+
+	public static PropertyDescriptor packageProp = new TextPropertyDescriptor(ID_PACKAGE, N3Messages.POPUP_PACKAGE);//2008040302 PKY S 
+	public static PropertyDescriptor nameProp = new TextPropertyDescriptor(ID_NAME, N3Messages.POPUP_NAME);//2008040302 PKY S 
+	public static PropertyDescriptor streoProp = new TextPropertyDescriptor(ID_STEREOTYPE, N3Messages.POPUP_STEREOTYPE);//2008040302 PKY S 
+	public static ColorPropertyDescriptor colorPropertyDescriptor = new ColorPropertyDescriptor(ID_COLOR, N3Messages.POPUP_BACKGROUND_COLOR);//2008040302 PKY S 
+//	public static DescriptionPropertyDescriptor descriptionPropertyDescriptor =
+//	new DescriptionPropertyDescriptor(ID_DESCRIPTION, "설명");
+	public static FontPropertyDescriptor fontPropertyDescriptor = new FontPropertyDescriptor(ID_FONT, "폰트");
+	public static PropertyDescriptor attrProp = new AttrPropertyDescriptor(ID_ATTRIBUTE, N3Messages.POPUP_ATTRIBUTES);//2008040302 PKY S 
+	public static PropertyDescriptor fragmProp = new FragmentPropertyDescriptor(ID_FRAGMENT,"Fragment");//2008041501PKY S
+	public static PropertyDescriptor configureTimeLineProp = new ConfigureTimeLinePropertyDescriptor(ID_CONFIGURE_TIMELINE, "Configure TimeLine");
+	public static PropertyDescriptor messagePropertiestProp = new MessagePropertiestPropertyDescriptor(ID_MESSAGE_PROPERTIES, "Message Propertiest");
+	public static PropertyDescriptor typeProp = new TypePropertyDescriptor(ID_TYPE, "Type");
+
+	public static PropertyDescriptor DetailPropertyDescriptorProp = new DetailPropertyDescriptor(ID_DETAIL,  N3Messages.POPUP_PROPERTIES);//2008040301 PKY S 
+	public static PropertyDescriptor operProp = new OperPropertyDescriptor(ID_OPERATION, N3Messages.POPUP_OPERATION);//2008040302 PKY S 
+	public static PropertyDescriptor colorProp = colorPropertyDescriptor;
+	public static  PropertyDescriptor multiplicityPrope = new TextPropertyDescriptor(ID_MULTI, "다중성");
+
+	public static  PropertyDescriptor effectPrope = new TextPropertyDescriptor(ID_MULTI, "다중성");
+
+	public static  PropertyDescriptor scopeProp = new ComboBoxPropertyDescriptor(ID_SCOPE, N3Messages.POPUP_SCOPE,
+			new String[] { "Public", "Protected", "Private", "Package"});//2008040302 PKY S 
+	public static  PropertyDescriptor activeProp = new ComboBoxPropertyDescriptor(ID_ACTIVE, "활성",
+			new String[] { "True", "False"});
+	public static  PropertyDescriptor referenceProp = new ComboBoxPropertyDescriptor(ID_REFERENCE, "참조",
+			new String[] { "True", "False"});
+
+
+	public static  PropertyDescriptor readOnlyProp = new ComboBoxPropertyDescriptor(ID_READONLY , "isReadOnly",
+			new String[] { "True", "False"});
+	public static  PropertyDescriptor singleExecutionProp = new ComboBoxPropertyDescriptor(ID_SINGLEEXECUTION, "단일실행",
+			new String[] { "True", "False"});
+
+	public static PropertyDescriptor preConditionProp = new TextPropertyDescriptor(ID_PRECONDITION , "사전조건");
+	public static PropertyDescriptor postConditionProp = new TextPropertyDescriptor(ID_POSTCONDITION , "사후조건");
+	public static PropertyDescriptor parameterNameProp = new TextPropertyDescriptor(ID_PARAMETERNAME , "변수이름");
+	public static PropertyDescriptor objectStateProp = new TextPropertyDescriptor(ID_OBJECT_STATE , "객체상태");
+
+	public static PropertyDescriptor effectProp = new TextPropertyDescriptor(ID_EFFECT , "effect");
+	public static PropertyDescriptor contextProp = new TextPropertyDescriptor(ID_CONTEXT , "context");
+
+	public static PropertyDescriptor fileNameProp = new TextPropertyDescriptor(ID_FILENAME , "fileName");
+
+	public static  PropertyDescriptor simpleProp = new ComboBoxPropertyDescriptor(ID_SIMPLE , "simple",
+			new String[] { "True", "False"});
+	public static  PropertyDescriptor submachineStateProp = new ComboBoxPropertyDescriptor(ID_SUBMACHINESTATE, "submachineState",
+			new String[] { "True", "False"});
+	public static  PropertyDescriptor orthogonalProp = new ComboBoxPropertyDescriptor(ID_ORTHOGONAL , "orthogonal",
+			new String[] { "True", "False"});
+	public static  PropertyDescriptor compositeProp = new ComboBoxPropertyDescriptor(ID_COMPOSITE, "composite",
+			new String[] { "True", "False"});
+	public java.util.ArrayList operSCOPE;//2008042101PKY S
+	public java.util.ArrayList attSCOPE;//2008042101PKY S
+
+	public static  PropertyDescriptor indirectlyInstantiatedProp = new ComboBoxPropertyDescriptor(ID_INDIRECTLYINSTANTIATED, "indirectlyInstantiated",
+			new String[] { "True", "False"});
+
+	java.util.ArrayList detailProperty = new java.util.ArrayList();
+	java.util.ArrayList extendsPoints = new java.util.ArrayList();
+	java.util.ArrayList tags = new java.util.ArrayList();
+	java.util.ArrayList interfaces = new java.util.ArrayList();
+	java.util.ArrayList parents = new java.util.ArrayList();
+	java.util.ArrayList refType = new java.util.ArrayList();
+	String desc = "";
+	N3EditorDiagramModel n3EditorDiagramModelTemp ;
+	public String view_ID = "";
+	
+	
+
+	protected static Image createImage(Class rsrcClass, String name) {
+		InputStream stream = rsrcClass.getResourceAsStream(name);
+		Image image = new Image(null, stream);
+		try {
+			
+			stream.close();
+		} catch (IOException ioe) {
+		}
+		return image;
+	}
+	
+	public int addAttributeCount(){
+		return this.attributeCount++;
+	}
+	
+	public int addOperationCount(){
+		return this.operationCount++;
+	}
+	
+	//2008042502PKY S
+	public void downAttributeCount(){
+		if(!(this.attributeCount<=0)){
+			--this.attributeCount;
+		}
+	}
+
+	public void downOperationCount(){
+		if(!(this.operationCount<=0)){
+			--this.operationCount;
+		}
+	}
+	//2008042502PKY E
+
+
+	public void setExtendsPoints(java.util.ArrayList p){
+		this.extendsPoints = p;
+		uMLDataModel.setElementProperty(this.ID_EXTENSIONPOINT, p);
+		firePropertyChange(ID_EXTENSIONPOINT, null, null); //$NON-NLS-1$
+	}
+
+	public java.util.ArrayList getExtendsPoints(){
+		if(uMLDataModel.getElementProperty(this.ID_EXTENSIONPOINT)==null){
+			this.setExtendsPoints(this.extendsPoints);
+		}
+		return (java.util.ArrayList)uMLDataModel.getElementProperty(this.ID_EXTENSIONPOINT);
+	}
+
+	public void setTags(java.util.ArrayList p){
+		this.tags = p;
+		uMLDataModel.setElementProperty(this.ID_TAG, p);
+
+	}
+
+	public java.util.ArrayList getTags(){
+		if(uMLDataModel.getElementProperty(this.ID_TAG)==null){
+			this.setTags(this.tags);
+		}
+		return (java.util.ArrayList)uMLDataModel.getElementProperty(this.ID_TAG);
+	}
+
+	public void setDesc(String p){
+		uMLDataModel.setProperty(this.ID_DESCRIPTION, p);
+
+
+
+	}
+
+	public String getDesc(){
+		if(uMLDataModel.getProperty(this.ID_DESCRIPTION)==null){
+			this.setDesc("");
+		}
+		return uMLDataModel.getProperty(this.ID_DESCRIPTION);
+	}
+
+	public UMLModel() {
+
+		uMLDataModel = new UMLDataModel();
+		
+       
+		try {
+			//공통
+			//유즈케이스 
+			//클래스
+			//상태
+			//액티비티
+			//시퀀스
+			//복합
+			//컴포넌트
+			//커뮤니케이션
+			//타이밍
+
+			//유즈케이스
+			if(this instanceof UseCaseModel){
+				//시나리오
+				//extension point
+				descriptors = new IPropertyDescriptor[] {
+						nameProp, colorProp,  attrProp, operProp, streoProp,DetailPropertyDescriptorProp,scopeProp,multiplicityPrope,packageProp
+				};
+			}
+			else if(this instanceof FinalActorModel){
+				descriptors = new IPropertyDescriptor[] {
+						typeProp,nameProp, colorProp,  attrProp, operProp, streoProp,DetailPropertyDescriptorProp,scopeProp,multiplicityPrope,actorProp,packageProp
+				};
+			}
+			else if(this instanceof FinalBoundryModel){
+				descriptors = new IPropertyDescriptor[] {
+						typeProp,nameProp, colorProp,  DetailPropertyDescriptorProp,packageProp
+				};
+			}
+			else if(this instanceof CollaborationModel){
+				descriptors = new IPropertyDescriptor[] {
+						typeProp,nameProp, colorProp,  attrProp, operProp, streoProp,DetailPropertyDescriptorProp,scopeProp,multiplicityPrope,packageProp
+				};
+			}
+			else if(this instanceof FinalPackageModel){
+				descriptors = new IPropertyDescriptor[] {
+						nameProp, colorProp,  streoProp,DetailPropertyDescriptorProp,scopeProp,packageProp
+				};
+			}
+
+			//클래스
+			else if(this instanceof FinalClassModel){
+				//시나리오
+				//extension point
+				descriptors = new IPropertyDescriptor[] {
+						nameProp, colorProp,  attrProp, operProp, streoProp,DetailPropertyDescriptorProp,scopeProp,multiplicityPrope,activeProp,packageProp
+				};
+			}
+			else if(this instanceof InterfaceModel){
+				descriptors = new IPropertyDescriptor[] {
+						nameProp, colorProp,  attrProp, operProp, streoProp,DetailPropertyDescriptorProp,scopeProp,multiplicityPrope,packageProp
+				};
+			}
+			else if(this instanceof EnumerationModel){
+				descriptors = new IPropertyDescriptor[] {
+						typeProp,nameProp, colorProp,  attrProp, operProp, streoProp,DetailPropertyDescriptorProp,scopeProp,multiplicityPrope,activeProp,packageProp
+				};
+			}
+			else if(this instanceof PartModel){
+				//시나리오
+				//extension point
+				descriptors = new IPropertyDescriptor[] {
+						nameProp, colorProp,  attrProp, operProp, streoProp,DetailPropertyDescriptorProp,scopeProp,multiplicityPrope,referenceProp,packageProp,typeProp
+				};
+			}
+			//액티비티
+
+			else if(this instanceof ExceptionModel){
+				descriptors = new IPropertyDescriptor[] {
+						nameProp, colorProp,  streoProp,DetailPropertyDescriptorProp,scopeProp,packageProp
+				};
+
+			}
+			else if(this instanceof FinalActivityModel){
+				descriptors = new IPropertyDescriptor[] {
+						typeProp,nameProp, colorProp,  attrProp, operProp, streoProp,DetailPropertyDescriptorProp,scopeProp,multiplicityPrope,readOnlyProp,singleExecutionProp,
+						preConditionProp,postConditionProp,parameterNameProp,packageProp
+				};
+			}
+			else if(this instanceof FinalStrcuturedActivityModel){
+				descriptors = new IPropertyDescriptor[] {
+						typeProp,nameProp, colorProp,  attrProp, operProp, streoProp,DetailPropertyDescriptorProp,scopeProp,multiplicityPrope,readOnlyProp,singleExecutionProp,
+						preConditionProp,postConditionProp,parameterNameProp,packageProp
+				};
+			}
+			else if(this instanceof FinalActiionModel){
+				descriptors = new IPropertyDescriptor[] {
+						typeProp,nameProp, colorProp,  streoProp,DetailPropertyDescriptorProp,scopeProp,effectProp,contextProp,packageProp
+				};
+			}
+			else if(this instanceof SendModel){
+				//시나리오
+				//extension point
+				descriptors = new IPropertyDescriptor[] {
+						nameProp, colorProp,  streoProp,DetailPropertyDescriptorProp,scopeProp,multiplicityPrope,packageProp
+				};
+			}
+
+			else if(this instanceof FlowFinalModel){
+
+				descriptors = new IPropertyDescriptor[] {
+						nameProp, colorProp,  streoProp,DetailPropertyDescriptorProp,scopeProp,multiplicityPrope,packageProp
+				};
+			}
+			else if(this instanceof ReceiveModel){
+				descriptors = new IPropertyDescriptor[] {
+						nameProp, colorProp,   streoProp,DetailPropertyDescriptorProp,scopeProp,packageProp
+				};
+			}
+			else if(this instanceof InitialModel){
+				descriptors = new IPropertyDescriptor[] {
+						nameProp, colorProp,   streoProp,DetailPropertyDescriptorProp,scopeProp,packageProp
+				};
+			}
+			else if(this instanceof FinalModel){
+				//시나리오
+				//extension point
+				descriptors = new IPropertyDescriptor[] {
+						nameProp, colorProp,   streoProp,DetailPropertyDescriptorProp,scopeProp,packageProp
+				};
+			}
+			else if(this instanceof SynchModel){
+				//시나리오
+				//extension point
+				descriptors = new IPropertyDescriptor[] {
+						nameProp, colorProp,   streoProp,DetailPropertyDescriptorProp,scopeProp,packageProp
+				};
+			}
+			else if(this instanceof DecisionModel){
+				descriptors = new IPropertyDescriptor[] {
+						nameProp, colorProp,   streoProp,DetailPropertyDescriptorProp,scopeProp,packageProp
+				};
+			}
+			else if(this instanceof FinalObjectNodeModel){
+				descriptors = new IPropertyDescriptor[] {
+						nameProp, colorProp,  attrProp, operProp, streoProp,DetailPropertyDescriptorProp,scopeProp,multiplicityPrope,objectStateProp,packageProp,typeProp
+				};
+			}
+
+			else if(this instanceof CentralBufferNodeModel){
+				descriptors = new IPropertyDescriptor[] {
+						nameProp, colorProp,   streoProp,DetailPropertyDescriptorProp,scopeProp,packageProp
+				};
+			}
+			else if(this instanceof DataStoreModel){
+				descriptors = new IPropertyDescriptor[] {
+						nameProp, colorProp,  attrProp, operProp, streoProp,DetailPropertyDescriptorProp,scopeProp,multiplicityPrope,objectStateProp,packageProp
+				};
+			}
+
+			else if(this instanceof HPartitionModel){
+				//시나리오
+				//extension point
+				descriptors = new IPropertyDescriptor[] {
+						nameProp, colorProp,   streoProp,DetailPropertyDescriptorProp,scopeProp,packageProp
+				};
+			}
+			else if(this instanceof HForkJoinModel){
+				descriptors = new IPropertyDescriptor[] {
+						nameProp, colorProp,   streoProp,DetailPropertyDescriptorProp,scopeProp,packageProp
+				};
+			}
+			else if(this instanceof VForkJoinModel){
+				descriptors = new IPropertyDescriptor[] {
+						nameProp, colorProp,   streoProp,DetailPropertyDescriptorProp,scopeProp,packageProp
+				};
+			}
+
+			//상태
+			else if(this instanceof StateModel){
+				descriptors = new IPropertyDescriptor[] {
+						nameProp, colorProp,  attrProp, operProp, streoProp,DetailPropertyDescriptorProp,scopeProp,simpleProp,submachineStateProp,orthogonalProp,compositeProp,packageProp
+				};
+
+			}
+			else if(this instanceof StrcuturedStateModel){
+				descriptors = new IPropertyDescriptor[] {
+						nameProp, colorProp,  attrProp, operProp, streoProp,DetailPropertyDescriptorProp,scopeProp,simpleProp,submachineStateProp,orthogonalProp,compositeProp,packageProp
+				};
+
+			}
+			else if(this instanceof HistoryModel){
+				descriptors = new IPropertyDescriptor[] {
+						nameProp, colorProp,  streoProp,DetailPropertyDescriptorProp,scopeProp,packageProp
+				};
+
+			}
+			else if(this instanceof TerminateModel){
+				descriptors = new IPropertyDescriptor[] {
+						nameProp, colorProp,  streoProp,DetailPropertyDescriptorProp,scopeProp,packageProp
+				};
+
+			} 
+			else if(this instanceof InitialModel){
+				descriptors = new IPropertyDescriptor[] {
+						nameProp, colorProp,  streoProp,DetailPropertyDescriptorProp,scopeProp,packageProp
+				};
+
+			}  
+			else if(this instanceof FinalModel){
+				descriptors = new IPropertyDescriptor[] {
+						nameProp, colorProp,  streoProp,DetailPropertyDescriptorProp,scopeProp,packageProp
+				};
+
+			}  
+			else if(this instanceof FlowFinalModel){
+				descriptors = new IPropertyDescriptor[] {
+						nameProp, colorProp,  streoProp,DetailPropertyDescriptorProp,scopeProp,packageProp
+				};
+
+			} 
+			else if(this instanceof SynchModel){
+				descriptors = new IPropertyDescriptor[] {
+						nameProp, colorProp,  streoProp,DetailPropertyDescriptorProp,scopeProp,packageProp
+				};
+
+			} 
+			else if(this instanceof DecisionModel){
+				descriptors = new IPropertyDescriptor[] {
+						nameProp, colorProp,  streoProp,DetailPropertyDescriptorProp,scopeProp,packageProp
+				};
+
+			}  
+
+			else if(this instanceof HForkJoinModel){
+				descriptors = new IPropertyDescriptor[] {
+						nameProp, colorProp,  streoProp,DetailPropertyDescriptorProp,scopeProp,packageProp
+				};
+
+			}  
+			else if(this instanceof VForkJoinModel){
+				descriptors = new IPropertyDescriptor[] {
+						nameProp, colorProp,  streoProp,DetailPropertyDescriptorProp,scopeProp,packageProp
+				};
+
+			}  
+			else if(this instanceof VForkJoinModel){
+				descriptors = new IPropertyDescriptor[] {
+						nameProp, colorProp,  streoProp,DetailPropertyDescriptorProp,scopeProp,packageProp
+				};
+
+			} 
+			//컴포넌트
+			else if(this instanceof ComponentModel){
+				descriptors = new IPropertyDescriptor[] {
+						nameProp, colorProp,  attrProp, operProp, streoProp,DetailPropertyDescriptorProp,scopeProp,indirectlyInstantiatedProp,packageProp
+				};
+
+			}
+			else if(this instanceof ArtfifactModel){
+				descriptors = new IPropertyDescriptor[] {
+						nameProp, colorProp,  attrProp, operProp, streoProp,DetailPropertyDescriptorProp,scopeProp,fileNameProp,multiplicityPrope,packageProp,typeProp
+				};
+
+			}
+			//노드
+			else if(this instanceof NodeModel){
+				descriptors = new IPropertyDescriptor[] {
+						nameProp, colorProp,  attrProp, operProp, streoProp,DetailPropertyDescriptorProp,scopeProp,multiplicityPrope,packageProp
+				};
+
+			}
+			else if(this instanceof DeviceModel){
+				descriptors = new IPropertyDescriptor[] {
+						nameProp, colorProp,  attrProp, operProp, streoProp,DetailPropertyDescriptorProp,scopeProp,multiplicityPrope,packageProp,typeProp
+				};
+
+			}
+			else if(this instanceof ExecutionEnvironmentModel){
+				descriptors = new IPropertyDescriptor[] {
+						nameProp, colorProp,  attrProp, operProp, streoProp,DetailPropertyDescriptorProp,scopeProp,multiplicityPrope,packageProp
+				};
+
+			}
+			else if(this instanceof DeploymentSpecificationModel){
+				descriptors = new IPropertyDescriptor[] {
+						nameProp, colorProp,  attrProp, operProp, streoProp,DetailPropertyDescriptorProp,scopeProp,multiplicityPrope,packageProp,typeProp
+				};
+
+			}
+
+			else if(this instanceof StateLifelineModel){
+				descriptors = new IPropertyDescriptor[] {
+						nameProp, colorProp, DetailPropertyDescriptorProp,packageProp,configureTimeLineProp,messagePropertiestProp,typeProp
+				};
+
+			}
+			else if(this instanceof LifeLineModel){
+				descriptors = new IPropertyDescriptor[] {
+						nameProp, colorProp, DetailPropertyDescriptorProp,packageProp,typeProp//2008042203PKY S
+				};
+
+			}
+			else if(this instanceof GroupModel){
+				descriptors = new IPropertyDescriptor[] {
+
+				};
+
+			}//2008041501PKY S
+
+			else if(this instanceof FragmentModel){
+				descriptors = new IPropertyDescriptor[] {
+						nameProp, packageProp,fragmProp
+				};
+			}//2008041501PKY E
+			//2008042204PKY S
+
+			else if(this instanceof MessageCommunicationModel){
+				descriptors = new IPropertyDescriptor[] {
+						DetailPropertyDescriptorProp
+				};
+			}
+			else if(this instanceof SelfMessageModel){
+				descriptors = new IPropertyDescriptor[] {
+						packageProp
+				};
+			}
+			//2008042204PKY E
+
+			else{
+				descriptors = new IPropertyDescriptor[] {
+						nameProp,packageProp
+				}; 
+			}
+			uMLDataModel.setElementProperty(this.ID_UPDATE_LISTENER, this.updateListener);
+			this.view_ID = ProjectManager.getInstance().getViewId(this);//2008042901 PKY S 
+			
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void setDetailProperty(java.util.ArrayList p){
+		this.detailProperty = p;
+
+		uMLDataModel.setElementProperty(this.ID_DETAIL, p);
+	}
+
+	public java.util.ArrayList getDetailProperty(){
+		if(uMLDataModel.getElementProperty(this.ID_DETAIL)==null){
+			this.setDetailProperty(this.detailProperty);
+		}
+		return (java.util.ArrayList)uMLDataModel.getElementProperty(this.ID_DETAIL);
+	}
+	
+	public void select(boolean isSelect){
+		firePropertyChange(this.ID_SELECT, null, isSelect); //$NON-NLS-1$
+	}
+
+	//참조관련
+	public void addUpdateListener(UMLModel p) {
+		updateListener = (java.util.ArrayList)uMLDataModel.getElementProperty(this.ID_UPDATE_LISTENER);
+		updateListener.add(p);
+	}
+
+	//참조관련
+	public void removeUpdateListener(UMLModel p) {
+		updateListener = (java.util.ArrayList)uMLDataModel.getElementProperty(this.ID_UPDATE_LISTENER);
+		this.updateListener.remove(p);
+	}
+
+	//참조관련
+	public void fireChildUpdate(UpdateEvent e) {
+		for (int i = 0; i < this.updateListener.size(); i++) {
+			
+			IUMLModelUpdateListener iu = (IUMLModelUpdateListener)this.updateListener.get(i);
+//			if(!(iu instanceof LifeLineModel))
+			iu.updateModel(e);
+		}
+	}
+
+	//라인 연결시 부모에게 연결시켜야 하는 경우
+	public void setParentModel(UMLModel p) {
+		this.parentModel = p;
+	}
+
+	public UMLModel getParentModel() {
+		return this.parentModel;
+	}
+
+	public void setLayout(Integer s) {
+		this.layout = s;
+		//		text = s;
+		//		firePropertyChange("labelContents", null, text); //$NON-NLS-2$//$NON-NLS-1$
+	}
+
+	public void setParentLayout(int s) {
+		this.parentLayout = s;
+		//		text = s;
+		//		firePropertyChange("labelContents", null, text); //$NON-NLS-2$//$NON-NLS-1$
+	}
+
+	public Integer getLayout() {
+		return this.layout;
+		//		text = s;
+		//		firePropertyChange("labelContents", null, text); //$NON-NLS-2$//$NON-NLS-1$
+	}
+
+	public int getParentLayout() {
+		return this.parentLayout;
+		//		text = s;
+		//		firePropertyChange("labelContents", null, text); //$NON-NLS-2$//$NON-NLS-1$
+	}
+
+	//	protected String getNewID(){
+	//	return "";
+	////	this.
+	//	}
+	public void connectInput(LineModel w) {
+		//		inputs.put(w.getTargetTerminal(), w);
+		inputs.addElement(w);
+		update();
+		fireStructureChange(INPUTS, w);
+	}
+
+	public void connectOutput(LineModel w) {
+		outputs.addElement(w);
+		update();
+		fireStructureChange(OUTPUTS, w);
+	}
+
+	public void disconnectInput(LineModel w) {
+		inputs.remove(w);
+		update();
+		fireStructureChange(INPUTS, w);
+	}
+
+	public void disconnectOutput(LineModel w) {
+		outputs.removeElement(w);
+		update();
+		fireStructureChange(OUTPUTS, w);
+	}
+
+	public Vector getConnections() {
+		Vector v = (Vector)outputs.clone();
+		Enumeration ins = inputs.elements();
+		while (ins.hasMoreElements())
+			v.addElement(ins.nextElement());
+		return v;
+	}
+
+	protected void setOutput(String terminal, boolean val) {
+		Enumeration elements = outputs.elements();
+		Wire w;
+		while (elements.hasMoreElements()) {
+			w = (Wire)elements.nextElement();
+			if (w.getSourceTerminal().equals(terminal) && this.equals(w.getSource()))
+				w.setValue(val);
+		}
+	}
+
+	//	protected boolean getInput(String terminal) {
+		//	LineModel w = (LineModel)inputs.get(terminal);
+		//	return (w == null) ? false : w.getValue();
+	//	}
+	public UMLModelGuide getHorizontalGuide() {
+		return horizontalGuide;
+	}
+
+	public Image getIcon() {
+		return getIconImage();
+	}
+
+	abstract public Image getIconImage();
+
+	public String getID() {
+		return uMLDataModel.getId();
+	}
+
+	public Point getLocation() {
+		return location;
+	}
+
+	protected String getNewID() {
+		return "";
+	}
+
+	/**
+	 * Returns useful property descriptors for the use in property sheets. this supports location and size.
+	 * @return  Array of property descriptors.
+	 */
+	public IPropertyDescriptor[] getPropertyDescriptors() {
+		System.out.println("ddddd");
+		return descriptors;
+	}
+
+	/**
+	 * Returns an Object which represents the appropriate value for the property name supplied.
+	 * @param propName  Name of the property for which the the values are needed.
+	 * @return  Object which is the value of the property.
+	 */
+	public Object getPropertyValue(Object propName) {
+		try{
+			if (ID_SIZE.equals(propName))
+				return new DimensionPropertySource(getSize());
+			else if (ID_LOCATION.equals(propName))
+				return new LocationPropertySource(getLocation());
+			else if (ID_NAME.equals(propName)) {
+				return this.getName();
+			} else if (this.ID_COLOR.equals(propName)) {
+				return this.backGroundColor.getRGB();
+			} else if (this.ID_DESCRIPTION.equals(propName)) {
+				return this.description;
+			}
+			else if (this.ID_FONT.equals(propName)) {
+				return this.font.getFontData();
+			}
+			else if (this.ID_STEREOTYPE.equals(propName)) {
+				return this.getStereotype();
+			}
+			else if (this.ID_SCOPE.equals(propName)) {
+				return this.getScope();
+			}
+			else if (this.ID_ACTIVE.equals(propName)) {
+				return this.getActive();
+			}
+			else if (this.ID_REFERENCE.equals(propName)) {
+				return this.getReference();
+			}
+			else if (this.ID_MULTI.equals(propName)) {
+				return this.getMultiplicity();
+			}
+
+			else if (this.ID_READONLY.equals(propName)) {
+				return this.getReadOnly();
+			}
+			else if (this.ID_PRECONDITION.equals(propName)) {
+				return this.getPreCondition();
+			}
+			else if (this.ID_POSTCONDITION.equals(propName)) {
+				return this.getPostCondition();
+			}
+			else if (this.ID_SINGLEEXECUTION.equals(propName)) {
+				return this.getSingleExecution();
+			}
+			else if (this.ID_PARAMETERNAME.equals(propName)) {
+				return this.getParameterName();
+			}
+			else if (this.ID_OBJECT_STATE.equals(propName)) {
+				return this.getObjectState();
+			}
+
+			else if (this.ID_EFFECT.equals(propName)) {
+				return this.getEffect();
+			}
+			else if (this.ID_CONTEXT.equals(propName)) {
+				return this.getContext();
+			}
+
+			else if (this.ID_SIMPLE.equals(propName)) {
+				return this.getSimple();
+			}
+			else if (this.ID_SUBMACHINESTATE.equals(propName)) {
+				return this.getSubmachineState();
+			}
+			else if (this.ID_ORTHOGONAL.equals(propName)) {
+				return this.getOrthogonal();
+			}
+			else if (this.ID_COMPOSITE.equals(propName)) {
+				return this.getComposite();
+			}
+			else if (this.ID_INDIRECTLYINSTANTIATED.equals(propName)) {
+				return this.getIndirectlyInstantiated();
+			}
+			else if (this.ID_ACTORIMAGE.equals(propName)) {
+				return this.getActorImage();
+			}
+			else if (this.ID_PACKAGE.equals(propName)) {
+				return this.getPackage();
+			}
+			else{
+				ProjectManager.getInstance().setSelectPropertyUMLElementModel(this);
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public String getPackage(){
+		StringBuffer sb = new StringBuffer();
+		java.util.ArrayList list = new java.util.ArrayList();
+		if(this.treeModel!=null){
+			this.treeModel.getPackage(list);
+		}
+		//2008040303 PKY S 
+
+		for(int i=list.size()-1;i>0;i--){
+			if(i!=list.size()-1){
+			String p = (String)list.get(i);
+			
+			sb.append(p);
+			if(i<list.size()-1){
+				if(i!=1)
+				sb.append(".");
+			}
+			}
+		}
+		//2008040303 PKY E 
+
+		return sb.toString();
+	}
+	public Dimension getSize() {
+		return size;
+	}
+
+	public String getName() {
+		return uMLDataModel.getName();
+	}
+
+	public Vector getSourceConnections() {
+		return (Vector)outputs.clone();
+	}
+
+	public Vector getTargetConnections() {
+		Enumeration elements = inputs.elements();
+		Vector v = new Vector(inputs.size());
+		while (elements.hasMoreElements())
+			v.addElement(elements.nextElement());
+		return v;
+	}
+
+	public UMLModelGuide getVerticalGuide() {
+		return verticalGuide;
+	}
+
+	/**  */
+	public boolean isPropertySet() {
+		return true;
+	}
+
+	public void setHorizontalGuide(UMLModelGuide hGuide) {
+		horizontalGuide = hGuide;
+
+		/*
+		 * @TODO:Pratik   firePropertyChanged?
+		 */
+	}
+
+	/*
+	 * Does nothing for the present, but could be
+	 * used to reset the properties of this to
+	 * whatever values are desired.
+	 *
+	 * @param id  Parameter which is to be reset.
+	 *
+public void resetPropertyValue(Object id){
+	if(ID_SIZE.equals(id)){;}
+	if(ID_LOCATION.equals(id)){;}
+}*/
+
+	public void setID(String s) {
+		id = s;
+	}
+
+	public void setLocation(Point p) {
+		//port
+		System.out.println("p1:" + p);
+		if (location.equals(p))
+			return;
+		location = p;
+		firePropertyChange(ID_LOCATION, null, p); //$NON-NLS-1$
+	}
+
+	/**
+	 * Sets the value of a given property with the value supplied. Also fires a property change if necessary.
+	 * @param id  Name of the parameter to be changed.
+	 * @param value  Value to be set to the given parameter.
+	 */
+	public void setPropertyValue(Object id, Object value) {
+		if (ID_SIZE.equals(id))
+			setSize((Dimension)value);
+		else if (ID_LOCATION.equals(id))
+			setLocation((Point)value);
+		else if (ID_NAME.equals(id)) {
+			setName((String)value);
+		}
+		else if (ID_COLOR.equals(id)) {
+			Color newColor = new Color(null, (RGB)value);
+			this.setBackGroundColor(newColor);
+		}
+		else if (this.ID_DESCRIPTION.equals(id)) {
+			this.description = (String)value;
+		}
+		else if (this.ID_FONT.equals(id)) {
+			Font newFont = new Font(null, (FontData)value);
+			this.font = newFont;
+		}
+		else if (this.ID_STEREOTYPE.equals(id)) {
+			this.setStereotype((String)value);
+		}
+		else if (this.ID_STEREOTYPE.equals(id)) {
+			//2008041604PKY S
+			if(this.getStereotype()!=null||!this.getStereotype().equals(""))
+			this.setStero(true);	
+			//2008041604PKY E
+			this.setStereotype((String)value);
+		}
+		else if (this.ID_ACTIVE.equals(id)) {
+			this.setActive(value.toString());
+		}
+		else if (this.ID_REFERENCE.equals(id)) {
+			this.setReference(value.toString());
+		}
+		else if (this.ID_MULTI.equals(id)) {
+			this.setMultiplicity((String)value);
+		}
+		else if (this.ID_OBJECT_STATE.equals(id)) {
+			this.setObjectState((String)value);
+		}
+
+		else if (this.ID_READONLY.equals(id)) {
+			this.setReadOnly((String)value);
+		}
+		else if (this.ID_PRECONDITION.equals(id)) {
+			this.setPreCondition(value.toString());
+		}
+		else if (this.ID_POSTCONDITION.equals(id)) {
+			this.setPostCondition(value.toString());
+		}
+		else if (this.ID_SINGLEEXECUTION.equals(id)) {
+			this.setSingleExecution(value.toString());
+		}
+		else if (this.ID_PARAMETERNAME.equals(id)) {
+			this.setParameterName((String)value);
+		}
+
+		else if (this.ID_EFFECT.equals(id)) {
+			this.setEffect(value.toString());
+		}
+		else if (this.ID_CONTEXT.equals(id)) {
+			this.setContext((String)value);
+		}
+
+		else if (this.ID_SIMPLE.equals(id)) {
+			this.setSimple((String)value);
+		}
+		else if (this.ID_SUBMACHINESTATE.equals(id)) {
+			this.setSubmachineState((String)value);
+		}
+		else if (this.ID_ORTHOGONAL.equals(id)) {
+			this.setOrthogonal((String)value);
+		}
+		else if (this.ID_COMPOSITE.equals(id)) {
+			this.setComposite((String)value);
+		}
+		else if (this.ID_INDIRECTLYINSTANTIATED.equals(id)) {
+			this.setIndirectlyInstantiated((String)value);
+		}
+		else if (this.ID_ACTORIMAGE.equals(id)) {
+			this.setActorImage((String)value);
+		}
+
+
+	}
+
+	public void setSize(Dimension d) {
+		if (size.equals(d))
+			return;
+		//2008042301PKY S
+	 if(this instanceof FinalPackageModel){
+			if(d.height<62){
+				d.height=62;
+			}
+			if(d.width<55){
+				d.width=55;
+			}
+		}else{
+			if(d.height<25){
+				d.height=30;
+			}
+			if(d.width<30){
+				d.width=25;
+			}
+		}
+		
+	//2008042301PKY E
+		size = d;
+		firePropertyChange(this.ID_SIZE, null, size); //$NON-NLS-1$
+	}
+
+	public void setObjectState(String p){
+		uMLDataModel.setProperty(this.ID_OBJECT_STATE, p);
+		firePropertyChange(ID_OBJECT_STATE, null, null); //$NON-NLS-1$
+	}
+
+	public String getObjectState(){
+		if(uMLDataModel.getProperty(this.ID_OBJECT_STATE)==null){
+			this.setObjectState("");
+		}
+		return uMLDataModel.getProperty(this.ID_OBJECT_STATE);
+	}
+
+
+	public void setEffect(String p){
+		uMLDataModel.setProperty(this.ID_EFFECT, p);
+
+	}
+
+	public String getEffect(){
+		if(uMLDataModel.getProperty(this.ID_EFFECT)==null){
+			this.setEffect("");
+		}
+		return uMLDataModel.getProperty(this.ID_EFFECT);
+	}
+
+	public void setIndirectlyInstantiated(String p){
+		uMLDataModel.setProperty(this.ID_INDIRECTLYINSTANTIATED, p);
+
+	}
+
+	public String getIndirectlyInstantiated(){
+		if(uMLDataModel.getProperty(this.ID_INDIRECTLYINSTANTIATED)==null){
+			this.setIndirectlyInstantiated("");
+		}
+		return uMLDataModel.getProperty(this.ID_INDIRECTLYINSTANTIATED);
+	}
+
+
+
+
+	public void setContext(String p){
+		uMLDataModel.setProperty(this.ID_CONTEXT, p);
+
+	}
+
+	public String getContext(){
+		if(uMLDataModel.getProperty(this.ID_CONTEXT)==null){
+			this.setContext("");
+		}
+		return uMLDataModel.getProperty(this.ID_CONTEXT);
+	}
+
+	public void setFileName(String p){
+		uMLDataModel.setProperty(this.ID_FILENAME, p);
+
+	}
+
+	public String getFileName(){
+		if(uMLDataModel.getProperty(this.ID_FILENAME)==null){
+			this.setFileName("");
+		}
+		return uMLDataModel.getProperty(this.ID_FILENAME);
+	}
+
+
+
+	public void setPreCondition(String p){
+		uMLDataModel.setProperty(this.ID_PRECONDITION, p);
+		firePropertyChange(ID_PRECONDITION, null, null); //$NON-NLS-1$
+	}
+
+	public String getPreCondition(){
+		if(uMLDataModel.getProperty(this.ID_PRECONDITION)==null){
+			this.setPreCondition("");
+		}
+		return uMLDataModel.getProperty(this.ID_PRECONDITION);
+	}
+
+	public void setPostCondition(String p){
+		uMLDataModel.setProperty(this.ID_POSTCONDITION, p);
+		firePropertyChange(ID_POSTCONDITION, null, null); //$NON-NLS-1$
+	}
+
+	public String getPostCondition(){
+		if(uMLDataModel.getProperty(this.ID_POSTCONDITION)==null){
+			this.setPostCondition("");
+		}
+		return uMLDataModel.getProperty(this.ID_POSTCONDITION);
+	}
+
+	public void setParameterName(String p){
+		uMLDataModel.setProperty(this.ID_PARAMETERNAME, p);
+		firePropertyChange(ID_PARAMETERNAME, null, null); //$NON-NLS-1$
+	}
+
+	public String getParameterName(){
+		if(uMLDataModel.getProperty(this.ID_PARAMETERNAME)==null){
+			this.setParameterName("");
+		}
+
+		return uMLDataModel.getProperty(this.ID_PARAMETERNAME);
+	}
+
+	public void setReadOnly(String p){
+		uMLDataModel.setProperty(this.ID_READONLY , p);
+	}
+
+	public Integer getReadOnly(){
+		if(uMLDataModel.getProperty(this.ID_READONLY)==null){
+			this.setReadOnly("1");
+		}
+		return Integer.valueOf(uMLDataModel.getProperty(this.ID_READONLY));
+	}
+
+	public void setSingleExecution(String p){
+		uMLDataModel.setProperty(this.ID_SINGLEEXECUTION , p);
+	}
+
+	public Integer getSingleExecution(){
+		if(uMLDataModel.getProperty(this.ID_SINGLEEXECUTION)==null){
+			this.setSingleExecution("1");
+		}
+		return Integer.valueOf(uMLDataModel.getProperty(this.ID_SINGLEEXECUTION));
+	}
+
+
+
+	public void setSimple(String p){
+		uMLDataModel.setProperty(this.ID_SIMPLE , p);
+	}
+
+	public Integer getSimple(){
+		if(uMLDataModel.getProperty(this.ID_SIMPLE)==null){
+			this.setSimple("1");
+		}
+		return Integer.valueOf(uMLDataModel.getProperty(this.ID_SIMPLE));
+	}
+
+	public void setSubmachineState(String p){
+		uMLDataModel.setProperty(this.ID_SUBMACHINESTATE , p);
+	}
+
+	public Integer getSubmachineState(){
+		if(uMLDataModel.getProperty(this.ID_SUBMACHINESTATE)==null){
+			this.setSubmachineState("1");
+		}
+		return Integer.valueOf(uMLDataModel.getProperty(this.ID_SUBMACHINESTATE));
+	}
+
+
+	public void setOrthogonal(String p){
+		uMLDataModel.setProperty(this.ID_ORTHOGONAL , p);
+	}
+
+	public Integer getOrthogonal(){
+		if(uMLDataModel.getProperty(this.ID_ORTHOGONAL)==null){
+			this.setOrthogonal("1");
+		}
+		return Integer.valueOf(uMLDataModel.getProperty(this.ID_ORTHOGONAL));
+	}
+
+	public void setComposite(String p){
+		uMLDataModel.setProperty(this.ID_COMPOSITE , p);
+	}
+
+	public Integer getComposite(){
+		if(uMLDataModel.getProperty(this.ID_COMPOSITE)==null){
+			this.setComposite("1");
+		}
+		return Integer.valueOf(uMLDataModel.getProperty(this.ID_COMPOSITE));
+	}
+
+
+
+
+	public void setActive(String p){
+		uMLDataModel.setProperty(this.ID_ACTIVE, p);
+	}
+
+	public Integer getActive(){
+		if(uMLDataModel.getProperty(this.ID_ACTIVE)==null){
+			this.setActive("1");
+		}
+		return Integer.valueOf(uMLDataModel.getProperty(this.ID_ACTIVE));
+	}
+	public void setReference(String p){
+		uMLDataModel.setProperty(this.ID_REFERENCE, p);
+		firePropertyChange(this.ID_REFERENCE, null, null); //$NON-NLS-1$
+	}
+
+	public Integer getReference(){
+		if(uMLDataModel.getProperty(this.ID_REFERENCE)==null){
+			this.setReference("1");
+		}
+		return Integer.valueOf(uMLDataModel.getProperty(this.ID_REFERENCE));
+	}
+
+	public void setActorImage(String p){
+		uMLDataModel.setProperty(this.ID_ACTORIMAGE, p);
+		Image image = this.getImage(p);
+
+		uMLDataModel.setProperty(this.ID_W, String.valueOf(image.getBounds().width));
+		uMLDataModel.setProperty(this.ID_H, String.valueOf(image.getBounds().height));
+		uMLDataModel.setElementProperty(this.ID_IMAGEDATA, image);
+		firePropertyChange(this.ID_ACTORIMAGE, null, null); //$NON-NLS-1$
+//		firePropertyChange(this.ID_IMAGEDATA, null, null); //$NON-NLS-1$
+	}
+
+	public String getActorImage(){
+		if(uMLDataModel.getProperty(this.ID_ACTORIMAGE)==null){
+			this.setActorImage("");
+		}
+		return uMLDataModel.getProperty(this.ID_ACTORIMAGE);
+	}
+
+	public Image getImage(String p){
+		//ijs080429
+		return ProjectManager.getInstance().getImage(p);
+
+
+	}
+
+
+
+	public void setScope(String p){
+		uMLDataModel.setProperty(this.ID_SCOPE, p);
+	}
+
+	public Integer getScope(){
+		if(uMLDataModel.getProperty(this.ID_SCOPE)==null){
+			this.setScope("0");
+		}
+		return Integer.valueOf(uMLDataModel.getProperty(this.ID_SCOPE));
+	}
+
+	public void setMultiplicity(String p){
+		uMLDataModel.setProperty(this.ID_MULTI, p);
+		firePropertyChange(ID_MULTI, null, null); //$NON-NLS-1$
+
+	}
+
+	public String getMultiplicity(){
+		if(uMLDataModel.getProperty(this.ID_MULTI)==null){
+			this.setMultiplicity("");
+		}
+		return uMLDataModel.getProperty(this.ID_MULTI);
+	}
+
+	public void setName(String _name) {
+		if (uMLDataModel.getName().equals(_name))
+			return;
+		//		name = _name;
+		uMLDataModel.setName(_name);
+		firePropertyChange(ID_NAME, null, _name); //$NON-NLS-1$
+	}
+
+	public void setStereotype(String p) {
+		this.stereotype = p;
+	}
+
+	public String getStereotype() {
+		return this.stereotype;
+	}
+
+	public void setBackGroundColor(Color d) {
+		this.backGroundColor = d;
+//		this.uMLDataModel.setElementProperty(ID_COLOR, d);
+		firePropertyChange(ID_COLOR, null, backGroundColor); //$NON-NLS-1$
+	}
+
+	public Color getBackGroundColor() {
+		return this.backGroundColor;
+	}
+
+	public void setVerticalGuide(UMLModelGuide vGuide) {
+		verticalGuide = vGuide;
+	}
+
+	public void setTreeModel(UMLTreeModel p) {
+		this.treeModel = p;
+	}
+
+	public UMLTreeModel getUMLTreeModel() {
+		return this.treeModel;
+	}
+
+	public void setUMLDataModel(UMLDataModel p) {
+		this.uMLDataModel = p;
+	}
+
+	public UMLDataModel getUMLDataModel() {
+		return this.uMLDataModel;
+	}
+
+	public EditPart getTempEditPart() {
+		UMLGraphicalPartFactory ugp = new UMLGraphicalPartFactory();
+		return ugp.createEditPart(null, this);
+	}
+
+	public Object clone() {
+		return null;
+	}
+
+	public Vector getCloneOutPutLine() {
+		Vector vc = this.getSourceConnections();
+		for (int i = 0; i < vc.size(); i++) {
+			LineModel li = (LineModel)vc.get(i);
+		}
+		return null;
+	}
+
+
+	public boolean isAddLine() {
+		return isAddLine;
+	}
+
+
+	public void setAddLine(boolean isAddLine) {
+		this.isAddLine = isAddLine;
+	}
+
+
+	public java.util.ArrayList getInterfaces() {
+		return interfaces;
+	}
+
+
+	public void setInterfaces(java.util.ArrayList interfaces) {
+		this.interfaces = interfaces;
+	}
+
+
+	public java.util.ArrayList getParents() {
+		return parents;
+	}
+
+
+	public void setParents(java.util.ArrayList parents) {
+		this.parents = parents;
+	}
+
+	public int getAttributeCount() {
+		return attributeCount;
+	}
+
+	public void setAttributeCount(int attributeCount) {
+		this.attributeCount = attributeCount;
+	}
+
+	public int getOperationCount() {
+		return operationCount;
+	}
+
+	public void setOperationCount(int operationCount) {
+		this.operationCount = operationCount;
+	}
+
+	public N3EditorDiagramModel getN3EditorDiagramModelTemp() {
+		return n3EditorDiagramModelTemp;
+	}
+
+	public void setN3EditorDiagramModelTemp(
+			N3EditorDiagramModel editorDiagramModelTemp) {
+		n3EditorDiagramModelTemp = editorDiagramModelTemp;
+	}
+
+	public java.util.ArrayList getRefType() {
+		return refType;
+	}
+
+	public void setRefType(java.util.ArrayList refType) {
+		this.refType = refType;
+	}
+	
+	public void updateModel(UpdateEvent p) {
+//        //rename
+//        if (p.getType() == IUpdateType.REMOVE_TYPE) {
+//            setName(this.getName());
+//        }
+    }
+
+	public String getView_ID() {
+		return view_ID;
+	}
+
+	public void setView_ID(String view_ID) {
+		this.view_ID = view_ID;
+	}
+	//20080327 PKY S 해당 객체에 파티션이 먼져 들어가있는지 없는지 확인
+	public boolean isPartition() {
+		return isPartition;
+	}
+
+	public void setPartition(boolean isPartition) {
+		this.isPartition = isPartition;
+	}
+	//20080327 PKY E 해당 객체에 파티션이 먼져 들어가있는지 없는지 확인
+	//2008042106PKY S
+
+	public NodeContainerModel getSaveContainer() {
+		return saveContainer;
+	}
+
+	public void setSaveContainer(NodeContainerModel saveContainer) {
+		this.saveContainer = saveContainer;
+	}
+	//2008042106PKY E
+	
+	public boolean isStero() {
+		return isStero;
+	}
+
+	public void setStero(boolean isStero) {
+		this.isStero = isStero;
+//		uMLDataModel.setElementProperty(this.ID_EXTENSIONPOINT, p);
+//		firePropertyChange(ID_EXTENSIONPOINT, null, null); //$NON-NLS-1$
+	}
+
+	
+//	public String writeView(){
+//		StringBuffer sb = new StringBuffer();
+//		return sb.toString();
+//	}
+}

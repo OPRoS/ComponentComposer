@@ -1,0 +1,66 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE> New Document </TITLE>
+<META NAME="Generator" CONTENT="EditPlus">
+<META NAME="Author" CONTENT="">
+<META NAME="Keywords" CONTENT="">
+<META NAME="Description" CONTENT="">
+</HEAD>
+
+<BODY>
+<div class="help_breadcrumbs"><a href="../main.html">사용자 메뉴얼</a> > 
+<a href="./modeler_main.html">영역 모델러의 사용</a> > 
+<a href="./modeler_1.html">UML Structural(구조적 모델링 다이어그램)</a> > 
+<a href="./modeler_1_2.html">Class</a> > 
+</div>
+
+<h1 class="NavTitle">객체 생성 및 편집</h1>
+
+<p>class 다이어그램은 class의 palett에서 객체를 이용하여 작성한다.
+<ol>
+<li>객체 생성</li>
+<p>palette에서 생성할 객체를 클릭하고 원하는 다이어그램 위치에 클릭하면 객체가 생성된다.
+<P CLASS="Para" align="center"><img src="../images/modeler/1/class/image011.jpg" alt="start1" border="0"><br>
+그림 2.1-2 class 생성
+</p>
+<li>객체 삭제</li>
+<p>객체삭제는 모델삭제와 뷰 삭제 두가지가 있다. 다이어그램에는 여러개의 같은 객체의 뷰가 생성 가능하지만 모델에는 단 하나이 객체만 생성할 수 있다.
+<p>패키지 모델을 삭제할 때는 트리에서 삭제할 패키지에 마우스를 대고 우클릭을 하면 뜨는 팝업창에서 Delete Model을 선택하면 객체를 삭제할 수 있다. 객체 모델을 삭제하면 추가했던 뷰들도 모두 삭제된다.
+<P CLASS="Para" align="center"><img src="../images/modeler/1/class/image012.jpg" alt="start1" border="0"><br>
+그림 2.1-2 모델 지우기
+</p>
+<p>뷰 지우기는 다이어그램에서 삭제할 객체에 마우스를 대고 우클릭을 하면 뜨는 팝업창에서 delete를 선택하면 다이어그램에서뷰를 삭제할 수 있다.
+<P CLASS="Para" align="center"><img src="../images/modeler/1/class/image013.jpg" alt="start1" border="0"><br>
+그림 2.1-2 뷰 지우기
+</p>
+<li>객체 이름 변경</li>
+<p>객체의 이름을 바꾸려면 클래스를 선택하고 이름이 보이는 영역을 더블클릭하면 이름을 변경할수 있도록 선택된다. 변경하고자 하는 이름으로 입력하고 엔터를 누르거나, 객체를 마우스로 클릭하면 이름이 변경된다. 객체의 이름은 다른 객체 이름과 중복되어서는 안된다.
+<P CLASS="Para" align="center"><img src="../images/modeler/1/class/image014.jpg" alt="start1" border="0"><br>
+그림 2.1-2 
+</p>
+<li>Add 기능</li>
+<p>클래스에 선택된 내용을 추가한다. port, attribut, operation이 있다. 프로퍼티에서도 동일한 기능을 추가할 수 있다.
+<P CLASS="Para" align="center"><img src="../images/modeler/1/class/image015.jpg" alt="start1" border="0"><br>
+그림 2.1-2 class Add 기능
+</p>
+<ul>
+<li>port - 클래스에 포트를 추가한다.</li>
+<li>attribute - 클래스에 어트리뷰트를 추가한다.</li>
+<li>operation - 클래스에 오퍼레이션을 추가한다.</li>
+</ul>
+<P CLASS="Para" align="center"><img src="../images/modeler/1/class/image015_1.jpg" alt="start1" border="0">
+<img src="../images/modeler/1/class/image015_2.jpg" alt="start1" border="0">
+<img src="../images/modeler/1/class/image015_3.jpg" alt="start1" border="0"><br>
+그림 2.1-2 포트, 어트리뷰트, 오퍼레이션이 추가된 클래스
+</p>
+<p>
+<li>인터페이스 모양 변경</li>
+<p>인터페이스의 모양을 변경할 수 있다.인터페이스에 마우스를 대고 우클릭을 하면 뜨는 팝업창에서 change interface mode를 클릭하면 변경된다.
+<P CLASS="Para" align="center"><img src="../images/modeler/1/class/image016.jpg" alt="start1" border="0">
+<img src="../images/modeler/1/class/image017.jpg" alt="start1" border="0"><br>
+그림 2.1-2 class Add 기능
+</p>
+</ol>
+</BODY>
+</HTML>

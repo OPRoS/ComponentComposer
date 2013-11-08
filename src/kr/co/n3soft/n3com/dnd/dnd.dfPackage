@@ -1,0 +1,45 @@
+package idekk0uf91zz67uf9202i7a;
+
+/**
+@version 2.0
+@physicalPackage
+@__modelType diagram 
+*/
+class diagram {
+/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.dnd.TreeSimpleFactory:oiref><oihard>
+@__modelType reference 
+*/
+class reference {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.dnd.N3TemplateTransferDropTargetListener:oiref><oihard>
+@__modelType reference 
+*/
+class reference34 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.dnd.CopySimpleLineFactory:oiref><oihard>
+@__modelType reference 
+*/
+class reference35 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.dnd.CopySimpleFactory:oiref><oihard>
+@__modelType reference 
+*/
+class reference36 {
+}}/**
+@__tags
+@shapeType ClassDiagram 
+*/
+class __tags {
+}/**
+@__options 
+*/
+class __options {
+}/**
+@__positions <oigroup:<oiref:java#Class#kr.co.n3soft.n3com.dnd.CopySimpleFactory:oiref>=230,170,174,222,1:oigroup>
+<oigroup:<oiref:java#Class#kr.co.n3soft.n3com.dnd.TreeSimpleFactory:oiref>=10,10,200,206,1:oigroup>
+<oigroup:<oiref:java#Class#kr.co.n3soft.n3com.dnd.N3TemplateTransferDropTargetListener:oiref>=230,10,200,133,1:oigroup>
+<oigroup:<oiref:java#Class#kr.co.n3soft.n3com.dnd.CopySimpleLineFactory:oiref>=10,250,173,222,1:oigroup>
+*/
+class __positions {
+}

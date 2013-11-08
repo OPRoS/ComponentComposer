@@ -1,0 +1,37 @@
+package id7h1klf91zz67uf9202ige;
+
+/**
+@version 2.0
+@physicalPackage
+@__modelType diagram 
+*/
+class diagram {
+/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.diagram.UMLUseCaseDiagramModel:oiref><oihard>
+@__modelType reference 
+*/
+class reference {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.diagram.N3EditorDiagramModel:oiref><oihard>
+@__modelType reference 
+*/
+class reference227 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.diagram.UMLDiagramModel:oiref><oihard>
+@__modelType reference 
+*/
+class reference228 {
+}}/**
+@__tags
+@shapeType ClassDiagram 
+*/
+class __tags {
+}/**
+@__options 
+*/
+class __options {
+}/**
+@__positions 
+*/
+class __positions {
+}

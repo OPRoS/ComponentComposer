@@ -1,0 +1,29 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE> New Document </TITLE>
+<META NAME="Generator" CONTENT="EditPlus">
+<META NAME="Author" CONTENT="">
+<META NAME="Keywords" CONTENT="">
+<META NAME="Description" CONTENT="">
+</HEAD>
+
+<BODY>
+<div class="help_breadcrumbs"><a href="../main.html">사용자 메뉴얼</a> > 
+<a href="../GUI/gui_main.html"> 통합 GUI 사용</a> > 
+</div>
+
+<H1 CLASS="Head">프로젝트 통합</H1>
+<p>도구 메뉴에 프로젝트 통합을 클릭 하면 (그림 3.16-1)과 같은 화면이 나타난다. 다음 방법을 통해 프로젝트를 통합한다.
+<P CLASS="Para" align="center"><img src="../images/GUI/16/image001.jpg" alt="start1" border="0"><br>
+그림 2.1-2 도구 종료
+</p>
+<ol>
+<li>통합하려는 프로젝트들을 선택한다.</li> 
+<li>각 프로젝트 별로 통합하려는 다이어그램를 선택한다.</li> 
+<li>새로운 프로젝트를 생성할지 기존 프로젝트에 추가할 지를 선택한다.</li> 
+<li>프로젝트를 새로 생성할 경우 프로젝트 이름을 입력한다.</li> 
+<li>종료 버튼을 클릭한다.</li> 
+</ol>
+</BODY>
+</HTML>

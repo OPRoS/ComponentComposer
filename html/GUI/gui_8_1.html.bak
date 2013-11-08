@@ -1,0 +1,22 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE> New Document </TITLE>
+<META NAME="Generator" CONTENT="EditPlus">
+<META NAME="Author" CONTENT="">
+<META NAME="Keywords" CONTENT="">
+<META NAME="Description" CONTENT="">
+</HEAD>
+
+<BODY>
+<H1 CLASS="Head">객체 추가</H1>
+<p>새로운 다이어그램을 생성하거나 기존의 다이어그램을 연 이후에 다이어그램에 노테이션을 추가할 수 있다. 우선 다이어그램 좌측에 있는 팔레트에서 그리고자 하는 객체를 클릭한다.
+<P CLASS="Para" align="center"><img src="../images/GUI/20/image001.jpg" alt="start1" border="0"><br>
+그림 2.1-2 팔레트에서 객체 선택
+</p>
+<p>다이어그램 상의 빈공간에 마우스를 클릭하면 선택된 아이콘이 다이어그램에 추가되고, 동시에 트리에도 추가된다. 
+<P CLASS="Para" align="center"><img src="../images/GUI/20/image001_1.jpg" alt="start1" border="0"><br>
+그림 2.1-2 소스 코드 선택 창
+</p>
+</BODY>
+</HTML>

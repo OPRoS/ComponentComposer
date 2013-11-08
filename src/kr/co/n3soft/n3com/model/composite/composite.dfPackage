@@ -1,0 +1,62 @@
+package id5t40ofayma2abfaymap2m;
+
+/**
+@version 2.0
+@physicalPackage
+@__modelType diagram 
+*/
+class diagram {
+/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.composite.ProvidedInterfaceLineModel:oiref><oihard>
+@__modelType reference 
+*/
+class reference {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.composite.RoleBindingLineModel:oiref><oihard>
+@__modelType reference 
+*/
+class reference264 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.composite.DelegateLineModel:oiref><oihard>
+@__modelType reference 
+*/
+class reference265 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.composite.RequiredInterfaceLineModel:oiref><oihard>
+@__modelType reference 
+*/
+class reference266 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.composite.PartModel:oiref><oihard>
+@__modelType reference 
+*/
+class reference267 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.composite.RepresentsLineModel:oiref><oihard>
+@__modelType reference 
+*/
+class reference268 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.composite.ConnectorLineModel:oiref><oihard>
+@__modelType reference 
+*/
+class reference269 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.composite.OccurrenceLineModel:oiref><oihard>
+@__modelType reference 
+*/
+class reference270 {
+}}/**
+@__tags
+@shapeType ClassDiagram 
+*/
+class __tags {
+}/**
+@__options 
+*/
+class __options {
+}/**
+@__positions 
+*/
+class __positions {
+}

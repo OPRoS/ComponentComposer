@@ -1,0 +1,31 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE> New Document </TITLE>
+<META NAME="Generator" CONTENT="EditPlus">
+<META NAME="Author" CONTENT="">
+<META NAME="Keywords" CONTENT="">
+<META NAME="Description" CONTENT="">
+</HEAD>
+
+<BODY>
+<div class="help_breadcrumbs"><a href="../main.html">사용자 메뉴얼</a> > 
+<a href="../construction/construction_main.html">N3Com 구성</a> > 
+</div>
+
+<h1 class="NavTitle">화면 구성</h1>
+<p>(그림 2.2-1)은 컴포넌트 생성 지원 도구의 초기 화면으로, 컴포넌트 생성 지원 도구 초기 화면의 GUI는 공통 풀다운 메뉴, 툴바, 브라우징 윈도우, 편집기 윈도우, 메시지 윈도우, 상태줄로 구성된다. 컴포넌트 생성 지원 도구 초기 화면의 주요 구성 요소의 기능은 다음과 같다.
+<P CLASS="Para" align="center"><img src="../images/construction/2/image001.jpg" alt="start1" border="0"><br>
+그림 2.2-1 컴포넌트 생성 지원 도구의 초기 화면
+</p>
+<ul>
+<li>풀다운 메뉴 - 도구 전체에서 사용되는 메뉴들이 위치한다.</li>
+<li>툴바 - 도구 전체에서 자주 사용되는 기능들을 툴바에 배치하였다.</li>
+<li>작업창 - 도구에서 사용되는 편집기들의 Window가 배치된다.</li>
+<li>모델 브라우징 윈도우 - 프로젝트의 구조를 시각적으로 표현한다.</li>
+<li>콘솔 윈도우 - 도구가 실행 중 발생하는 메시지를 표현한다.</li>
+<li>아웃라인 창 - 다이어그램에 그려는 객체들 표현한다.</li>
+<li>프로퍼티 창 - 선택된 객체에대한 프로퍼티를 설정할 수 있다.</li>
+</ul>
+</BODY>
+</HTML>

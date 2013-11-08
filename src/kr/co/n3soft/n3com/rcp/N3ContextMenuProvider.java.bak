@@ -1,0 +1,1386 @@
+package kr.co.n3soft.n3com.rcp;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Vector;
+
+import kr.co.n3soft.n3com.edit.ComponentEditPart;
+import kr.co.n3soft.n3com.edit.FinalActivityEditPart;
+import kr.co.n3soft.n3com.edit.FinalActorEditPart;
+import kr.co.n3soft.n3com.edit.FinalClassEditPart;
+import kr.co.n3soft.n3com.edit.FinalPackageEditPart;
+import kr.co.n3soft.n3com.edit.FinalStrcuturedActivityEditPart;
+import kr.co.n3soft.n3com.edit.InterfaceEditPart;
+import kr.co.n3soft.n3com.edit.MessageEditPart;
+import kr.co.n3soft.n3com.edit.NodeEditPart;
+import kr.co.n3soft.n3com.edit.SelfMessageEditPart;
+import kr.co.n3soft.n3com.edit.StateEditPart;
+import kr.co.n3soft.n3com.edit.StrcuturedStateEditPart;
+import kr.co.n3soft.n3com.edit.UMLContainerTreeEditPart;
+import kr.co.n3soft.n3com.edit.UMLTreeEditPart;
+import kr.co.n3soft.n3com.edit.UseCaseEditPart;
+import kr.co.n3soft.n3com.lang.N3Messages;
+import kr.co.n3soft.n3com.model.activity.FinalActivityModel;
+import kr.co.n3soft.n3com.model.activity.FinalStrcuturedActivityModel;
+import kr.co.n3soft.n3com.model.comm.AttributeElementModel;
+import kr.co.n3soft.n3com.model.comm.ClassModel;
+import kr.co.n3soft.n3com.model.comm.ClassifierModel;
+import kr.co.n3soft.n3com.model.comm.FinalPackageModel;
+import kr.co.n3soft.n3com.model.comm.NodeContainerModel;
+import kr.co.n3soft.n3com.model.comm.OperationElementModel;
+import kr.co.n3soft.n3com.model.comm.StrcuturedActivityPackageTreeModel;
+import kr.co.n3soft.n3com.model.comm.StrcuturedPackageTreeModel;
+import kr.co.n3soft.n3com.model.comm.TypeRefModel;
+import kr.co.n3soft.n3com.model.comm.UMLModel;
+import kr.co.n3soft.n3com.model.component.ComponentModel;
+import kr.co.n3soft.n3com.model.deployment.NodeModel;
+import kr.co.n3soft.n3com.model.diagram.N3EditorDiagramModel;
+import kr.co.n3soft.n3com.model.sequence.LifeLineModel;
+import kr.co.n3soft.n3com.model.sequence.MessageModel;
+import kr.co.n3soft.n3com.model.sequence.SelfMessageModel;
+import kr.co.n3soft.n3com.model.sequence.SeqGroup;
+import kr.co.n3soft.n3com.model.state.StateModel;
+import kr.co.n3soft.n3com.model.state.StrcuturedStateModel;
+import kr.co.n3soft.n3com.model.state.StrcuturedStatePackageTreeModel;
+import kr.co.n3soft.n3com.model.umlclass.AttributeEditableTableItem;
+import kr.co.n3soft.n3com.model.umlclass.CompartmentModel;
+import kr.co.n3soft.n3com.model.umlclass.FinalClassModel;
+import kr.co.n3soft.n3com.model.umlclass.InterfaceModel;
+import kr.co.n3soft.n3com.model.umlclass.OperationEditableTableItem;
+import kr.co.n3soft.n3com.model.usecase.FinalActorModel;
+import kr.co.n3soft.n3com.model.usecase.UseCaseModel;
+import kr.co.n3soft.n3com.project.browser.PackageTreeModel;
+import kr.co.n3soft.n3com.project.browser.UMLTreeModel;
+import kr.co.n3soft.n3com.projectmanager.ProjectManager;
+import kr.co.n3soft.n3com.rcp.actions.ADDSEQMessageAction;
+import kr.co.n3soft.n3com.rcp.actions.OpenDiagramAction;
+
+import org.eclipse.gef.EditPartViewer;
+import org.eclipse.gef.examples.logicdesigner.LogicMessages;
+import org.eclipse.gef.examples.logicdesigner.actions.IncrementDecrementAction;
+import org.eclipse.gef.ui.actions.ActionRegistry;
+import org.eclipse.gef.ui.actions.GEFActionConstants;
+import org.eclipse.gef.ui.parts.TreeViewer;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.ui.actions.ActionFactory;
+
+public class N3ContextMenuProvider extends org.eclipse.gef.ContextMenuProvider {
+	private ActionRegistry actionRegistry;
+
+	public N3ContextMenuProvider(EditPartViewer viewer, ActionRegistry registry) {
+		super(viewer);
+		setActionRegistry(registry);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.gef.ContextMenuProvider#menuAboutToShow(org.eclipse.jface.action.IMenuManager)
+	 */
+
+	public void addSuperMessage(MenuManager superMessages,ClassifierModel fcm,MessageModel mm){
+//		MenuManager messages = new MenuManager(N3Messages.POPUP_ADD_SEQ_MESSAGE);
+//		if(fcm.getParents().size()>0){
+		for(int i=0;i<fcm.getParents().size();i++){
+			ClassifierModel um = (ClassifierModel)fcm.getParents().get(i);
+			MenuManager superMessages1 = new MenuManager("super:"+um.getName());
+//			superMessages.appendToGroup(GEFActionConstants.GROUP_EDIT, superMessages1);
+			this.addSuperMessage(superMessages1, um,mm);
+			superMessages.add(superMessages1);
+		}
+		TypeRefModel trm = fcm.getClassModel();
+		for (int i = 0; i <trm.getOperations().size(); i++) {
+			Object obj1 = trm.getOperations().get(i);
+			OperationEditableTableItem oti = (OperationEditableTableItem)obj1;
+			ADDSEQMessageAction action1 = new ADDSEQMessageAction();
+			action1.setText(oti.toString());
+			action1.setOti(oti);
+			action1.setMm(mm);
+			action1.setTrm(trm);
+			superMessages.add(action1);
+
+//			manager.appendToGroup(GEFActionConstants.GROUP_EDIT, messages);
+
+		}
+
+//		MenuManager superMessages1 = new MenuManager(N3Messages.POPUP_ADD_SEQ_MESSAGE);
+
+//		}
+	}
+
+	public void addSuperMessage(MenuManager superMessages,ClassifierModel fcm,SelfMessageModel mm){
+//		MenuManager messages = new MenuManager(N3Messages.POPUP_ADD_SEQ_MESSAGE);
+//		if(fcm.getParents().size()>0){
+		for(int i=0;i<fcm.getParents().size();i++){
+			ClassifierModel um = (ClassifierModel)fcm.getParents().get(i);
+			MenuManager superMessages1 = new MenuManager("super:"+um.getName());
+//			superMessages.appendToGroup(GEFActionConstants.GROUP_EDIT, superMessages1);
+			this.addSuperMessage(superMessages1, um,mm);
+			superMessages.add(superMessages1);
+		}
+		TypeRefModel trm = fcm.getClassModel();
+		for (int i = 0; i <trm.getOperations().size(); i++) {
+			Object obj1 = trm.getOperations().get(i);
+			OperationEditableTableItem oti = (OperationEditableTableItem)obj1;
+			ADDSEQMessageAction action1 = new ADDSEQMessageAction();
+			action1.setText(oti.toString());
+			action1.setOti(oti);
+//			action1.setMm(mm);
+			action1.setTrm(trm);
+			superMessages.add(action1);
+
+//			manager.appendToGroup(GEFActionConstants.GROUP_EDIT, messages);
+
+		}
+
+//		MenuManager superMessages1 = new MenuManager(N3Messages.POPUP_ADD_SEQ_MESSAGE);
+
+//		}
+	}
+	private N3ContextMenuProvider nmp;
+	public N3ContextMenuProvider getNmp() {
+		return nmp;
+	}
+
+	public void setNmp(N3ContextMenuProvider nmp) {
+		this.nmp = nmp;
+	}
+
+	public void buildContextMenu(IMenuManager manager) {
+		try{
+			//액션
+			N3ContextMenuProvider nmp = 	(N3ContextMenuProvider)manager;	
+			setNmp(nmp);
+			if(nmp.getViewer() instanceof TreeViewer){
+
+//				setList(s);
+////2008042401PKY S
+				GEFActionConstants.addStandardActionGroups(manager);
+				IAction copy = null;
+				/**
+				 * Copy 메뉴 액션 
+				 */
+				copy = new Action() {
+					public void run() {	
+						ProjectManager.getInstance().setCopyattList(null);
+						ProjectManager.getInstance().setCopyoperList(null);
+						N3ContextMenuProvider nmp=getNmp(); 
+						TreeViewer viewer=(TreeViewer)nmp.getViewer();
+						Object selectionList= viewer.getSelection();
+						StructuredSelection container=null;
+						ArrayList att= new ArrayList();
+						ArrayList oper= new ArrayList();
+						HashMap  doubleId = new HashMap();
+						if(selectionList instanceof StructuredSelection){
+							container =(StructuredSelection) selectionList;
+							List copylist= new ArrayList();
+
+								List listz=container.toList();
+								for(int i=0;i<listz.size();i++){
+									copylist.add(listz.get(i));
+								}
+							
+							Vector removeList =new Vector();
+							for(int k=0; k<copylist.size();k++){
+								if(copylist.get(k) instanceof UMLContainerTreeEditPart){
+									UMLContainerTreeEditPart uMLContainerTreeEditPart=(UMLContainerTreeEditPart)copylist.get(k);
+									if(uMLContainerTreeEditPart.getChildren()!=null){
+										List list=uMLContainerTreeEditPart.getChildren();
+										for(int j=0;j<list.size();j++){
+											if(list.get(j) instanceof UMLTreeEditPart){
+												UMLTreeEditPart UMLTreeEditPart=(UMLTreeEditPart)list.get(j);
+												//2008042903 PKY S
+												if(UMLTreeEditPart.getModel()instanceof AttributeElementModel){
+													AttributeElementModel uMLContainerTreeEditPart1 = (AttributeElementModel)UMLTreeEditPart.getModel();
+//													AttributeElementModel uMLContainerTreeEditPart2(new AttributeElementModel UMLTreeEditPart.getModel());
+//													AttributeEditableTableItem newItem = new AttributeEditableTableItem(new Integer(0), "attribute"+"", "String", "");
+//													
+//													uMLContainerTreeEditPart1.getAttributeEditableTableItem().id=newItem.id;
+													doubleId.put(uMLContainerTreeEditPart1.getUMLDataModel().getId().toString(),
+															uMLContainerTreeEditPart1.getUMLDataModel().getId().toString());
+															att.add(uMLContainerTreeEditPart1.getAttributeEditableTableItem());												
+													
+												}
+												if(UMLTreeEditPart.getModel()instanceof OperationElementModel){
+													OperationElementModel uMLContainerTreeEditPart1=(OperationElementModel)UMLTreeEditPart.getModel();
+//													OperationEditableTableItem newItem = new OperationEditableTableItem(new Integer(0), "attribute"+"", "String", "");
+//													uMLContainerTreeEditPart1.getAttributeEditableTableItem().id=newItem.id;
+													doubleId.put(uMLContainerTreeEditPart1.getUMLDataModel().getId().toString(),
+															uMLContainerTreeEditPart1.getUMLDataModel().getId().toString());
+													oper.add(uMLContainerTreeEditPart1.getAttributeEditableTableItem());
+													
+												}
+												if(UMLTreeEditPart.getModel()instanceof TypeRefModel){
+													ClassModel typeRefModel=(TypeRefModel)UMLTreeEditPart.getModel();
+													if(typeRefModel.getAttributes()!=null){
+													List classAtt=typeRefModel.getAttributes();
+													for(int i=0;i<classAtt.size();i++){
+														AttributeEditableTableItem attributeEditableTableItem=(AttributeEditableTableItem)classAtt.get(i);
+														if(attributeEditableTableItem.id!=null){
+														doubleId.put(attributeEditableTableItem.id.toString(),
+																attributeEditableTableItem.id.toString());
+														}
+														att.add(attributeEditableTableItem);		
+													}
+													}
+													else if(typeRefModel.getOperations()!=null){
+														List classAtt=typeRefModel.getOperations();
+														for(int i=0;i<classAtt.size();i++){
+															OperationEditableTableItem attributeEditableTableItem=(OperationEditableTableItem)classAtt.get(i);
+															if(attributeEditableTableItem.id!=null){
+															doubleId.put(attributeEditableTableItem.id.toString(),
+																	attributeEditableTableItem.id.toString());
+															}
+															oper.add(attributeEditableTableItem);		
+														
+														}
+													}
+													//2008042903 PKY S 
+												} if(UMLTreeEditPart.getModel()instanceof ClassModel){
+													ClassModel classModel=(ClassModel)UMLTreeEditPart.getModel();
+													List attr=classModel.getAttributes();
+													List opers=classModel.getOperations();
+													for(int u=0; u<attr.size();u++){
+														AttributeEditableTableItem attributeEditableTableItem=(AttributeEditableTableItem)attr.get(u);
+														if(attributeEditableTableItem.id!=null){
+														doubleId.put(attributeEditableTableItem.id.toString(),
+																attributeEditableTableItem.id.toString());
+														}
+														att.add(attributeEditableTableItem);
+													}
+													for(int q=0; q<opers.size();q++){
+														OperationEditableTableItem attributeEditableTableItem=(OperationEditableTableItem)opers.get(q);
+														if(attributeEditableTableItem.id!=null){
+														doubleId.put(attributeEditableTableItem.id.toString(),
+																attributeEditableTableItem.id.toString());
+														}
+														oper.add(attributeEditableTableItem);	
+													}
+												}//2008042903 PKY E
+											}
+												
+										}
+									}
+								}else if(copylist.get(k) instanceof UMLTreeEditPart){
+									UMLTreeEditPart UMLTreeEditPart=(UMLTreeEditPart)copylist.get(k);
+									
+									if(UMLTreeEditPart.getModel()instanceof AttributeElementModel){
+										AttributeElementModel attributeElementModel =(AttributeElementModel)UMLTreeEditPart.getModel();
+										if(doubleId.get(attributeElementModel.getUMLDataModel().getId().toString())==null){
+										att.add(attributeElementModel.getAttributeEditableTableItem());
+										}
+									}
+									if(UMLTreeEditPart.getModel()instanceof OperationElementModel){
+										OperationElementModel operationElementModel=(OperationElementModel)UMLTreeEditPart.getModel();
+										if(doubleId.get(operationElementModel.getUMLDataModel().getId().toString())==null){
+										oper.add(operationElementModel.getAttributeEditableTableItem());
+										}
+									}	
+								}
+							}
+							if(removeList!=null){
+							for(int j=0;j<removeList.size();j++){
+								copylist.remove(removeList.get(j));
+							}
+							}
+							if(oper.size()>0||att.size()>0){
+								if(att.size()>0)
+								ProjectManager.getInstance().setCopyattList(att);
+								if(oper.size()>0)
+								ProjectManager.getInstance().setCopyoperList(oper);
+								ProjectManager.getInstance().initSelectLineModel();
+								ProjectManager.getInstance().initTempCopyMap();
+								ProjectManager.getInstance().setCopySource(null);
+							}
+						}
+					}
+				};
+			
+				/**
+				 * Paste 메뉴 액션
+				 */
+				IAction paste = null;
+
+				paste = new Action() {
+					public void run() {
+						ClassModel selecttypeRefModel=null;
+						List attList =ProjectManager.getInstance().getCopyattList();
+						List operList =ProjectManager.getInstance().getCopyoperList();
+						
+						
+//							for(int j=0 ;j<copyList.length;j++){
+//								
+//								if(copyList[j] instanceof UMLTreeEditPart){
+//									UMLTreeEditPart uMLTreeEditPart=(UMLTreeEditPart)copyList[j];
+//									if(uMLTreeEditPart!=null){
+//										
+//									if(uMLTreeEditPart.getParent() instanceof UMLContainerTreeEditPart){
+//										
+//										UMLContainerTreeEditPart  uMLContainerTreeEditPart=(UMLContainerTreeEditPart)uMLTreeEditPart.getParent();
+//										if(uMLContainerTreeEditPart.getModel()!=null){
+//											if(uMLContainerTreeEditPart.getModel() instanceof CompartmentModel){
+//												CompartmentModel compartmentModel=(CompartmentModel)uMLContainerTreeEditPart.getModel();
+//												if(compartmentModel.getParentModel()!=null){
+//														if(compartmentModel.getParentModel() instanceof ClassifierModel){
+//															ClassifierModel modelType=(ClassifierModel)compartmentModel.getParentModel();
+//															if(modelType.getClassModel()!=null){
+//																if(modelType.getClassModel() instanceof TypeRefModel){
+//																	TypeRefModel typeRefModel=(TypeRefModel)modelType.getClassModel();
+//																	/**
+//																	 *  추가하려고  선택한 객체의 정보를 가져오도록 하는 부분
+//																	 */
+//																	N3ContextMenuProvider nmp=getNmp(); 
+//																	TreeViewer viewer=(TreeViewer)nmp.getViewer();
+//																	Object selectionList= viewer.getSelection();
+//																	StructuredSelection container=null;
+//																	if(selectionList instanceof StructuredSelection){
+//																		container =(StructuredSelection) selectionList;
+//																		List nowSelect=container.toList();
+//																		if(nowSelect.get(0) instanceof UMLContainerTreeEditPart){
+//																			UMLContainerTreeEditPart selectUMLContainerTreeEditPart =(UMLContainerTreeEditPart)nowSelect.get(0);
+//																			if(selectUMLContainerTreeEditPart.getModel()!=null){
+//																				if(selectUMLContainerTreeEditPart.getModel() instanceof CompartmentModel){
+//																					CompartmentModel slectcompartmentModel=(CompartmentModel)selectUMLContainerTreeEditPart.getModel();
+//																					if(slectcompartmentModel.getParentModel()!=null){
+//																						if(slectcompartmentModel.getParentModel() instanceof ClassifierModel){
+//																							ClassifierModel slectmodelType=(ClassifierModel)slectcompartmentModel.getParentModel();
+//																							if(slectmodelType.getClassModel()!=null){
+//																								if(slectmodelType.getClassModel() instanceof TypeRefModel){
+//																									selecttypeRefModel=(TypeRefModel)slectmodelType.getClassModel();
+//																								}
+//																								
+//																							}
+//																						}
+//																						
+//																					}
+//																					
+//																				}else if(selectUMLContainerTreeEditPart.getModel() instanceof ClassifierModel){
+//																					ClassifierModel slectcompartmentModel=(ClassifierModel)selectUMLContainerTreeEditPart.getModel();
+//																					selecttypeRefModel=(TypeRefModel)slectcompartmentModel.getClassModel();
+//																				}
+//																			}
+//																		}
+//																	}
+//																	/**
+//																	 *  CopyList에 있는 정보를 비교하여 Operation Attribute를 객체에 넣어주는 부분 
+//																	 */
+////															if(uMLTreeEditPart.getModel() instanceof AttributeElementModel){
+////																AttributeElementModel elementModel=(AttributeElementModel)uMLTreeEditPart.getModel();
+////																
+////																ArrayList attAdd = new ArrayList();
+////																List beforeAtt =selecttypeRefModel.getAttributes();
+////																for(int i=0;i<beforeAtt.size();i++){
+////																attAdd.add(beforeAtt.get(i));
+////																}
+////																attAdd.add(elementModel.getAttributeEditableTableItem());	
+////																
+////																selecttypeRefModel.setAttributes(attAdd);
+////																
+////															}
+////															if(uMLTreeEditPart.getModel() instanceof OperationElementModel){
+////																OperationElementModel elementModel=(OperationElementModel)uMLTreeEditPart.getModel();
+////																
+////																ArrayList operAdd =new ArrayList();
+////																List beforeOper =selecttypeRefModel.getOperations();
+////																for(int i=0;i<beforeOper.size();i++){
+////																	operAdd.add(beforeOper.get(i));
+////																}
+////																operAdd.add(elementModel.getAttributeEditableTableItem());	
+////																selecttypeRefModel.setOperations(operAdd);
+////															}
+////															ProjectManager.getInstance().autoSize(selecttypeRefModel);
+//																}
+//															}
+//														}
+//												}
+//											}
+//										}
+//										
+//									}else if(uMLTreeEditPart.getModel() instanceof AttributeElementModel){
+//										/**
+//										 *  CopyList에 있는 정보를 비교하여 Operation Attribute를 객체에 넣어주는 부분 
+//										 */
+//										AttributeElementModel attributeElementModel=(AttributeElementModel)uMLTreeEditPart.getModel();
+//										N3ContextMenuProvider nmp=getNmp(); 
+//										TreeViewer viewer=(TreeViewer)nmp.getViewer();
+//										Object selectionList= viewer.getSelection();
+//										StructuredSelection container=null;
+//										/**
+//										 *  추가하려고  선택한 객체의 정보를 가져오도록 하는 부분
+//										 */
+//										if(selectionList instanceof StructuredSelection){
+//											container =(StructuredSelection) selectionList;
+//											List nowSelect=container.toList();
+//											if(nowSelect.get(0) instanceof UMLContainerTreeEditPart){
+//												UMLContainerTreeEditPart selectUMLContainerTreeEditPart =(UMLContainerTreeEditPart)nowSelect.get(0);
+//												if(selectUMLContainerTreeEditPart.getModel()!=null){
+//													if(selectUMLContainerTreeEditPart.getModel() instanceof CompartmentModel){
+//														CompartmentModel slectcompartmentModel=(CompartmentModel)selectUMLContainerTreeEditPart.getModel();
+//														if(slectcompartmentModel.getParentModel()!=null){
+//															if(slectcompartmentModel.getParentModel() instanceof ClassifierModel){
+//																ClassifierModel slectmodelType=(ClassifierModel)slectcompartmentModel.getParentModel();
+//																if(slectmodelType.getClassModel()!=null){
+//																	if(slectmodelType.getClassModel() instanceof TypeRefModel){
+//																		selecttypeRefModel=(TypeRefModel)slectmodelType.getClassModel();
+//																	}
+//																	
+//																}
+//															}
+//															
+//														}
+//														
+//													}
+//												}
+//											}
+//										}
+//										/**
+//										 *  CopyList에 있는 정보를 비교하여 Attribute를 객체에 넣어주는 부분 
+//										 */
+////										if(uMLTreeEditPart.getModel()!=null){
+////											if(uMLTreeEditPart.getModel()instanceof AttributeElementModel){
+////										AttributeElementModel elementModel=(AttributeElementModel)uMLTreeEditPart.getModel();
+////										
+////										ArrayList attAdd = new ArrayList();
+////										List beforeAtt =selecttypeRefModel.getAttributes();
+////										for(int i=0;i<beforeAtt.size();i++){
+////										attAdd.add(beforeAtt.get(i));
+////										}
+////										attAdd.add(elementModel.getAttributeEditableTableItem());	
+////										
+////										selecttypeRefModel.setAttributes(attAdd);
+////											}
+////											}
+//									}else if(uMLTreeEditPart.getModel() instanceof OperationElementModel){
+//
+//										OperationElementModel attributeElementModel=(OperationElementModel)uMLTreeEditPart.getModel();
+//										N3ContextMenuProvider nmp=getNmp(); 
+//										TreeViewer viewer=(TreeViewer)nmp.getViewer();
+//										Object selectionList= viewer.getSelection();
+//										StructuredSelection container=null;
+//										/**
+//										 *  추가하려고  선택한 객체의 정보를 가져오도록 하는 부분
+//										 */
+//										if(selectionList instanceof StructuredSelection){
+//											container =(StructuredSelection) selectionList;
+//											List nowSelect=container.toList();
+//											if(nowSelect.get(0) instanceof UMLContainerTreeEditPart){
+//												UMLContainerTreeEditPart selectUMLContainerTreeEditPart =(UMLContainerTreeEditPart)nowSelect.get(0);
+//												if(selectUMLContainerTreeEditPart.getModel()!=null){
+//													if(selectUMLContainerTreeEditPart.getModel() instanceof CompartmentModel){
+//														CompartmentModel slectcompartmentModel=(CompartmentModel)selectUMLContainerTreeEditPart.getModel();
+//														if(slectcompartmentModel.getParentModel()!=null){
+//															if(slectcompartmentModel.getParentModel() instanceof ClassifierModel){
+//																ClassifierModel slectmodelType=(ClassifierModel)slectcompartmentModel.getParentModel();
+//																if(slectmodelType.getClassModel()!=null){
+//																	if(slectmodelType.getClassModel() instanceof TypeRefModel){
+//																		selecttypeRefModel=(TypeRefModel)slectmodelType.getClassModel();
+//																	}
+//																	
+//																}
+//															}
+//															
+//														}
+//														
+//													}
+//												}
+//											}
+//											System.out.print("");
+//										}
+//
+//									}
+//	
+//							}
+//									/**
+//									 *  CopyList에 있는 정보를 비교하여 Operation를 객체에 넣어주는 부분 
+//									 */
+//									if(uMLTreeEditPart.getModel()!=null){
+//										if(uMLTreeEditPart.getModel()instanceof OperationElementModel){
+//									OperationElementModel elementModel=(OperationElementModel)uMLTreeEditPart.getModel();
+//									
+//									ArrayList operAdd =new ArrayList();
+//									List beforeOper =selecttypeRefModel.getOperations();
+//									for(int i=0;i<beforeOper.size();i++){
+//										operAdd.add(beforeOper.get(i));
+//									}
+//									operAdd.add(elementModel.getAttributeEditableTableItem());	
+//									selecttypeRefModel.setOperations(operAdd);
+//										}
+//									}
+//									if(uMLTreeEditPart.getModel() instanceof AttributeElementModel){
+//										AttributeElementModel elementModel=(AttributeElementModel)uMLTreeEditPart.getModel();
+//										
+//										ArrayList attAdd = new ArrayList();
+//										List beforeAtt =selecttypeRefModel.getAttributes();
+//										for(int i=0;i<beforeAtt.size();i++){
+//										attAdd.add(beforeAtt.get(i));
+//										}
+//										attAdd.add(elementModel.getAttributeEditableTableItem());	
+//										
+//										selecttypeRefModel.setAttributes(attAdd);
+//										
+//									}
+//									}
+//								}
+							N3ContextMenuProvider nmp=getNmp(); 
+							TreeViewer viewer=(TreeViewer)nmp.getViewer();
+							Object selectionList= viewer.getSelection();
+							StructuredSelection container=null;
+							if(selectionList instanceof StructuredSelection){
+								container =(StructuredSelection) selectionList;
+								List nowSelect=container.toList();
+								if(nowSelect.get(0) instanceof UMLContainerTreeEditPart){
+									UMLContainerTreeEditPart selectUMLContainerTreeEditPart =(UMLContainerTreeEditPart)nowSelect.get(0);
+									if(selectUMLContainerTreeEditPart.getModel()!=null){
+										if(selectUMLContainerTreeEditPart.getModel() instanceof CompartmentModel){
+											CompartmentModel slectcompartmentModel=(CompartmentModel)selectUMLContainerTreeEditPart.getModel();
+											if(slectcompartmentModel.getParentModel()!=null){
+												if(slectcompartmentModel.getParentModel() instanceof ClassifierModel){
+													ClassifierModel slectmodelType=(ClassifierModel)slectcompartmentModel.getParentModel();
+													if(slectmodelType.getClassModel()!=null){
+														if(slectmodelType.getClassModel() instanceof TypeRefModel){
+															selecttypeRefModel=(TypeRefModel)slectmodelType.getClassModel();
+														}
+														
+													}
+												}
+												
+											}
+											
+										}else if(selectUMLContainerTreeEditPart.getModel() instanceof ClassifierModel){
+											ClassifierModel slectcompartmentModel=(ClassifierModel)selectUMLContainerTreeEditPart.getModel();
+											selecttypeRefModel=(TypeRefModel)slectcompartmentModel.getClassModel();
+										}else if(selectUMLContainerTreeEditPart.getModel() instanceof InterfaceModel){
+											InterfaceModel slectcompartmentModel=(InterfaceModel)selectUMLContainerTreeEditPart.getModel();
+											if(slectcompartmentModel.getClassModel()!=null){
+												if(slectcompartmentModel.getClassModel() instanceof ClassModel){
+													selecttypeRefModel=(ClassModel)slectcompartmentModel.getClassModel();
+													
+												}
+												
+											}
+										}
+									}
+								}
+							}
+							/**
+							 *  CopyList에 있는 정보를 비교하여 Operation를 객체에 넣어주는 부분 
+							 */
+							if(selecttypeRefModel!=null){
+							if(operList!=null&&operList.size()>0){		
+							ArrayList operAdd =new ArrayList();
+							List beforeOper =selecttypeRefModel.getOperations();
+							for(int i=0;i<beforeOper.size();i++){
+								operAdd.add(beforeOper.get(i));
+							}
+							for(int i=0; i<operList.size();i++){
+								OperationEditableTableItem operationEditableTableItem=(OperationEditableTableItem)operList.get(i);
+
+								operAdd.add(operationEditableTableItem.clone());	
+								}
+							selecttypeRefModel.setOperations(operAdd);
+								
+							}
+							if(attList!=null&&attList.size()>0){
+							
+								
+								ArrayList attAdd = new ArrayList();
+								List beforeAtt =selecttypeRefModel.getAttributes();
+								for(int i=0;i<beforeAtt.size();i++){
+								attAdd.add(beforeAtt.get(i));
+								}
+								for(int i=0; i<attList.size();i++){
+									AttributeEditableTableItem attributeEditableTableItem =(AttributeEditableTableItem)attList.get(i);
+								attAdd.add(attributeEditableTableItem.clone());	
+								}
+								selecttypeRefModel.setAttributes(attAdd);
+								
+							}
+							
+							if(selecttypeRefModel!=null){
+								if(selecttypeRefModel instanceof ClassModel){
+									if(selecttypeRefModel.isMode()==true){
+								ProjectManager.getInstance().setOutlineAutoSize(true);
+								ProjectManager.getInstance().autoSize(selecttypeRefModel);
+								ProjectManager.getInstance().setOutlineAutoSize(false);
+									}
+								}else{
+									ProjectManager.getInstance().setOutlineAutoSize(true);
+									ProjectManager.getInstance().autoSize(selecttypeRefModel);
+									ProjectManager.getInstance().setOutlineAutoSize(false);
+								}
+								}
+							}
+					}
+				};
+				IAction delete = null;
+/**
+ * Delte메뉴 액션 
+ */
+				delete = new Action() {
+					public void run() {
+						
+						N3ContextMenuProvider nmp=getNmp(); 
+						TreeViewer viewer=(TreeViewer)nmp.getViewer();
+						Object selectionList= viewer.getSelection();
+						StructuredSelection container=null;
+						ArrayList att= new ArrayList();
+						ArrayList oper= new ArrayList();
+						HashMap  doubleId = new HashMap();
+						if(selectionList instanceof StructuredSelection){
+							container =(StructuredSelection) selectionList;
+							List copylist= new ArrayList();
+
+								List listz=container.toList();
+								for(int i=0;i<listz.size();i++){
+									copylist.add(listz.get(i));
+								}
+							for(int k=0; k<copylist.size();k++){
+								if(copylist.get(k) instanceof UMLContainerTreeEditPart){
+
+									UMLContainerTreeEditPart uMLContainerTreeEditPart=(UMLContainerTreeEditPart)copylist.get(k);
+									if(uMLContainerTreeEditPart.getChildren()!=null){
+										List list=uMLContainerTreeEditPart.getChildren();
+										for(int j=0;j<list.size();j++){
+											if(list.get(j) instanceof UMLTreeEditPart){
+												UMLTreeEditPart UMLTreeEditPart=(UMLTreeEditPart)list.get(j);
+												if(UMLTreeEditPart.getModel()instanceof AttributeElementModel){
+													AttributeElementModel uMLContainerTreeEditPart1=(AttributeElementModel)UMLTreeEditPart.getModel();
+													if(uMLContainerTreeEditPart1.getAttributeEditableTableItem().id!=null){
+													doubleId.put(uMLContainerTreeEditPart1.getAttributeEditableTableItem().id.toString(),
+															uMLContainerTreeEditPart1.getAttributeEditableTableItem().id.toString());
+															att.add(uMLContainerTreeEditPart1.getAttributeEditableTableItem());
+													}else{
+														doubleId.put(uMLContainerTreeEditPart1.getUMLDataModel().getId().toString(),
+																uMLContainerTreeEditPart1.getUMLDataModel().getId().toString());
+																att.add(uMLContainerTreeEditPart1.getAttributeEditableTableItem());
+													}
+													
+												}
+												if(UMLTreeEditPart.getModel()instanceof OperationElementModel){
+													OperationElementModel uMLContainerTreeEditPart1=(OperationElementModel)UMLTreeEditPart.getModel();
+													doubleId.put(uMLContainerTreeEditPart1.getAttributeEditableTableItem().id.toString(),
+															uMLContainerTreeEditPart1.getAttributeEditableTableItem().id.toString());
+													oper.add(uMLContainerTreeEditPart1.getAttributeEditableTableItem());
+												}	
+												
+											}
+										}
+									}
+								
+								}else if(copylist.get(k) instanceof UMLTreeEditPart){
+									UMLTreeEditPart UMLTreeEditPart=(UMLTreeEditPart)copylist.get(k);
+									
+									if(UMLTreeEditPart.getModel()instanceof AttributeElementModel){
+										AttributeElementModel attributeElementModel =(AttributeElementModel)UMLTreeEditPart.getModel();
+										doubleId.put(attributeElementModel.getAttributeEditableTableItem().id.toString(),
+												attributeElementModel.getAttributeEditableTableItem().id.toString());
+										att.add(attributeElementModel.getAttributeEditableTableItem());
+									
+										
+									}
+									if(UMLTreeEditPart.getModel()instanceof OperationElementModel){
+										OperationElementModel operationElementModel=(OperationElementModel)UMLTreeEditPart.getModel();
+										doubleId.put(operationElementModel.getAttributeEditableTableItem().id.toString(),
+												operationElementModel.getAttributeEditableTableItem().id.toString());
+										oper.add(operationElementModel.getAttributeEditableTableItem());
+										
+										
+									}	
+								}
+							}
+							
+							/**
+							 * 현재 마우스가 선택한 위치 
+							 */
+							
+							ClassModel selecttypeRefModel=null;
+							if(selectionList instanceof StructuredSelection){
+								container =(StructuredSelection) selectionList;
+								List nowSelect=container.toList();
+								if(nowSelect.get(0) instanceof UMLContainerTreeEditPart){
+									UMLContainerTreeEditPart selectUMLContainerTreeEditPart =(UMLContainerTreeEditPart)nowSelect.get(0);
+									if(selectUMLContainerTreeEditPart.getModel()!=null){
+										if(selectUMLContainerTreeEditPart.getModel() instanceof CompartmentModel){
+											CompartmentModel slectcompartmentModel=(CompartmentModel)selectUMLContainerTreeEditPart.getModel();
+											if(slectcompartmentModel.getParentModel()!=null){
+												if(slectcompartmentModel.getParentModel() instanceof ClassifierModel){
+													ClassifierModel slectmodelType=(ClassifierModel)slectcompartmentModel.getParentModel();
+													if(slectmodelType.getClassModel()!=null){
+														if(slectmodelType.getClassModel() instanceof TypeRefModel){
+															selecttypeRefModel=(TypeRefModel)slectmodelType.getClassModel();
+														}
+														
+													}
+												}else if(slectcompartmentModel.getParentModel() instanceof InterfaceModel){
+													InterfaceModel slectmodelType=(InterfaceModel)slectcompartmentModel.getParentModel();
+													if(slectmodelType.getClassModel()!=null){
+														if(slectmodelType.getClassModel() instanceof ClassModel){
+															selecttypeRefModel=(ClassModel)slectmodelType.getClassModel();
+														}
+														
+													}
+												}
+												
+											}
+											
+										}else if(selectUMLContainerTreeEditPart.getModel() instanceof ClassifierModel){
+											ClassifierModel slectcompartmentModel=(ClassifierModel)selectUMLContainerTreeEditPart.getModel();
+											selecttypeRefModel=(TypeRefModel)slectcompartmentModel.getClassModel();
+										}else if(selectUMLContainerTreeEditPart.getModel() instanceof InterfaceModel){
+											InterfaceModel slectcompartmentModel=(InterfaceModel)selectUMLContainerTreeEditPart.getModel();
+											if(slectcompartmentModel.getClassModel()!=null){
+												if(slectcompartmentModel.getClassModel() instanceof ClassModel){
+													selecttypeRefModel=(ClassModel)slectcompartmentModel.getClassModel();
+													
+												}
+												
+											}
+										}
+									}
+								}else if(nowSelect.get(0) instanceof UMLTreeEditPart){
+									UMLTreeEditPart uMLTreeEditPart=(UMLTreeEditPart)nowSelect.get(0);
+									if(uMLTreeEditPart.getParent() instanceof UMLContainerTreeEditPart){
+										UMLContainerTreeEditPart selectUMLContainerTreeEditPart =(UMLContainerTreeEditPart)uMLTreeEditPart.getParent();
+										if(selectUMLContainerTreeEditPart.getModel()!=null){
+											if(selectUMLContainerTreeEditPart.getModel() instanceof CompartmentModel){
+												CompartmentModel slectcompartmentModel=(CompartmentModel)selectUMLContainerTreeEditPart.getModel();
+												if(slectcompartmentModel.getParentModel()!=null){
+													if(slectcompartmentModel.getParentModel() instanceof ClassifierModel){
+														ClassifierModel slectmodelType=(ClassifierModel)slectcompartmentModel.getParentModel();
+														if(slectmodelType.getClassModel()!=null){
+															if(slectmodelType.getClassModel() instanceof TypeRefModel){
+																selecttypeRefModel=(TypeRefModel)slectmodelType.getClassModel();
+															}
+															
+														}
+													}
+													
+												}
+												
+											}else if(selectUMLContainerTreeEditPart.getModel() instanceof ClassifierModel){
+												ClassifierModel slectcompartmentModel=(ClassifierModel)selectUMLContainerTreeEditPart.getModel();
+												selecttypeRefModel=(TypeRefModel)slectcompartmentModel.getClassModel();
+											}else if(selectUMLContainerTreeEditPart.getModel() instanceof InterfaceModel){
+												InterfaceModel slectcompartmentModel=(InterfaceModel)selectUMLContainerTreeEditPart.getModel();
+												if(slectcompartmentModel.getClassModel()!=null){
+													if(slectcompartmentModel.getClassModel() instanceof ClassModel){
+														selecttypeRefModel=(ClassModel)slectcompartmentModel.getClassModel();
+														
+													}
+													
+												}
+											}
+										}
+								}
+									
+								}
+							}
+							if(selecttypeRefModel!=null){
+								if(oper!=null&&oper.size()>0){		
+								ArrayList operAdd =new ArrayList();
+								List beforeOper =selecttypeRefModel.getOperations();
+								for(int i=0;i<beforeOper.size();i++){
+									OperationEditableTableItem operationElementModel=(OperationEditableTableItem)beforeOper.get(i);
+									if(doubleId.get(operationElementModel.id.toString())==null){	
+									operAdd.add(beforeOper.get(i));
+									oper.remove(beforeOper.get(i));
+									}else{
+										selecttypeRefModel.downOperationCount();
+									}
+								}
+								selecttypeRefModel.setOperations(operAdd);
+									
+								}
+								if(att!=null&&att.size()>0){
+									if(att.size()>0){										
+									ArrayList attAdd = new ArrayList();
+									List beforeAtt =selecttypeRefModel.getAttributes();
+									for(int i=0;i<beforeAtt.size();i++){
+										AttributeEditableTableItem attributeElementModel=(AttributeEditableTableItem)	beforeAtt.get(i);
+										if(doubleId.get(attributeElementModel.id.toString())==null){	
+											attAdd.add(beforeAtt.get(i));
+											att.remove(beforeAtt.get(i));
+										}else{
+											selecttypeRefModel.downAttributeCount();
+										}
+									}
+									
+
+									selecttypeRefModel.setAttributes(attAdd);
+									}
+								}
+								
+								if(selecttypeRefModel!=null){
+									ProjectManager.getInstance().setOutlineAutoSize(true);
+									ProjectManager.getInstance().autoSize(selecttypeRefModel);
+									ProjectManager.getInstance().setOutlineAutoSize(false);
+									}
+								}
+						}
+					
+						
+						
+						
+						
+					}
+				};
+				
+				/**
+				 *  Menu 별 활성화 구분 Copy,Paste/Copy/Copy,Paste,Delete/
+				 */
+				if(nmp.getViewer() instanceof TreeViewer){
+					TreeViewer viewer=(TreeViewer)nmp.getViewer();
+					Object selectionList= viewer.getSelection();
+					StructuredSelection container=null;
+					if(selectionList instanceof StructuredSelection){
+						container =(StructuredSelection) selectionList;
+						List nowSelect=container.toList();
+						List attList =ProjectManager.getInstance().getCopyattList();
+						List operList =ProjectManager.getInstance().getCopyoperList();
+						if(nowSelect.get(0)instanceof UMLContainerTreeEditPart){
+							UMLContainerTreeEditPart uMLContainerTreeEditPart=(UMLContainerTreeEditPart)nowSelect.get(0);
+							if(uMLContainerTreeEditPart.getModel() instanceof ClassifierModel
+									||uMLContainerTreeEditPart.getModel() instanceof InterfaceModel){
+//							GEFActionConstants.addStandardActionGroups(manager);
+//							IAction action;
+//							action = getActionRegistry().getAction(ActionFactory.COPY.getId());
+//							if (action.isEnabled())
+//								manager.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
+//							if(ProjectManager.getInstance().getCopyList().size()>0){
+//							action = getActionRegistry().getAction(ActionFactory.PASTE.getId());
+//								manager.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
+//							}
+//							action = getActionRegistry().getAction(ActionFactory.DELETE.getId());
+//							
+//							if (action.isEnabled())
+//								manager.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
+								copy.setText(N3Messages.POPUP_COPY);
+								paste.setText(N3Messages.POPUP_PASTE);
+								manager.add(copy);
+								if(attList!=null){
+									if(attList.size()>0){
+										manager.add(paste);
+									}
+								}
+								else if(operList!=null){
+									if(operList.size()>0){
+										manager.add(paste);
+										
+									}
+								}
+							}else if(uMLContainerTreeEditPart.getModel() instanceof TypeRefModel
+						||uMLContainerTreeEditPart.getModel() instanceof NodeContainerModel
+						){
+								
+							}else{
+								copy.setText(N3Messages.POPUP_COPY);
+								paste.setText(N3Messages.POPUP_PASTE);
+								delete.setText(N3Messages.POPUP_DELETE);
+								manager.add(copy);
+								if(attList!=null){
+									if(attList.size()>0){
+										manager.add(paste);
+									}
+								}
+								else if(operList!=null){
+									if(operList.size()>0){
+										manager.add(paste);
+										
+									}
+								}
+									
+								manager.add(delete);
+							}
+						}else if(nowSelect.get(0)instanceof UMLTreeEditPart){
+							UMLTreeEditPart uMLTreeEditPart=(UMLTreeEditPart)nowSelect.get(0);
+							if(uMLTreeEditPart.getModel() instanceof AttributeElementModel||
+									uMLTreeEditPart.getModel() instanceof OperationElementModel){
+
+								copy.setText(N3Messages.POPUP_COPY);
+								paste.setText(N3Messages.POPUP_PASTE);
+								delete.setText(N3Messages.POPUP_DELETE);
+								manager.add(copy);
+								if(attList!=null){
+									if(attList.size()>0){
+										manager.add(paste);
+									}
+								}
+								else if(operList!=null){
+									if(operList.size()>0){
+										manager.add(paste);
+										
+									}
+								}
+									
+								manager.add(delete);
+								
+						}
+						}
+						else{
+							copy.setText(N3Messages.POPUP_COPY);
+							paste.setText(N3Messages.POPUP_PASTE);
+							delete.setText(N3Messages.POPUP_DELETE);
+							manager.add(copy);
+							if(attList!=null){
+								if(attList.size()>0){
+									manager.add(paste);
+								}
+							}
+							else if(operList!=null){
+								if(operList.size()>0){
+									manager.add(paste);
+									
+								}
+							}
+								
+							manager.add(delete);
+						}
+					}
+				}
+				
+				//2008042401PKY E
+			}
+			
+			else{
+
+
+				GEFActionConstants.addStandardActionGroups(manager);
+				IAction action;
+				MenuManager elementSubmenu = new MenuManager(N3Messages.POPUP_ADD);
+				MenuManager messages = new MenuManager(N3Messages.POPUP_ADD_SEQ_MESSAGE);
+				MenuManager subDiagramList = new MenuManager(N3Messages.POPUP_OPEN_DIAGRAM);
+				action = getActionRegistry().getAction(ActionFactory.UNDO.getId());
+				manager.appendToGroup(GEFActionConstants.GROUP_UNDO, action);
+				action = getActionRegistry().getAction(ActionFactory.REDO.getId());
+				manager.appendToGroup(GEFActionConstants.GROUP_UNDO, action);
+				action = getActionRegistry().getAction(ActionFactory.PASTE.getId());
+				if (action.isEnabled())
+					manager.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
+
+				action = getActionRegistry().getAction("NewOperationAction");
+				if (action.isEnabled())
+					manager.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
+
+				action = getActionRegistry().getAction("ChanageAggregateAction");
+				if (action.isEnabled())
+					manager.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
+
+				action = getActionRegistry().getAction("ChanageCompositeAction");
+				if (action.isEnabled())
+					manager.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
+
+				action = getActionRegistry().getAction("ChanageNavigableAction");
+				if (action.isEnabled())
+					manager.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
+
+				action = getActionRegistry().getAction("AddRoleNameAction");
+				if (action.isEnabled())
+					manager.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
+
+
+				List list = ProjectManager.getInstance().getSelectNodes();
+				if (list != null && list.size() == 1) {
+					Object obj = list.get(0);
+
+
+					if (obj instanceof MessageEditPart) {
+						MessageEditPart me = (MessageEditPart)obj;
+						MessageModel mm = (MessageModel)me.getModel();
+						UMLModel c = mm.getTarget();
+						if(c instanceof LifeLineModel){
+							kr.co.n3soft.n3com.model.sequence.LifeLineModel cm = (LifeLineModel)c;
+							UMLModel tm = (UMLModel)cm.getTypeRef();
+							if(tm instanceof FinalClassModel){
+								FinalClassModel fcm = (FinalClassModel)tm;
+								TypeRefModel trm = fcm.getClassModel();
+//								MenuManager superMessages = new MenuManager("super");
+
+								if(fcm.getParents().size()>0){
+									for(int i=0;i<fcm.getParents().size();i++){
+
+//										messages.appendToGroup(GEFActionConstants.GROUP_EDIT, superMessages);
+										ClassifierModel um = (ClassifierModel)fcm.getParents().get(i);
+										MenuManager superMessages = new MenuManager("super:"+um.getName());
+										this.addSuperMessage(superMessages, um,mm);
+										try{
+											messages.add(superMessages);
+										}
+										catch(Exception e){
+											e.printStackTrace();
+										}
+									}
+
+								}
+
+								for (int i = 0; i <trm.getOperations().size(); i++) {
+									Object obj1 = trm.getOperations().get(i);
+									OperationEditableTableItem oti = (OperationEditableTableItem)obj1;
+
+									ADDSEQMessageAction action1 = new ADDSEQMessageAction();
+									action1.setText(oti.toString());
+									action1.setOti(oti);
+									action1.setMm(mm);
+									action1.setTrm(trm);
+
+									messages.add(action1);
+//									manager.appendToGroup(GEFActionConstants.GROUP_EDIT, messages);
+
+								}
+								manager.appendToGroup(GEFActionConstants.GROUP_EDIT, messages);
+
+							}
+
+						}
+						  //2008040401PKY S "패키지 오른쪽 클릭 시 OpenDiagram 메뉴 추가    여러 다이어그램이있을경우 리스트 나오도록"
+					}  if (obj instanceof FinalPackageEditPart) {//2008040401PKY S 
+						FinalPackageEditPart finalPackageEditPart = (FinalPackageEditPart)obj;
+						FinalPackageModel finalPackageModel=(FinalPackageModel)finalPackageEditPart.getModel();
+						PackageTreeModel packageTreeModel =(PackageTreeModel)finalPackageModel.getUMLTreeModel();
+						ArrayList array=ProjectManager.getInstance().getModelBrowser().DiagramList(packageTreeModel);
+						ProjectManager.getInstance().setDiagramsSub(array);
+
+						for(int i = 0; i<array.size();i++){
+							Object obj1=array.get(i);
+							N3EditorDiagramModel n3EditorPackageDiagramModel =(N3EditorDiagramModel)obj1;
+							OpenDiagramAction action1 = new OpenDiagramAction();
+							action1.setText(n3EditorPackageDiagramModel.getName());
+							
+							action1.setN3EditorPackageDiagramModel(n3EditorPackageDiagramModel.getN3EditorDiagramModelTemp());
+							subDiagramList.add(action1);
+							
+						}
+						
+					}
+					//2008042902 PKY S 
+					else if (obj instanceof UseCaseEditPart||obj instanceof FinalActorEditPart
+							||obj instanceof FinalClassEditPart||obj instanceof InterfaceEditPart
+							||obj instanceof FinalStrcuturedActivityEditPart||obj instanceof ComponentEditPart
+							||obj instanceof StateEditPart||obj instanceof StrcuturedStateEditPart
+							||obj instanceof NodeEditPart) { 
+						
+						ArrayList array = new ArrayList();
+						if(obj instanceof FinalActivityEditPart){
+						FinalActivityEditPart finalPackageEditPart = (FinalActivityEditPart)obj;
+						FinalActivityModel finalPackageModel=(FinalActivityModel)finalPackageEditPart.getModel();
+						StrcuturedPackageTreeModel packageTreeModel =(StrcuturedPackageTreeModel)finalPackageModel.getUMLTreeModel();						
+						array=ProjectManager.getInstance().getModelBrowser().DiagramList(packageTreeModel);
+						ProjectManager.getInstance().setDiagramsSub(array);
+						}
+						else if(obj instanceof UseCaseEditPart){
+							UseCaseEditPart finalPackageEditPart = (UseCaseEditPart)obj;
+							UseCaseModel finalPackageModel=(UseCaseModel)finalPackageEditPart.getModel();
+							StrcuturedPackageTreeModel packageTreeModel =(StrcuturedPackageTreeModel)finalPackageModel.getUMLTreeModel();						
+							array=ProjectManager.getInstance().getModelBrowser().DiagramList(packageTreeModel);
+							ProjectManager.getInstance().setDiagramsSub(array);
+						}
+						else if(obj instanceof FinalActorEditPart){
+							FinalActorEditPart finalPackageEditPart = (FinalActorEditPart)obj;
+							FinalActorModel finalPackageModel=(FinalActorModel)finalPackageEditPart.getModel();
+							UMLTreeModel packageTreeModel =(UMLTreeModel)finalPackageModel.getUMLTreeModel();						
+							array=ProjectManager.getInstance().getModelBrowser().DiagramList(packageTreeModel);
+							ProjectManager.getInstance().setDiagramsSub(array);
+						}
+						else if(obj instanceof FinalClassEditPart){
+							FinalClassEditPart finalPackageEditPart = (FinalClassEditPart)obj;
+							FinalClassModel finalPackageModel=(FinalClassModel)finalPackageEditPart.getModel();
+							StrcuturedPackageTreeModel packageTreeModel =(StrcuturedPackageTreeModel)finalPackageModel.getUMLTreeModel();						
+							array=ProjectManager.getInstance().getModelBrowser().DiagramList(packageTreeModel);
+							ProjectManager.getInstance().setDiagramsSub(array);
+						}
+						else if(obj instanceof InterfaceEditPart){
+							InterfaceEditPart finalPackageEditPart = (InterfaceEditPart)obj;
+							InterfaceModel finalPackageModel=(InterfaceModel)finalPackageEditPart.getModel();
+							StrcuturedPackageTreeModel packageTreeModel =(StrcuturedPackageTreeModel)finalPackageModel.getUMLTreeModel();						
+							array=ProjectManager.getInstance().getModelBrowser().DiagramList(packageTreeModel);
+							ProjectManager.getInstance().setDiagramsSub(array);
+						}
+						else if(obj instanceof FinalStrcuturedActivityEditPart){
+							FinalStrcuturedActivityEditPart finalPackageEditPart = (FinalStrcuturedActivityEditPart)obj;
+							FinalStrcuturedActivityModel finalPackageModel=(FinalStrcuturedActivityModel)finalPackageEditPart.getModel();
+							StrcuturedActivityPackageTreeModel packageTreeModel =(StrcuturedActivityPackageTreeModel)finalPackageModel.getUMLTreeModel();						
+							array=ProjectManager.getInstance().getModelBrowser().DiagramList(packageTreeModel);
+							ProjectManager.getInstance().setDiagramsSub(array);
+						}
+						else if(obj instanceof ComponentEditPart){
+							ComponentEditPart finalPackageEditPart = (ComponentEditPart)obj;
+							ComponentModel finalPackageModel=(ComponentModel)finalPackageEditPart.getModel();
+							StrcuturedPackageTreeModel packageTreeModel =(StrcuturedPackageTreeModel)finalPackageModel.getUMLTreeModel();						
+							array=ProjectManager.getInstance().getModelBrowser().DiagramList(packageTreeModel);
+							ProjectManager.getInstance().setDiagramsSub(array);
+						}
+						else if(obj instanceof StateEditPart){
+							StateEditPart finalPackageEditPart = (StateEditPart)obj;
+							StateModel finalPackageModel=(StateModel)finalPackageEditPart.getModel();
+							StrcuturedPackageTreeModel packageTreeModel =(StrcuturedPackageTreeModel)finalPackageModel.getUMLTreeModel();						
+							array=ProjectManager.getInstance().getModelBrowser().DiagramList(packageTreeModel);
+							ProjectManager.getInstance().setDiagramsSub(array);
+						}
+						else if(obj instanceof StrcuturedStateEditPart){
+							StrcuturedStateEditPart finalPackageEditPart = (StrcuturedStateEditPart)obj;
+							StrcuturedStateModel finalPackageModel=(StrcuturedStateModel)finalPackageEditPart.getModel();
+							StrcuturedStatePackageTreeModel packageTreeModel =(StrcuturedStatePackageTreeModel)finalPackageModel.getUMLTreeModel();						
+							array=ProjectManager.getInstance().getModelBrowser().DiagramList(packageTreeModel);
+							ProjectManager.getInstance().setDiagramsSub(array);
+						}
+						else if(obj instanceof NodeEditPart){
+							NodeEditPart finalPackageEditPart = (NodeEditPart)obj;
+							NodeModel finalPackageModel=(NodeModel)finalPackageEditPart.getModel();
+							StrcuturedPackageTreeModel packageTreeModel =(StrcuturedPackageTreeModel)finalPackageModel.getUMLTreeModel();						
+							array=ProjectManager.getInstance().getModelBrowser().DiagramList(packageTreeModel);
+							ProjectManager.getInstance().setDiagramsSub(array);
+						}
+						if(array.size()>0){
+						for(int i = 0; i<array.size();i++){
+							Object obj1=array.get(i);
+							N3EditorDiagramModel n3EditorPackageDiagramModel =(N3EditorDiagramModel)obj1;
+							OpenDiagramAction action1 = new OpenDiagramAction();
+							action1.setText(n3EditorPackageDiagramModel.getName());
+							
+							action1.setN3EditorPackageDiagramModel(n3EditorPackageDiagramModel.getN3EditorDiagramModelTemp());
+							subDiagramList.add(action1);
+							
+						}
+						}
+					}
+					//2008042902 PKY E
+					//2008040401PKY E "패키지 오른쪽 클릭 시 OpenDiagram 메뉴 추가    여러 다이어그램이있을경우 리스트 나오도록"
+					else if(obj instanceof SelfMessageEditPart){//2008041502PKY S 셀프메세지 오퍼레이션 보일수 있도록 수정
+						SelfMessageEditPart me =(SelfMessageEditPart)obj;						
+						SelfMessageModel mm = (SelfMessageModel)me.getModel();
+						SeqGroup ss=(SeqGroup)mm.getSeg();
+						if(ss!=null){
+						UMLModel c = ss.getMessageModel(0).getTarget();
+						if(c instanceof LifeLineModel){
+							kr.co.n3soft.n3com.model.sequence.LifeLineModel cm = (LifeLineModel)c;
+							UMLModel tm = (UMLModel)cm.getTypeRef();
+							if(tm instanceof FinalClassModel){
+								FinalClassModel fcm = (FinalClassModel)tm;
+								TypeRefModel trm = fcm.getClassModel();
+								if(fcm.getParents().size()>0){
+									for(int i=0;i<fcm.getParents().size();i++){
+
+//										messages.appendToGroup(GEFActionConstants.GROUP_EDIT, superMessages);
+										ClassifierModel um = (ClassifierModel)fcm.getParents().get(i);
+										MenuManager superMessages = new MenuManager("super:"+um.getName());
+										this.addSuperMessage(superMessages, um,mm);
+										try{
+											messages.add(superMessages);
+										}
+										catch(Exception e){
+											e.printStackTrace();
+										}
+									}
+								}
+								for (int i = 0; i <trm.getOperations().size(); i++) {
+									Object obj1 = trm.getOperations().get(i);
+									OperationEditableTableItem oti = (OperationEditableTableItem)obj1;
+
+									ADDSEQMessageAction action1 = new ADDSEQMessageAction();
+									action1.setText(oti.toString());
+									action1.setOti(oti);
+									action1.setSm(mm);
+									action1.setTrm(trm);
+
+									messages.add(action1);
+//									manager.appendToGroup(GEFActionConstants.GROUP_EDIT, messages);
+
+								}
+								manager.appendToGroup(GEFActionConstants.GROUP_EDIT, messages);
+							}
+						}
+					}
+						System.out.print("");
+					}//2008041502PKY E
+				}
+//				}
+			
+
+
+
+
+
+				action = getActionRegistry().getAction("ADD ADDPartitionAction");
+				if (action.isEnabled()){
+					elementSubmenu.add(action);
+					manager.appendToGroup(GEFActionConstants.GROUP_EDIT, elementSubmenu);
+				}
+
+				action = getActionRegistry().getAction("ADDStateRegionAction");
+				if (action.isEnabled()){
+					elementSubmenu.add(action);
+					manager.appendToGroup(GEFActionConstants.GROUP_EDIT, elementSubmenu);
+				}
+
+
+//				action = getActionRegistry().getAction("DockingConfigureTimelineAction");
+//				if (action.isEnabled())
+//				manager.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
+
+//				action = getActionRegistry().getAction("OpenConfigureTimelineDialog");
+//				if (action.isEnabled())
+//				manager.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
+
+				action = getActionRegistry().getAction("OpenDiagramAction");
+				if (action.isEnabled())
+					manager.appendToGroup(GEFActionConstants.GROUP_EDIT, subDiagramList);       //2008040401PKY S "패키지 오른쪽 클릭 시 OpenDiagram 메뉴 추가  여러 다이어그램이있을경우 리스트 나오도록"
+
+				action = getActionRegistry().getAction("OpenSeqMessageDialogAction");
+				if (action.isEnabled())
+					manager.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
+
+
+				action = getActionRegistry().getAction("DeleteNumberBar");
+				if (action.isEnabled())
+					manager.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
+
+
+				action = getActionRegistry().getAction("ADDMessageAction");
+				if (action.isEnabled())
+					manager.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
+				
+				action = getActionRegistry().getAction("ADDTargetMessageAction");
+				if (action.isEnabled())
+					manager.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
+
+				action = getActionRegistry().getAction("ChangeDeepHistoryAction");
+				if (action.isEnabled())
+					manager.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
+				action = getActionRegistry().getAction("ADD ADDContainerAction");
+				if (action.isEnabled()){
+					elementSubmenu.add(action);
+					manager.appendToGroup(GEFActionConstants.GROUP_EDIT, elementSubmenu);
+				}
+				action = getActionRegistry().getAction("ChangeInterfaceModeAction");
+				if (action.isEnabled())
+					manager.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
+				//		action = getActionRegistry().getAction("123");
+				////		if (action.isEnabled())
+				//			manager.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
+				//			action.setEnabled(true);
+				action = getActionRegistry().getAction(ActionFactory.DELETE.getId());
+				if (action.isEnabled())
+					manager.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
+				action = getActionRegistry().getAction(ActionFactory.COPY.getId());
+				if (action.isEnabled())
+					manager.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
+
+				action = getActionRegistry().getAction("포트추가");
+				if (action.isEnabled()) {
+					elementSubmenu.add(action);
+					manager.appendToGroup(GEFActionConstants.GROUP_EDIT, elementSubmenu);
+				}
+
+
+				action = getActionRegistry().getAction("ADDObjectPortAction");
+				if (action.isEnabled()) {
+					elementSubmenu.add(action);
+					manager.appendToGroup(GEFActionConstants.GROUP_EDIT, elementSubmenu);
+				}
+				action = getActionRegistry().getAction("ADD ActivityParameter");
+				if (action.isEnabled()) {
+					elementSubmenu.add(action);
+					manager.appendToGroup(GEFActionConstants.GROUP_EDIT, elementSubmenu);
+				}
+				action = getActionRegistry().getAction("ADD ADDExpansionNodeAction");
+				if (action.isEnabled()) {
+					elementSubmenu.add(action);
+					manager.appendToGroup(GEFActionConstants.GROUP_EDIT, elementSubmenu);
+				}
+				action = getActionRegistry().getAction("ADDExitPointAction");
+				if (action.isEnabled()) {
+					elementSubmenu.add(action);
+					manager.appendToGroup(GEFActionConstants.GROUP_EDIT, elementSubmenu);
+				}
+				action = getActionRegistry().getAction("ADDEntryPointAction");
+				if (action.isEnabled()) {
+					elementSubmenu.add(action);
+					manager.appendToGroup(GEFActionConstants.GROUP_EDIT, elementSubmenu);
+				}
+				action = getActionRegistry().getAction("ADDActionPinAction");
+				if (action.isEnabled()){
+					elementSubmenu.add(action);
+					manager.appendToGroup(GEFActionConstants.GROUP_EDIT, elementSubmenu);
+				}
+
+				action = getActionRegistry().getAction("ADDAttribute");
+				if (action.isEnabled()) {
+					elementSubmenu.add(action);
+					manager.appendToGroup(GEFActionConstants.GROUP_EDIT, elementSubmenu);
+				}
+
+				action = getActionRegistry().getAction("ADDoperation");
+				if (action.isEnabled()) {
+					elementSubmenu.add(action);
+					manager.appendToGroup(GEFActionConstants.GROUP_EDIT, elementSubmenu);
+				}
+
+				//		action = getActionRegistry().getAction("포트추가");
+				//		if (action.isEnabled()){
+				//			elementSubmenu.add(action);
+				//			manager.appendToGroup(GEFActionConstants.GROUP_EDIT, elementSubmenu);
+				//		}
+				//		
+				//		action = getActionRegistry().getAction("포트추가");
+				//		if (action.isEnabled()){
+				//			elementSubmenu.add(action);
+				//			manager.appendToGroup(GEFActionConstants.GROUP_EDIT, elementSubmenu);
+				//		}
+				//		action = getActionRegistry().getAction(ActionFactory..getId());
+				//		if (action.isEnabled())
+				//			manager.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
+				action = getActionRegistry().getAction(GEFActionConstants.DIRECT_EDIT);
+				if (action.isEnabled())
+					manager.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
+				action = getActionRegistry().getAction(IncrementDecrementAction.INCREMENT);
+				if (action.isEnabled())
+					manager.appendToGroup(GEFActionConstants.GROUP_REST, action);
+				action = getActionRegistry().getAction(IncrementDecrementAction.DECREMENT);
+				if (action.isEnabled())
+					manager.appendToGroup(GEFActionConstants.GROUP_REST, action);
+				// Alignment Actions
+				MenuManager submenu = new MenuManager(LogicMessages.AlignmentAction_AlignSubmenu_ActionLabelText);
+				action = getActionRegistry().getAction(GEFActionConstants.ALIGN_LEFT);
+				if (action.isEnabled())
+					submenu.add(action);
+				action = getActionRegistry().getAction(GEFActionConstants.ALIGN_CENTER);
+				if (action.isEnabled())
+					submenu.add(action);
+				action = getActionRegistry().getAction(GEFActionConstants.ALIGN_RIGHT);
+				if (action.isEnabled())
+					submenu.add(action);
+				submenu.add(new Separator());
+				action = getActionRegistry().getAction(GEFActionConstants.ALIGN_TOP);
+				if (action.isEnabled())
+					submenu.add(action);
+				action = getActionRegistry().getAction(GEFActionConstants.ALIGN_MIDDLE);
+				if (action.isEnabled())
+					submenu.add(action);
+				action = getActionRegistry().getAction(GEFActionConstants.ALIGN_BOTTOM);
+				if (action.isEnabled())
+					submenu.add(action);
+				if (!submenu.isEmpty())
+					manager.appendToGroup(GEFActionConstants.GROUP_REST, submenu);
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+		//		action = getActionRegistry().getAction(ActionFactory.SAVE.getId());
+		//		manager.appendToGroup(GEFActionConstants.GROUP_SAVE, action);
+	}
+
+	private ActionRegistry getActionRegistry() {
+		return actionRegistry;
+	}
+
+	private void setActionRegistry(ActionRegistry registry) {
+		actionRegistry = registry;
+	}
+
+
+
+}

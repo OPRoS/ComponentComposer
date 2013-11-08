@@ -1,0 +1,22 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE> New Document </TITLE>
+<META NAME="Generator" CONTENT="EditPlus">
+<META NAME="Author" CONTENT="">
+<META NAME="Keywords" CONTENT="">
+<META NAME="Description" CONTENT="">
+</HEAD>
+
+<BODY>
+<div class="help_breadcrumbs"><a href="../main.html">사용자 메뉴얼</a> > 
+<a href="../GUI/gui_main.html"> 통합 GUI 사용</a> > 
+</div>
+
+<H1 CLASS="Head">작업중인 윈도우 선택</H1>
+<p>통합 GUI는 사용자의 편의성을 고려하여 작업 중인 윈도우들에 대한 정렬기능을 제공한다. 계단형 정렬, 가로 정렬, 세로 정렬을 제공하며, 빠른 윈도우 찾아가기 기능을 제공하여 작업 윈도우의 관리를 사용자가 편하게 할 수가 있다.
+<P CLASS="Para" align="center"><img src="../images/GUI/11/image001.jpg" alt="start1" border="0"><br>
+그림 2.1-2 윈도우 메뉴의 열려진 윈도우 리스트
+</p>
+</BODY>
+</HTML>

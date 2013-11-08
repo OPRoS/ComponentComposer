@@ -1,0 +1,54 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE> New Document </TITLE>
+<META NAME="Generator" CONTENT="EditPlus">
+<META NAME="Author" CONTENT="">
+<META NAME="Keywords" CONTENT="">
+<META NAME="Description" CONTENT="">
+</HEAD>
+
+<BODY>
+<div class="help_breadcrumbs"><a href="../main.html">사용자 메뉴얼</a> > 
+<a href="./modeler_main.html">영역 모델러의 사용</a> > 
+<a href="./modeler_1.html">UML Structural(구조적 모델링 다이어그램)</a> > 
+<a href="./modeler_1_2.html">Class</a> > 
+</div>
+
+<h1 class="NavTitle">Class 다이어그램</h1>
+<p>클래스를 이용해서 시스템의 구성을 보여주는 다이어그램으로써 주요 클래스와 그들간의 연관 관계를 정의한다.
+<ol>
+<li>다이어그램 생성</li>
+<p>다이어그램 생성창에서 Class 다이어그램을 선택하고 다이어그램의 이름을 쓴 후에 확인 버튼을 누른다.
+<P CLASS="Para" align="center"><img src="../images/modeler/1/class/image001.jpg" alt="start1" border="0"><br>
+그림 2.1-2 class 다이어그램
+</p>
+<li>다이어그램 작성</li>
+<p>class 다이어그램 palette를 이용하여 다이어그램을 작성하면 된다.
+<P CLASS="Para" align="center"><img src="../images/modeler/1/class/image002.jpg" alt="start1" border="0"><br>
+그림 2.1-2 class 다이어그램
+</p>
+<P CLASS="Para" align="center"><img src="../images/modeler/1/class/image003.jpg" alt="start1" border="0"><br>
+그림 2.1-2 class 다이어그램
+</p>
+<p>
+
+<p>다음은 class에 대한 프로퍼티를 변경할 수 있는 창이다.
+<P CLASS="Para" align="center"><img src="../images/modeler/1/class/image004.jpg" alt="start1" border="0"><br>
+그림 2.1-2 proprety 창
+</p>
+<ul>
+<li>Attributes - 선택된 객체의 어트리뷰트를 변경한다.</li>
+<li>BackGround Color - 선택된 객체의 색상을 변경한다.</li>
+<li>isActive - 스레드 클래스 인지 아닌지를 결정한다.<li>
+<li>Multiplicity - 선택된 객체의 다양성을 변경한다.</li>
+<li>Name - 선택된 객체의 이름을 변경한다.</li>
+<li>Operation - 선택된 객체의 오퍼레이션을 변경한다.</li>
+<li>Package - 선택된 객체의 패키지 구조를 알려준다.</li>
+<li>Properties - 선택된 객체의 Tag와 Description을 변경한다.</li>
+<li>Scope - 선택된 객체의 타입을 변경한다. public, protected, private, package 네가지가 있다.</li>
+<li>Stereotype - 선택된 객체의 스테레오 타입을 변경한다.</li>
+</ul>
+</ol>
+</BODY>
+</HTML>

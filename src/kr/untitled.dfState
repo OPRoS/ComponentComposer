@@ -1,0 +1,106 @@
+package idfvtpbf91zz67uf9202h8k;
+
+/**
+@version 2.0
+@__modelType diagram 
+*/
+class diagram {
+/**
+@__ref <oiref:design#Class#idfvtpbf91zz67uf9202h8k.node:oiref><oihard>
+@__modelType reference 
+*/
+class reference {
+}/**
+@__ref <oiref:design#Class#idfvtpbf91zz67uf9202h8k.node1:oiref><oihard>
+@__modelType reference 
+*/
+class reference11 {
+}/**
+@__ref <oiref:design#Class#idfvtpbf91zz67uf9202h8k.node3:oiref><oihard>
+@__modelType reference 
+*/
+class reference12 {
+}/**
+@__ref <oiref:design#Class#idfvtpbf91zz67uf9202h8k.node5:oiref><oihard>
+@__modelType reference 
+*/
+class reference13 {
+}/**
+@__ref <oiref:design#Class#idfvtpbf91zz67uf9202h8k.node7:oiref><oihard>
+@__modelType reference 
+*/
+class reference14 {
+}/**
+@__ref <oiref:design#Class#idfvtpbf91zz67uf9202h8k.node9:oiref><oihard>
+@__modelType reference 
+*/
+class reference15 {
+}}/**
+@__tags
+@shapeType StateDiagram 
+*/
+class __tags {
+}/**
+@__options 
+*/
+class __options {
+}/**
+@__positions <oigroup:<oiref:design#Class#idfvtpbf91zz67uf9202h8k.node:oiref>=160,80,12,12:oigroup>
+<oigroup:<oiref:design#Class#idfvtpbf91zz67uf9202h8k.node7:oiref>=410,270,100,110:oigroup>
+<oigroup:<oiref:design#Class#idfvtpbf91zz67uf9202h8k.node9:oiref>=209,330,60,55:oigroup>
+<oigroup:<oiref:design#Class#idfvtpbf91zz67uf9202h8k.node1:oiref>=311,58,15,15:oigroup>
+<oigroup:<oiref:design#Class#idfvtpbf91zz67uf9202h8k.node3:oiref>=110,160,140,6:oigroup>
+<oigroup:<oiref:design#Class#idfvtpbf91zz67uf9202h8k.node5:oiref>=250,200,60,6:oigroup> 
+*/
+class __positions {
+}/**
+@shapeType StartState
+@__modelType node
+@name StartState1 
+*/
+class node {
+/**
+@shapeType TransitionLink
+@__modelType link
+@__ref <oiref:design#Class#idfvtpbf91zz67uf9202h8k.node7:oiref><oihard>
+@label link 
+*/
+class link {
+}}/**
+@shapeType EndState
+@__modelType node
+@name EndState1 
+*/
+class node1 {
+}/**
+@shapeType SyncBar
+@__modelType node
+@name SyncBar1 
+*/
+class node3 {
+}/**
+@shapeType SyncBar
+@__modelType node
+@name SyncBar2 
+*/
+class node5 {
+}/**
+@shapeType State
+@__modelType node
+@name State1 
+*/
+class node7 {
+/**
+@shapeType TransitionLink
+@__modelType link
+@__ref <oiref:design#Class#idfvtpbf91zz67uf9202h8k.node1:oiref><oihard>
+@label link 
+*/
+class link {
+}}/**
+@shapeType Object
+@__modelType node
+@name Object1 
+*/
+class node9 {
+}

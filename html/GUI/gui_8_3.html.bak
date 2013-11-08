@@ -1,0 +1,30 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE> New Document </TITLE>
+<META NAME="Generator" CONTENT="EditPlus">
+<META NAME="Author" CONTENT="">
+<META NAME="Keywords" CONTENT="">
+<META NAME="Description" CONTENT="">
+</HEAD>
+
+<BODY>
+<H1 CLASS="Head">객체 이동</H1>
+<p>이동할 객체를 마우스로 선택한 후에 드래그 하여 이동할 위치까지 이동한다.
+<P CLASS="Para" align="center"><img src="../images/GUI/8/image003.jpg" alt="start1" border="0"><br>
+그림 2.1-2 역공학 기능
+</p>
+<p>이동할 위치에 마우스가 도달하면 마우스 버튼을 놓으면 객체가 이동된다.
+<P CLASS="Para" align="center"><img src="../images/GUI/8/image003_1.jpg" alt="start1" border="0"><br>
+그림 2.1-2 소스 코드 선택 창
+</p>
+<p>여러개의 객체를 동시에 이동하는것도 가능하다. 다중으로 객체를 선택한 후에 드래그 하여 이동할 위치까지 이동한다.
+<P CLASS="Para" align="center"><img src="../images/GUI/8/image003_2.jpg" alt="start1" border="0"><br>
+그림 2.1-2 생성된 클래스
+</p>
+<p>이동할 위치에 마우스가 도달하면 마우스 버튼을 놓으면 여러 객체가 이동된다.
+<P CLASS="Para" align="center"><img src="../images/GUI/8/image003_3.jpg" alt="start1" border="0"><br>
+그림 2.1-2 소스 코드 선택 창
+</p>
+</BODY>
+</HTML>

@@ -1,0 +1,43 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE> New Document </TITLE>
+<META NAME="Generator" CONTENT="EditPlus">
+<META NAME="Author" CONTENT="">
+<META NAME="Keywords" CONTENT="">
+<META NAME="Description" CONTENT="">
+</HEAD>
+
+<BODY>
+<H1 CLASS="Head">객체 찾기</H1>
+<p>찾기 기능은 텍스트를 중심으로 모델이나 다이어그램을 찾는 기능이다.
+<P CLASS="Para" align="center"><img src="../images/GUI/8/image013.jpg" alt="start1" border="0"><br>
+그림 2.1-2 찾기 팝업
+</p>
+<p>편집 메뉴에서 find버튼을 누르면 다음과 같은 창이 뜨는데 텍스트를 기반으로 모델을 찾을 수 있다.
+<P CLASS="Para" align="center"><img src="../images/GUI/8/image013_1.jpg" alt="start1" border="0"><br>
+그림 2.1-2 찾기 창
+</p>
+<ul>
+<li>Text to Find - 찾을 텍스트를 입력한다. 기본적으로 객체의 이름을 찾는다.</li>
+<li>Model Type - 찾을 객체의 타입을 지정할 수 있다. 세분한 찾기가 가능하다.</li>
+<li>in Model - 도구 좌측의 트리에서 찾는다.</li>
+<li>in Diagram - 다이어그램에서 찾는다.</li>
+<li>Case Sensitive - 대소문자를 구별한다.</li>
+<li>Exact Match - 모르겠음</li>
+<li>In Description - 설명에서도 찾는다.</li>
+</ul>
+<p>콘솔창에 검색 결과에서 모델을 클릭하면 트리에서 모델이 선택된 것을 볼 수 있다.
+<P CLASS="Para" align="center"><img src="../images/GUI/8/image013_2.jpg" alt="start1" border="0"><br>
+그림 2.1-2 트리에서 찾은 모델
+</p>
+<p>다이어그램에서도 모델을 찾을 수 있는데 In Diagram을 선택하면 가능하다.
+<P CLASS="Para" align="center"><img src="../images/GUI/8/image013_3.jpg" alt="start1" border="0"><br>
+그림 2.1-2 찾기 창
+</p>
+<p>콘솔창에 검색 결과에서 모델을 클릭하면 다이어그램이 열리고 모델이 선택된 것을 볼 수 있다.
+<P CLASS="Para" align="center"><img src="../images/GUI/8/image013_4.jpg" alt="start1" border="0"><br>
+그림 2.1-2 다이어그램에서 찾은 모델
+</p>
+</BODY>
+</HTML>

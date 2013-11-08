@@ -1,0 +1,85 @@
+package idhzal5f91zz67uf9202ihp;
+
+/**
+@version 2.0
+@physicalPackage
+@__modelType diagram 
+*/
+class diagram {
+/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.umlclass.FinalClassModel:oiref><oihard>
+@__modelType reference 
+*/
+class reference {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.umlclass.EnumerationModel:oiref><oihard>
+@__modelType reference 
+*/
+class reference218 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.umlclass.InterfaceModel:oiref><oihard>
+@__modelType reference 
+*/
+class reference219 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.umlclass.CompartmentModel:oiref><oihard>
+@__modelType reference 
+*/
+class reference220 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.umlclass.ParameterEditableTableItem:oiref><oihard>
+@__modelType reference 
+*/
+class reference221 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.umlclass.AttributeEditableTableItem:oiref><oihard>
+@__modelType reference 
+*/
+class reference222 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.umlclass.ClassBoundaryModel:oiref><oihard>
+@__modelType reference 
+*/
+class reference223 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.umlclass.DependencyLineModel:oiref><oihard>
+@__modelType reference 
+*/
+class reference224 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.umlclass.ArrayItem:oiref><oihard>
+@__modelType reference 
+*/
+class reference225 {
+}/**
+@__ref <oiref:java#Class#kr.co.n3soft.n3com.model.umlclass.OperationEditableTableItem:oiref><oihard>
+@__modelType reference 
+*/
+class reference226 {
+}}/**
+@__tags
+@shapeType ClassDiagram 
+*/
+class __tags {
+}/**
+@__options 
+*/
+class __options {
+}/**
+@__positions <oigroup:<oiref:java#Class#kr.co.n3soft.n3com.model.umlclass.ClassBoundaryModel:oiref>=10,690,193,350,1:oigroup>
+<oigroup:<oiref:java#Extends#kr.co.n3soft.n3com.model.umlclass.OperationEditableTableItem#kr.co.n3soft.n3com.model.umlclass.ArrayItem:oiref>=755,155,755,95:oigroup>
+<oigroup:<oiref:java#Class#kr.co.n3soft.n3com.model.umlclass.DependencyLineModel:oiref>=223,650,140,101,1:oigroup>
+<oigroup:<oiref:java#Class#kr.co.n3soft.n3com.model.umlclass.InterfaceModel:oiref>=10,10,200,222,1:oigroup>
+<oigroup:<oiref:java#Class#kr.co.n3soft.n3com.model.umlclass.EnumerationModel:oiref>=550,430,125,133,1:oigroup>
+<oigroup:<oiref:java#Class#kr.co.n3soft.n3com.model.umlclass.CompartmentModel:oiref>=330,10,200,462,1:oigroup>
+<oigroup:<oiref:java#Class#kr.co.n3soft.n3com.model.umlclass.ArrayItem:oiref>=686,10,90,85,1:oigroup>
+<oigroup:<oiref:java#Class#kr.co.n3soft.n3com.model.umlclass.OperationEditableTableItem:oiref>=735,155,191,238,1:oigroup>
+<oigroup:MemberLink#<oiref:java#Member#kr.co.n3soft.n3com.model.umlclass.InterfaceModel#operModel:oiref>=210,84,330,84:oigroup>
+<oigroup:<oiref:java#Extends#kr.co.n3soft.n3com.model.umlclass.AttributeEditableTableItem#kr.co.n3soft.n3com.model.umlclass.ArrayItem:oiref>=700,155,700,95:oigroup>
+<oigroup:<oiref:java#Class#kr.co.n3soft.n3com.model.umlclass.FinalClassModel:oiref>=10,510,114,133,1:oigroup>
+<oigroup:MemberLink#<oiref:java#Member#kr.co.n3soft.n3com.model.umlclass.InterfaceModel#attrModel:oiref>=210,158,330,158:oigroup>
+<oigroup:<oiref:java#Class#kr.co.n3soft.n3com.model.umlclass.ParameterEditableTableItem:oiref>=695,430,200,174,1:oigroup>
+<oigroup:<oiref:java#Class#kr.co.n3soft.n3com.model.umlclass.AttributeEditableTableItem:oiref>=550,155,165,190,1:oigroup> 
+*/
+class __positions {
+}

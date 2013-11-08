@@ -1,0 +1,39 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE> New Document </TITLE>
+<META NAME="Generator" CONTENT="EditPlus">
+<META NAME="Author" CONTENT="">
+<META NAME="Keywords" CONTENT="">
+<META NAME="Description" CONTENT="">
+</HEAD>
+
+<BODY>
+
+<h1 class="NavTitle">관계 연결 및 편집 </h1>
+
+<p>Communication 다이어그램은 Communication의 palett에서 객체를 이용하여 작성한다.
+<ol>
+<li>Associate 전이</li>
+<p>전이의 흐름을 나타낸다.
+<P CLASS="Para" align="center"><img src="../images/modeler/2/communication/image021.jpg" alt="start1" border="0"><br>
+그림 2.1-2 연관 관계 종류
+</p>
+<li>관계 편집</li>
+<p>관계에 마우스를 갖다 대고 우클릭을 하면 다음과 같은 팝업창이 뜬다.
+<P CLASS="Para" align="center"><img src="../images/modeler/2/communication/image022.jpg" alt="start1" border="0"><br>
+그림 2.1-2 관계 팝업창
+</p>
+<ul>
+<li>Direct Line - 관계를 직선으로 만든다.</li>
+<li>Message from Actor to Object - 정방향 메시지를 추가한다.</li>
+<li>Message from Object to Actor - 역방향 메시지를 추가한다.</li>
+<li>Delete - 관계를 삭제한다.</li>
+</ul>
+<P CLASS="Para" align="center"><img src="../images/modeler/2/communication/image023.jpg" alt="start1" border="0"><br>
+그림 2.1-2 Message 추가
+</p>
+<p>1은 정방향 메시지 1.1은 역방향 메시지가 추가된 모습니다.
+</ol>
+</BODY>
+</HTML>

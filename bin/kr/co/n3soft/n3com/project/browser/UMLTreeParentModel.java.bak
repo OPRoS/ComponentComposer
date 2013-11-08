@@ -1,0 +1,433 @@
+package kr.co.n3soft.n3com.project.browser;
+
+import java.util.ArrayList;
+
+import kr.co.n3soft.n3com.edit.FinalPackageEditPart;
+import kr.co.n3soft.n3com.lang.N3Messages;
+import kr.co.n3soft.n3com.model.comm.FinalPackageModel;
+import kr.co.n3soft.n3com.model.comm.UMLModel;
+import kr.co.n3soft.n3com.model.diagram.N3EditorDiagramModel;
+import kr.co.n3soft.n3com.parser.ModelManager;
+import kr.co.n3soft.n3com.projectmanager.ProjectManager;
+
+//등록
+public class UMLTreeParentModel extends UMLTreeModel {
+    private ArrayList children;
+    //2008040301 PKY S 
+    public static String UseCaseDiagramDefaultName = "유즈케이스다이어그램";
+    public static String PackageName = N3Messages.PALETTE_PACKAGE;
+    public static String UseCaseName = N3Messages.PALETTE_USECASE;
+    public static String ActorName = N3Messages.PALETTE_ACTOR;
+    public static String BoundaryName = N3Messages.PALETTE_BOUNDARY;
+    public static String CollaborationName = N3Messages.PALETTE_COLLABORATION;
+    public static String ClassName = N3Messages.PALETTE_CLASS;
+    public static String InterfaceName = N3Messages.PALETTE_INTERFACE;
+    public static String EnumerationName = N3Messages.PALETTE_ENUMERATION;
+    public static String ExceptionHandlerName = "ExceptionHandler";
+    public static String FinalActivityModelName = N3Messages.PALETTE_ACTIVITY;
+    public static String FinalActiionModelName = N3Messages.PALETTE_ACTION;
+    public static String SendModelName = N3Messages.MODEL_EVENT;
+    public static String ReceiveModelName = N3Messages.MODEL_EVENT;
+    public static String FinalObjectNodeModelName = N3Messages.PALETTE_OBJECT;
+    public static String CentralBufferNodeModelName = N3Messages.PALETTE_CENTRALBUFFERNODE;
+    public static String DataStoreModelName = N3Messages.PALETTE_DATASTORE;
+    public static String PartitionModelName = N3Messages.PALETTE_SWIMLANE;
+    public static String StrcuturedActivityModelName =N3Messages.PALETTE_STCUTUREACTIVITY;
+    public static String PartModellName = N3Messages.PALETTE_PART;
+    public static String LifeLineModellName =N3Messages.PALETTE_OBJECT;
+    public static String ComponentModelName = N3Messages.PALETTE_COMPONENT;
+    public static String ArtfifactModelName = N3Messages.PALETTE_ARTIFACT;
+    public static String StateModelName =  N3Messages.PALETTE_STATE;
+    public static String StrcuturedStateModelName = "StrcuturedState";
+    public static String LifeLineModelName =  N3Messages.PALETTE_LIFELINE;
+    public static String NodeModelName = N3Messages.PALETTE_NODE;
+    public static String DeviceModelName = N3Messages.PALETTE_DEVICE;
+    public static String ExecutionEnvironmentModelName = N3Messages.PALETTE_EXECUTIONENVIRONMENT;
+    public static String DeploymentSpecificationModelName = N3Messages.PALETTE_DEPLOYMENTSPECIFICATION;
+    public static String StateLifelineModelName = N3Messages.PALETTE_STATELIFELINE;
+  //2008040301 PKY E
+    
+    
+    private int newUseCaseDiagramCount = 1;
+    private int newpackageCount = 1;
+    private int newUseCaseCount = 1;
+    private int newActorCount = 1;
+    private int newBoundaryCount = 1;
+    private int newCollaborationCount = 1;
+    private int newClassCount = 1;
+    private int newInterfaceCount = 1;
+    private int newEnumerationCount = 1;
+    private int newExceptionHandlerCount = 1;
+    private int newFinalActivityCount = 1;
+    private int newFinalActiionCount = 1;
+    private int newSendModelCount = 1;
+    private int newReceiveModelCount = 1;
+    private int newObjectNodeModelNameCount = 1;
+    private int newCentralBufferNodeModelNameCount = 1;
+    private int newDataStoreModelNameCount = 1;
+    private int newPartitionModelNameCount = 1;
+    private int newStrcuturedActivityNameCount = 1;
+    private int newPartModellNameCount = 1;
+    private int newLifeLineModellNameCount = 1;
+    private int newComponentModelNameCount = 1;
+    private int newArtfifactModelNameCount = 1;
+    private int newStateModelNameCount = 1;
+    private int newStrcuturedStateModelNameCount = 1;
+    private int newNodeModelNameCount = 1;
+    private int newDeviceModelNameCount = 1;
+    
+    private int newExecutionEnvironmentModelNameCount = 1;
+    private int newDeploymentSpecificationModelNameCount = 1;
+    
+    private int newStateLifelineModelNameCount = 1;
+    
+    private int newLifeLineModelNameCount = 1;
+
+    public UMLTreeParentModel(String name) {
+        super(name);
+        children = new ArrayList();
+    }
+
+    public void addChild(UMLTreeModel child) {
+        children.add(child);
+        child.setParent(this);
+    }
+
+    public void removeChild(UMLTreeModel child) {
+        children.remove(child);
+        child.setParent(null);
+    }
+    
+//  V1.01 WJH E 080501 S 다른곳에서 이 함수를 호출하는 부분이 없어서 함수 자체 수정
+    public UMLTreeModel searchChildModel(String type,String text,boolean isCaseSensitive){
+    	if(text != null && !text.equals("")){
+	    	for(int i=0;i<this.getChildren().length;i++){
+	    		UMLTreeModel ut = (UMLTreeModel)this.getChildren()[i];
+	    		System.out.println(text);
+	    		System.out.println(((UMLModel)ut.getRefModel()).getUMLDataModel().getId());
+	    		if(((UMLModel)ut.getRefModel()).getUMLDataModel().getId().equals(text)){
+	    			return ut;
+	    		}
+
+	    		if(ut instanceof UMLTreeParentModel){
+	    			
+	    		}
+
+	    		if(ut.getModelType()==0){
+	    			PackageTreeModel ptm = (PackageTreeModel)ut;
+	    			UMLTreeModel temp = null;
+	    			temp = ptm.searchChildModel(type, text, isCaseSensitive);
+	    			if(temp != null)
+	    				return temp;    			
+	    		}
+	    	}
+    	}
+    	return null;    	
+    }
+//  V1.01 WJH E 080501 E 다른곳에서 이 함수를 호출하는 부분이 없어서 함수 자체 수정
+    
+    //2008040401PKY S "패키지 오른쪽 클릭 시 OpenDiagram 메뉴 추가    여러 다이어그램이있을경우 리스트 나오도록"
+    public void diagramList(FinalPackageEditPart finalPackageEditPart ){
+    	for(int i=0;i<this.getChildren().length;i++){
+    		UMLTreeModel ut = (UMLTreeModel)this.getChildren()[i];
+    		System.out.print("");
+    	}
+    	
+    }
+    //2008040401PKY S "패키지 오른쪽 클릭 시 OpenDiagram 메뉴 추가    여러 다이어그램이있을경우 리스트 나오도록"
+    public UMLTreeModel[] getChildren() {
+        return (UMLTreeModel[]) children.toArray(new UMLTreeModel[children.size()]);
+    }
+
+    public boolean hasChildren() {
+        return children.size() > 0;
+    }
+
+
+    public int getNewUseCaseDiagramCount() {
+        return this.newUseCaseDiagramCount++;
+    }
+
+    public int getNewPackageCount() {
+        return this.newpackageCount++;
+    }
+
+    public int getNewUseCaseCount() {
+        return this.newUseCaseCount++;
+    }
+
+    public int getNewActorCountCount() {
+        return this.newActorCount++;
+    }
+
+    public int getNewBoundaryCountCount() {
+        return this.newBoundaryCount++;
+    }
+
+    public int getNewCollaborationCountCount() {
+        return this.newCollaborationCount++;
+    }
+
+    public int getNewClassCountCount() {
+        return this.newClassCount++;
+    }
+
+    public int getNewInterfaceCount() {
+        return this.newInterfaceCount++;
+    }
+
+    public int getNewEnumerationCount() {
+        return this.newEnumerationCount++;
+    }
+
+    public int getNewExceptionHandlerCount() {
+        return this.newExceptionHandlerCount++;
+    }
+
+    public int getNewFinalActivityCount() {
+        return this.newFinalActivityCount++;
+    }
+
+    public int getNewFinalActiionCount() {
+        return this.newFinalActiionCount++;
+    }
+
+    public int getNewSendModelCount() {
+        return this.newSendModelCount++;
+    }
+
+    public int getNewReceiveModelCount() {
+        return this.newReceiveModelCount++;
+    }
+
+    public int getNewFinalObjectNodeModelCount() {
+        return this.newObjectNodeModelNameCount++;
+    }
+
+    public int getNewCentralBufferNodeModelCount() {
+        return this.newCentralBufferNodeModelNameCount++;
+    }
+
+    public int getNewDataStoreModelCount() {
+        return this.newDataStoreModelNameCount++;
+    }
+
+    public int getNewPartitionModelNameCount() {
+        return this.newPartitionModelNameCount++;
+    }
+
+    public int getNewStrcuturedActivityModelNameCount() {
+        return this.newStrcuturedActivityNameCount++;
+    }
+
+    public int getNewPartModellNameCount() {
+        return this.newPartModellNameCount++;
+    }
+
+    public int getNewLifeLineModellNameCount() {
+        return this.newLifeLineModellNameCount++;
+    }
+
+    public int getNewComponentModelNameCount() {
+        return this.newComponentModelNameCount++;
+    }
+
+    public int getNewArtfifactModelNameCount() {
+        return this.newArtfifactModelNameCount++;
+    }
+
+    public int getNewStateModelNameCount() {
+        return this.newStateModelNameCount++;
+    }
+
+    public int getNewStrcuturedStateModelNameCount() {
+        return this.newStrcuturedStateModelNameCount++;
+    }
+    public int getNewNodeModelNameCount() {
+        return this.newNodeModelNameCount++;
+    }
+    public int getNewDeviceModelNameCount() {
+        return this.newDeviceModelNameCount++;
+    }
+    public int getNewExecutionEnvironmentModelNameCount() {
+        return this.newExecutionEnvironmentModelNameCount++;
+    }
+    
+    public int getNewDeploymentSpecificationModelNameCount() {
+        return this.newDeploymentSpecificationModelNameCount++;
+    }
+    
+    public int getNewStateLifelineModelNameCount() {
+        return this.newStateLifelineModelNameCount++;
+    }
+    
+    public int getNewLifeLineModelNameCount() {
+        return this.newLifeLineModelNameCount++;
+    }
+    
+    
+    public void writeModel(StringBuffer sb){
+    	try{
+    	if(!(this instanceof RootTreeModel)){
+    		UMLModel um = (UMLModel)this.getRefModel();
+    		sb.append(ModelManager.getInstance().writeModel(um,null));
+    	}
+    	for(int i=0;i<this.getChildren().length;i++){
+    		UMLTreeModel ut = (UMLTreeModel)this.getChildren()[i];
+    		if(ut instanceof UMLTreeParentModel){
+    			UMLTreeParentModel up = (UMLTreeParentModel)ut;	
+    			up.writeModel(sb);
+    		}
+    		else{
+    			UMLModel um1 = (UMLModel)ut.getRefModel();
+    			sb.append(ModelManager.getInstance().writeModel(um1,null));
+    			
+    		}
+    	}
+    	}
+    	catch(Exception e){
+    		e.printStackTrace();
+    	}
+    }
+    
+    
+//    public java.util.ArrayList getDiagrams(){
+//    	java.util.ArrayList a
+//    }
+    
+    
+    public UMLTreeParentModel getSearchUMLTreeModel(String path){
+    	String[] arr = path.split(",");
+    
+    	StringBuffer sb = null;
+//    	boolean isSearch = false;
+    	boolean isEnd = true;
+    	UMLTreeParentModel up = null;
+    	for(int i=0;i<this.getChildren().length;i++){
+    		UMLTreeModel ut = (UMLTreeModel)this.getChildren()[i];
+    		if(ut instanceof UMLTreeParentModel){
+    			if(arr[0].equals(ut.getName())){
+//    				isSearch = true;
+    				up = (UMLTreeParentModel)ut;
+    				sb = new StringBuffer();
+    				if(arr.length>1){
+    					isEnd = false;
+    					for(int k=1;k<arr.length;k++){
+    						sb.append(arr[k]);
+    						if(k<arr.length-1){
+    							sb.append(",");
+    						}
+    					}
+    					
+    				}
+    				break;
+    				
+    			}
+    		}
+    	}
+    	if(up==null){
+    		UMLTreeParentModel parent = this;
+    		PackageTreeModel to1 = null;
+    		for(int k=0;k<arr.length;k++){
+    			String name = arr[k];
+    			 to1 = new PackageTreeModel(name);
+                 UMLModel finalPackageModel = null;
+               
+                     finalPackageModel = new FinalPackageModel();
+
+                 to1.setRefModel(finalPackageModel);
+                 finalPackageModel.setName(name);
+                 finalPackageModel.setTreeModel(to1);
+                 to1.setParent(parent);
+                 parent.addChild(to1);
+                 parent = to1;
+			}
+    		return to1;
+    	}
+    	else{
+    		if(isEnd){
+    			return up;
+    		}
+    		else{
+    			return up.getSearchUMLTreeModel(sb.toString());
+    		}
+    	}
+    	
+    	
+    	
+    }
+    
+    public void searchModel(String type,String text,boolean isCase,boolean isWwo, boolean isDesc){
+    	if(ProjectManager.getInstance().isSearchModel()){
+    	for(int i=0;i<this.getChildren().length;i++){
+    		UMLTreeModel ut = (UMLTreeModel)this.getChildren()[i];
+    		
+    		String type1 = ProjectManager.getInstance().getModelTypeName(ProjectManager.getInstance().getModelType((UMLModel)ut.getRefModel(), -1));
+    		if(type.equals("All") || type1.equals(type)){
+    			UMLModel um = (UMLModel)ut.getRefModel();
+    			if(isDesc){
+    			
+    			if(um.getDesc()!=null && um.getDesc().indexOf(text)!=-1){
+    				ProjectManager.getInstance().getSearchModel().add(ut);
+    			}
+    		}
+    		else{
+	    		if(isCase==false){
+	    			if(!isWwo){
+	    				if(um.getName().indexOf(text)>=0){
+	
+	    	    			ProjectManager.getInstance().getSearchModel().add(ut);
+	    					 
+	    	    		}
+	    				
+	    			}
+	    			else if(um.getName().equals(text)){
+	
+		    			ProjectManager.getInstance().getSearchModel().add(ut);
+						 
+		    		}
+	    		}
+	    		else{
+//	    			if(!isWwo){
+//	    				if(ut.getName().indexOf(text)>=0){
+//	
+//	    	    			ProjectManager.getInstance().getSearchModel().add(ut);
+//	    					 
+//	    	    		}
+//	    				
+//	    			}
+	    			if(um.getName().equalsIgnoreCase(text)){
+	
+		    			ProjectManager.getInstance().getSearchModel().add(ut);
+						 
+		    		}
+	
+	    		}
+    		}
+    	}
+    		if(ut instanceof UMLTreeParentModel){
+    			UMLTreeParentModel utp = (UMLTreeParentModel)ut;
+    			utp.searchModel(type, text, isCase,isWwo,isDesc);
+    		}
+    		
+    	}
+    	}
+    	else{
+    		for(int i=0;i<this.getChildren().length;i++){
+        		UMLTreeModel ut = (UMLTreeModel)this.getChildren()[i];
+        		if(ut.getRefModel() instanceof N3EditorDiagramModel){
+        			N3EditorDiagramModel nd = (N3EditorDiagramModel)ut.getRefModel();
+        			nd.searchModel(type, text, isCase, isWwo);
+        		}
+        		if(ut instanceof UMLTreeParentModel){
+        			UMLTreeParentModel utp = (UMLTreeParentModel)ut;
+        			utp.searchModel(type, text, isCase,isWwo,isDesc);
+        		}
+    		}
+    	}
+    	return ;
+    	
+    }
+    
+    
+}

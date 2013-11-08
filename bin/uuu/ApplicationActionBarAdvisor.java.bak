@@ -1,0 +1,390 @@
+package uuu;
+
+import kr.co.n3soft.n3com.lang.N3Messages;
+import kr.co.n3soft.n3com.print.LogicPrintAction;
+import kr.co.n3soft.n3com.projectmanager.ProjectManager;
+import kr.co.n3soft.n3com.rcp.actions.ADDDiagramAction;
+import kr.co.n3soft.n3com.rcp.actions.ADDModelAction;
+import kr.co.n3soft.n3com.rcp.actions.ADDPackageAction;
+import kr.co.n3soft.n3com.rcp.actions.CloseAllDiagramAction;
+import kr.co.n3soft.n3com.rcp.actions.FindAction;
+import kr.co.n3soft.n3com.rcp.actions.LoadAction;
+import kr.co.n3soft.n3com.rcp.actions.NewProjectAction;
+import kr.co.n3soft.n3com.rcp.actions.OpenApplyPatternAction;
+import kr.co.n3soft.n3com.rcp.actions.OpenN3PropertyDialogAction;
+import kr.co.n3soft.n3com.rcp.actions.OpenProjectPopAction;
+import kr.co.n3soft.n3com.rcp.actions.ReverseCplusEngineerAction;
+import kr.co.n3soft.n3com.rcp.actions.ReverseJavaEngineerAction;
+import kr.co.n3soft.n3com.rcp.actions.SaveAction;
+import kr.co.n3soft.n3com.rcp.actions.SaveAsAction;
+import kr.co.n3soft.n3com.rcp.actions.ViewConsoleAction;
+import kr.co.n3soft.n3com.rcp.actions.ViewDescriptionAction;
+import kr.co.n3soft.n3com.rcp.actions.ViewOutlineAction;
+import kr.co.n3soft.n3com.rcp.actions.ViewPropertiesAction;
+import kr.co.n3soft.n3com.rcp.actions.WriteCAction;
+import kr.co.n3soft.n3com.rcp.actions.WriteJavaAction;
+
+import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.action.ICoolBarManager;
+import org.eclipse.jface.action.IMenuListener;
+import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.action.ToolBarManager;
+import org.eclipse.ui.IWorkbenchActionConstants;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.actions.ActionFactory;
+import org.eclipse.ui.actions.ActionFactory.IWorkbenchAction;
+import org.eclipse.ui.application.ActionBarAdvisor;
+import org.eclipse.ui.application.IActionBarConfigurer;
+
+/**
+ * An action bar advisor is responsible for creating, adding, and disposing of
+ * the actions added to a workbench window. Each window will be populated with
+ * new actions.
+ */
+public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
+
+	private IWorkbenchAction exitAction;
+	private IWorkbenchAction viewAction;
+	private IAction newAction;
+	private IAction findAction;
+	private IAction closeAllDiagramAction;
+	private IAction newProjectAction;
+	private IAction saveAction;
+	private IAction loadAction;
+	private IAction reverseJavaEngineerAction;
+	private IAction reverseCplusEngineerAction;
+	private IWorkbenchAction aboutAction;
+	private IWorkbenchAction helpAction;
+	private IWorkbenchAction introAction;
+	private IAction printAction;//2008042901 PKY S 
+	
+	private IAction roseloadAction;		// V1.01 WJH E 080506 추가
+
+	private IAction reportGenerateAction; //20080903 KDI s
+	
+	private IAction openN3PropertyDialogAction;
+	 //PKY 08062601 S 단축키 정의
+	private IAction saveAsAction;
+	private IWorkbenchAction DeleteAction;
+	private IWorkbenchAction CopyeAction;
+	private IWorkbenchAction PasteAction;
+	 //PKY 08062601 E 단축키 정의
+	
+	private IAction viewPropertiesAction;
+	private IAction viewOutlineAction;
+	private IAction viewConsoleAction;
+	
+	private IAction viewDescriptionAction; //20080728 KDI s
+	
+	private IAction OpenApplyPatternAction;
+	
+	
+	//PKY 08070301 S 툴바 추가작업
+	private IAction addPackage;
+	private IAction addDiagramAction;
+	private IAction addModelAction;
+	private IAction writeCAction;
+	private IAction writeJavaAction;
+	
+	private IAction windowsPropertyAction;
+	private IAction windowsOutlineyAction;
+	private IAction windowsConsoleAction;
+	
+	private IAction windowsDescriptionAction; //20080728 KDI s
+	
+	//PKY 08070301 E 툴바 추가작업
+	
+	public ApplicationActionBarAdvisor(IActionBarConfigurer configurer) {
+		super(configurer);
+		
+		ProjectManager.getInstance().setApplication(this);//PKY 08070301 S 툴바 추가작업
+		
+	}
+
+	protected void makeActions(final IWorkbenchWindow window) {
+		ProjectManager.getInstance().window = window;
+		newAction = new NewAction(window);
+		findAction = new FindAction(window);
+		saveAction = new SaveAction(window);
+		//PKY 08062601 S 단축키 정의
+		saveAsAction = new SaveAsAction(window);
+		DeleteAction = ActionFactory.DELETE.create(window);
+		CopyeAction = ActionFactory.COPY.create(window);
+		PasteAction = ActionFactory.PASTE.create(window);
+		//PKY 08062601 E 단축키 정의
+		loadAction = new LoadAction(window);
+		reverseJavaEngineerAction = new ReverseJavaEngineerAction(window);
+		reverseCplusEngineerAction = new ReverseCplusEngineerAction(window);
+		OpenApplyPatternAction = new OpenApplyPatternAction(window);
+		
+		windowsPropertyAction = new ViewPropertiesAction(window);
+		windowsOutlineyAction = new ViewOutlineAction(window);
+		windowsConsoleAction = new ViewConsoleAction(window);
+		
+		windowsDescriptionAction = new ViewDescriptionAction(window); //20080728 KDI s
+		
+		closeAllDiagramAction = new CloseAllDiagramAction(window);
+		viewPropertiesAction = new ViewPropertiesAction(window);
+		viewOutlineAction = new ViewOutlineAction(window);
+		viewConsoleAction = new ViewConsoleAction(window);
+//		((ViewPropertiesAction)viewPropertiesAction).setWorkbenchWindow(window);
+		
+		viewDescriptionAction = new ViewDescriptionAction(window); //20080728 KDI s
+		
+		
+		newProjectAction = new NewProjectAction(window);
+		exitAction = ActionFactory.QUIT.create(window);
+		aboutAction = ActionFactory.ABOUT.create(window);
+		helpAction = ActionFactory.HELP_CONTENTS.create(window);
+		introAction = ActionFactory.INTRO.create(window);
+		printAction = new LogicPrintAction(window);//2008042901 PKY S 
+		
+		roseloadAction = new kr.co.n3soft.n3com.rcp.actions.RoseLoadAction(window);		// V1.01 WJH E 080506 추가
+
+		reportGenerateAction =  new ReportGenerateAction(window);//20080903 KDI s
+		
+		openN3PropertyDialogAction = new OpenN3PropertyDialogAction(window);
+		
+		//PKY 08070301 S 툴바 추가작업
+		addPackage =  new ADDPackageAction(window); //PKY 08070301 S 툴바 추가작업
+		addDiagramAction =  new ADDDiagramAction(window); //PKY 08070301 S 툴바 추가작업
+		addModelAction = new ADDModelAction(window);
+		writeCAction = new WriteCAction(window);
+		writeJavaAction = new WriteJavaAction(window);
+		//PKY 08070301 E 툴바 추가작업
+		register(helpAction);
+    	register(exitAction);
+		register(newAction);
+		register(aboutAction);
+		register(introAction);
+		register(printAction);//2008042901 PKY S 
+		register(openN3PropertyDialogAction);
+	}
+
+	protected void fillMenuBar(IMenuManager menuBar) {
+		MenuManager fileMenu = 
+			new MenuManager("&File",IWorkbenchActionConstants.M_FILE);
+		MenuManager recentMenu = 
+			new MenuManager("&Recent Open Project","Recent project");
+		ProjectManager.getInstance().setRecentMenu(recentMenu);
+		menuBar.add(fileMenu);
+		fileMenu.add(newProjectAction);
+		fileMenu.add(saveAction);
+		fileMenu.add(saveAsAction);//PKY 08062601 S 단축키 정의
+		fileMenu.add(loadAction);
+		fileMenu.add(printAction);//2008042901 PKY S 
+		fileMenu.add(openN3PropertyDialogAction);
+		fileMenu.add(recentMenu);
+		
+		for(int i=0;i<ProjectManager.getInstance().getOpenProjects().size();i++){
+			OpenProjectPopAction oppA = new OpenProjectPopAction(ProjectManager.getInstance().window);
+			String str = (String)ProjectManager.getInstance().getOpenProjects().get(i);
+			oppA.setText(str);
+			oppA.setInit();
+			recentMenu.add(oppA);
+		}
+		
+		
+		fileMenu.add(exitAction);
+		
+		MenuManager editMenu = 
+			new MenuManager("&Edit",IWorkbenchActionConstants.M_EDIT);
+		menuBar.add(editMenu);
+		//PKY 08062601 S 단축키 정의
+		editMenu.add(CopyeAction);	
+		editMenu.add(PasteAction);
+		editMenu.add(DeleteAction);
+		editMenu.add(findAction);
+		//PKY 08062601 E 단축키 정의
+
+
+//		CloseAllDiagramAction
+		
+		MenuManager toolMenu = 
+			new MenuManager("&Tool","Tool");
+		
+	
+		menuBar.add(toolMenu);
+		//PKY 08072201 S 도구 툴바 통합
+		MenuManager reverseEngineerMenu = 
+			new MenuManager("&Reverse Engineer","Reverse Engineer");
+		toolMenu.add(reverseEngineerMenu);
+		reverseEngineerMenu.add(reverseJavaEngineerAction);
+		reverseEngineerMenu.add(reverseCplusEngineerAction);
+		//PKY 08072201 E 도구 툴바 통합
+
+		toolMenu.add(roseloadAction);		// V1.01 WJH E 080506 추가
+
+		toolMenu.add(reportGenerateAction); //20080903 KDI s
+		
+		toolMenu.add(OpenApplyPatternAction);
+		MenuManager help = new MenuManager(N3Messages.POPUP_HELP,"help");
+//    	help.add(aboutAction);
+		help.add(introAction);
+		help.add(helpAction);
+		help.add(aboutAction);
+		//PKY 08071601 S 모델 브라우져에서 다이어그램이 아닌 다른 객체를 클릭할 경우 패턴이 Enable이 false로 나왔던 문제 수정
+//		toolMenu.addMenuListener(
+//	            new IMenuListener() {
+//	                public void menuAboutToShow(IMenuManager manager) {
+//	                	OpenApplyPatternAction.setEnabled(true);
+//	                }
+//	            });
+		//PKY 08071601 E 모델 브라우져에서 다이어그램이 아닌 다른 객체를 클릭할 경우 패턴이 Enable이 false로 나왔던 문제 수정
+		//PKY 08072201 S 도구 툴바 통합
+		MenuManager viewMenu = 
+			new MenuManager("&Window","Window");
+		menuBar.add(viewMenu);
+		viewMenu.add(closeAllDiagramAction);
+		MenuManager showMenu = 
+			new MenuManager("&Show","Show");
+		viewMenu.add(showMenu);
+		showMenu.add(viewPropertiesAction);
+		showMenu.add(viewOutlineAction);
+		showMenu.add(viewConsoleAction);
+		//PKY 08072201 E 도구 툴바 통합
+
+		showMenu.add(viewDescriptionAction); //20080728 KDI s
+		
+//		MenuManager fileMenu = 
+//			new MenuManager("&파일",IWorkbenchActionConstants.M_FILE);
+//		menuBar.add(fileMenu);
+//		fileMenu.add(newProjectAction);
+//		fileMenu.add(saveAction);
+//		fileMenu.add(loadAction);
+//		fileMenu.add(printAction);//2008042901 PKY S 
+//		fileMenu.add(exitAction);
+//		MenuManager editMenu = 
+//			new MenuManager("&편집",IWorkbenchActionConstants.M_EDIT);
+//		menuBar.add(editMenu);
+//		editMenu.add(findAction);
+//		
+//		MenuManager help = new MenuManager("&도움말","help");
+////    	help.add(aboutAction);
+//		help.add(introAction);
+//		help.add(helpAction);
+//		help.add(aboutAction);
+		
+    	
+    	
+    	menuBar.add(help);
+    	}
+	protected void fillCoolBar(ICoolBarManager coolBar) {
+		//PKY 08070301 S 툴바 추가작업
+		IToolBarManager toolbar = new ToolBarManager(coolBar.getStyle());
+		coolBar.add(toolbar);
+		//PKY 08062601 S 단축키 정의
+		toolbar.add(newProjectAction);
+		toolbar.add(loadAction);
+		toolbar.add(saveAction);
+		toolbar.add(printAction);
+		//PKY 08062601 E 단축키 정의
+		IToolBarManager toolbar1 = new ToolBarManager(coolBar.getStyle());
+		coolBar.add(toolbar1);
+		toolbar1.add(CopyeAction);
+		toolbar1.add(PasteAction);		
+		toolbar1.add(DeleteAction);
+		toolbar1.add(findAction);
+		
+		
+		IToolBarManager toolbar2 = new ToolBarManager(coolBar.getStyle());
+		coolBar.add(toolbar2);
+		toolbar2.add(reverseJavaEngineerAction);
+		toolbar2.add(reverseCplusEngineerAction);
+		toolbar2.add(writeCAction);
+		toolbar2.add(writeJavaAction);
+
+		IToolBarManager toolbar4 = new ToolBarManager(coolBar.getStyle());
+		coolBar.add(toolbar4);
+		toolbar4.add(addPackage);
+		toolbar4.add(addDiagramAction);
+		toolbar4.add(addModelAction);
+		toolbar4.add(OpenApplyPatternAction);
+		
+		IToolBarManager toolbar5 = new ToolBarManager(coolBar.getStyle());
+		coolBar.add(toolbar5);
+		toolbar5.add(windowsPropertyAction);
+		toolbar5.add(windowsOutlineyAction);
+		toolbar5.add(windowsConsoleAction);
+		toolbar5.add(windowsDescriptionAction);//20080728 KDI s
+		
+		IToolBarManager toolbar3 = new ToolBarManager(coolBar.getStyle());
+		coolBar.add(toolbar3);
+		toolbar3.add(helpAction);
+		//PKY 08070301 E 툴바 추가작업
+
+//		toolbar.add(exitAction);
+	}
+
+	//PKY 08070301 S 툴바 추가작업
+	public IAction getAddPackage() {
+		return addPackage;
+	}
+
+	public void setAddPackage(IAction addPackage) {
+		this.addPackage = addPackage;
+	}
+
+	public IAction getAddDiagramAction() {
+		return addDiagramAction;
+	}
+
+	public void setAddDiagramAction(IAction addDiagramAction) {
+		this.addDiagramAction = addDiagramAction;
+	}
+
+	public IAction getAddModelAction() {
+		return addModelAction;
+	}
+
+	public void setAddModelAction(IAction addModelAction) {
+		this.addModelAction = addModelAction;
+	}
+
+	public IAction getWriteCAction() {
+		return writeCAction;
+	}
+
+	public void setWriteCAction(IAction writeCAction) {
+		this.writeCAction = writeCAction;
+	}
+
+	public IAction getWriteJavaAction() {
+		return writeJavaAction;
+	}
+
+	public void setWriteJavaAction(IAction writeJavaAction) {
+		this.writeJavaAction = writeJavaAction;
+	}
+	//PKY 08070301 E 툴바 추가작업
+	//PKY 08071601 S 다이얼로그 UI작업
+	public IAction getOpenApplyPatternAction() {
+		return OpenApplyPatternAction;
+	}
+
+	public void setOpenApplyPatternAction(IAction openApplyPatternAction) {
+		OpenApplyPatternAction = openApplyPatternAction;
+	}
+	//PKY 08071601 E 다이얼로그 UI작업
+	//PKY 08082201 S 팀 프로젝트 읽기전용일때 수정불가능하도록 작업
+	public IAction getReverseJavaEngineerAction() {
+		return reverseJavaEngineerAction;
+	}
+
+	public void setReverseJavaEngineerAction(IAction reverseJavaEngineerAction) {
+		this.reverseJavaEngineerAction = reverseJavaEngineerAction;
+	}
+
+	public IAction getReverseCplusEngineerAction() {
+		return reverseCplusEngineerAction;
+	}
+
+	public void setReverseCplusEngineerAction(IAction reverseCplusEngineerAction) {
+		this.reverseCplusEngineerAction = reverseCplusEngineerAction;
+	}
+	//PKY 08082201 E 팀 프로젝트 읽기전용일때 수정불가능하도록 작업
+
+
+}

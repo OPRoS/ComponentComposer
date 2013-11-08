@@ -1,0 +1,27 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE> New Document </TITLE>
+<META NAME="Generator" CONTENT="EditPlus">
+<META NAME="Author" CONTENT="">
+<META NAME="Keywords" CONTENT="">
+<META NAME="Description" CONTENT="">
+</HEAD>
+
+<BODY>
+
+<H1 CLASS="Head">편집 메뉴</H1>
+
+<P>(그림 2.3-2)는 공통 풀다운 메뉴의 편집 메뉴이다. 편집 메뉴는 [실행취소], [재실행], [복사], [잘라내기], [붙여넣기], [삭제]의 메뉴로 구성된다. 이러한 편집 메뉴는 파일 메뉴의 [새 프로젝트]나 [프로젝트 열기]을 통해 편집기로 열린 외부 파일의 컴포넌트나 커넥터와 같은 그래픽 편집 단위나 문자열과 같은 텍스트 편집 단위에 대해 복사, 잘라내기, 붙여넣기, 삭제와 같은 편집 작업을 할 수 있게 지원한다. 편집 메뉴의 상세 항목별 기능은 다음과 같다.
+<p>
+<P CLASS="Para" align="center"><img src="../images/construction/3/image002.jpg" alt="start1" border="0"><br>
+그림 2.1-2 편집 메뉴
+</p>
+<ul>
+<li><a href="../gui/gui_8_5.html">복사 : 사용자가 선택한 객체들을 복사한다.</li>
+<li><a href="../gui/gui_8_6.html">붙여넣기 : 복사하거나 잘라낸 내용들을 현재 선택한 편집기로 붙여 넣는다.</li>
+<li><a href="../gui/gui_8_7.html">삭제 : 사용자가 선택한 객체들을 삭제한다.</li>
+<li>모두선택 : 화면에 있는 모든 객체를 선택한다.</li>
+</ul>
+</BODY>
+</HTML>
